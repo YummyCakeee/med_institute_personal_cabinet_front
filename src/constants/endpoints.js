@@ -1,3 +1,3 @@
-export const COURSES_ENDPOINT = "api/Courses"
-export const USERS_ENDPOINT = ""
-export const TESTS_COLLECTION_ENDPOINT = ""
+export const ENDPOINT_COURSES = "api/Courses"
+export const ENDPOINT_USERS = ""
+export const ENDPOINT_TESTS_COLLECTION = ""
