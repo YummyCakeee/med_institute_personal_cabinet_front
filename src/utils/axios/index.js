@@ -4,15 +4,17 @@ export const createAxiosInstance = () => {
 
     const baseURL =
         (!process.env.NODE_ENV || process.env.NODE_ENV === "development") ?
-            "https://localhost" :
-            "https://localhost"
+            "http://localhost:5000" :
+            "http://localhost:5000"
 
     const headers = {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
     }
     const instance = axios.create({
         baseURL,
-        headers
+        headers,
+        withCredentials: false
     })
 
     return instance
