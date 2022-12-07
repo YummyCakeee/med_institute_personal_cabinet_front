@@ -1,29 +1,33 @@
 import Link from "next/link"
+import { useRouter } from "next/router"
 import React, { useState } from "react"
+import cn from "classNames"
 import styles from "./Header.module.scss"
 
 const Header = () => {
 
+    const router = useRouter()
+
     const [sections] = useState([
         {
             name: "Образовательные программы",
-            link: "/educationalPrograms",
+            path: "/educationalPrograms",
         },
         {
             name: "Пользователи",
-            link: "/users",
+            path: "/users",
         },
         {
             name: "Курсы",
-            link: "/courses",
+            path: "/courses",
         },
         {
             name: "Коллекция тестов",
-            link: "/testsCollection",
+            path: "/testsCollection",
         },
         {
             name: "Мой профиль",
-            link: "/",
+            path: "/",
         }
     ])
 
@@ -33,8 +37,11 @@ const Header = () => {
                 {sections.map((el, key) => (
                     <Link
                         key={key}
-                        href={el.link}
-                        className={styles.section}>
+                        href={el.path}
+                        className={cn(
+                            styles.section,
+                            { [styles.section_selected]: router.pathname === el.path }
+                        )}>
                         <p>{el.name}</p>
                     </Link>
                 ))}
