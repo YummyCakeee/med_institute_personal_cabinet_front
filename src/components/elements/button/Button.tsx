@@ -2,7 +2,7 @@ import React from "react"
 import styles from "./Button.module.scss"
 import cn from "classNames"
 
-export interface IButtonProps {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     title?: string,
     onClick?: () => void,
     size?: "small" | "medium" | "large",
@@ -13,21 +13,24 @@ const Button = ({
     title,
     onClick = () => { },
     size = "medium",
-    primary
-}: IButtonProps) => {
-
-    const cx = cn.bind(styles)
+    primary,
+    ...props
+}: ButtonProps) => {
 
     return (
-        <div className={cx({
-            [styles.container]: true,
-            [styles[size]]: true,
-            [styles.primary]: primary
-        })}
-            onClick={onClick}
+        <button className={cn(
+            { [styles.container]: true },
+            { [styles[size]]: true },
+            { [styles.primary]: primary },
+            { [styles.disabled]: props.disabled }
+        )}
+            {... {
+                onClick,
+                ...props
+            }}
         >
             {title}
-        </div >
+        </button>
     )
 }
 

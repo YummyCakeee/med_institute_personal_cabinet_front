@@ -12,7 +12,7 @@ $buttonColor: #3769c7;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 
-    &:hover {
+    &:hover:not(.disabled) {
         opacity: 0.8;
     }
 }
@@ -39,4 +39,8 @@ $buttonColor: #3769c7;
     background-color: $buttonColor;
     color: #fff;
     border-color: none;
+}
+
+.disabled {
+    filter: grayscale(0.5)
 }
