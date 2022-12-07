@@ -1,0 +1,162 @@
+@use "src/styles/utils.module.scss" as *;
+
+.container {
+    max-width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: transparentize($mainBlueColor, 0.5) solid 1px;
+    box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.295);
+}
+
+.header {
+    &_list {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px 0;
+        background-color: #d3d3d380;
+    }
+
+    &_item {
+        margin: 0 10px;
+        font-size: 20px;
+        font-weight: 500;
+        overflow: hidden;
+        text-align: center;
+    }
+}
+
+.item {
+    overflow: hidden;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    background-color: #ffffffa6;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px #0000004f;
+    margin: 0 5px 10px 5px;
+    transition: all 0.2s ease-in-out;
+    z-index: 1;
+    backdrop-filter: blur(5px);
+
+    &:hover {
+        background-color: transparentize($mainBlueColor, 0.7);
+        backdrop-filter: blur(10px);
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &_selected {
+        background-color: transparentize($mainBlueColor, 0.4);
+    }
+
+    &_field {
+        font-size: 15px;
+        padding: 0 10px;
+    }
+
+
+    &_control {
+
+        max-height: 0px;
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0;
+        opacity: 0;
+        border-bottom: black solid 1px;
+        background-color: #f7f7f7;
+
+        &[data-visible="true"] {
+            max-height: 100px;
+            padding: 10px;
+            opacity: 1;
+        }
+
+        &_button {
+            margin: 0 10px;
+
+            &_unselect {
+                cursor: pointer;
+            }
+        }
+
+        &_bottom_section {
+            height: 40px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            background-color: #f7f7f7;
+        }
+    }
+
+    &_list {
+        min-height: 150px;
+        max-height: 500px;
+        background-color: #fff;
+        padding: 5px 0;
+        overflow-y: scroll;
+
+        //Scroll-bar
+
+        scrollbar-width: thin;
+        scrollbar-color: $mainBlueColor #6b6b6b;
+
+        &::-webkit-scrollbar {
+            height: 12px;
+            width: 2px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #6b6b6b;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: $mainBlueColor;
+            border-radius: 5px;
+        }
+
+        //~Scroll-Bar
+
+        &_container {
+            position: relative;
+        }
+
+
+        &_background_columns {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: row;
+            z-index: 0;
+            padding: 0 5px;
+        }
+
+        &_background_column {
+            &_even {
+                background-color: #fff;
+            }
+
+            &_odd {
+                background-color: #b9b9b9;
+            }
+        }
+
+        &_empty {
+            text-align: center;
+            padding: 20px;
+        }
+    }
+}
