@@ -1,0 +1,38 @@
+@use "src/styles/utils.module.scss" as *;
+
+.container {
+    width: 100%;
+    position: relative;
+}
+
+.text_area {
+    &_container {
+        background-color: #fff;
+        width: 100%;
+        min-width: 200px;
+        min-height: 250px;
+        border-radius: 20px;
+        outline: none;
+        border: none;
+        font-size: 20px;
+        padding: 10px;
+        margin: 10px 0 20px 0;
+        resize: none;
+    }
+
+    &_error {
+        position: absolute;
+        bottom: 0;
+        color: $mainRedColor;
+        font-size: 15px;
+        max-height: 0px;
+        opacity: 0;
+        overflow: hidden;
+
+        &_shown {
+            max-height: 20px;
+            opacity: 1;
+            transition: all 0.3s ease-in-out
+        }
+    }
+}
