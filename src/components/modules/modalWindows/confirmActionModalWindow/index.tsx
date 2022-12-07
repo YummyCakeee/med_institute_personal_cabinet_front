@@ -1,10 +1,10 @@
 import ModalWindow from "components/elements/modalWindow/ModalWindow"
 import React from "react"
-import { IModalWindowProps } from "components/elements/modalWindow/ModalWindow"
+import { ModalWindowProps } from "components/elements/modalWindow/ModalWindow"
 import Button from "components/elements/button/Button"
 import utilStyles from "styles/utils.module.scss"
 
-export interface IConfirmActionModalWindowProps extends IModalWindowProps {
+export interface ConfirmActionModalWindowProps extends ModalWindowProps {
     onConfirm: () => void,
     onDismiss: () => void,
     text?: string,
@@ -15,7 +15,7 @@ const ConfirmActionModalWindow = ({
     onDismiss = () => { },
     text,
     ...props
-}: IConfirmActionModalWindowProps) => {
+}: ConfirmActionModalWindowProps) => {
 
     return (
         <ModalWindow

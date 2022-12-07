@@ -3,7 +3,7 @@ import { CrossIcon } from "../icons"
 import styles from "./ModalWindow.module.scss"
 import utilStyles from "styles/utils.module.scss"
 
-export interface IModalWindowProps {
+export interface ModalWindowProps {
     isShowing?: boolean,
     onClose?: () => void
     closable?: boolean,
@@ -19,7 +19,7 @@ const ModalWindow = ({
     children,
     backgroundOverlap,
     title
-}: IModalWindowProps) => {
+}: ModalWindowProps) => {
 
     const onBackgroundlClick = () => {
         if (closable) onClose()
