@@ -1,0 +1,9 @@
+@use "src/styles/utils.module.scss" as *;
+
+.container {
+    width: 100%;
+    height: 70px;
+    background-color: $mainGreyColor;
+    align-self: flex-end;
+    display: inline-block;
+}
