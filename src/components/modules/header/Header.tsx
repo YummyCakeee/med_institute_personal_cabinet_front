@@ -3,6 +3,13 @@ import { useRouter } from "next/router"
 import React, { useState } from "react"
 import cn from "classNames"
 import styles from "./Header.module.scss"
+import {
+    ROUTE_COURSES,
+    ROUTE_EDUCATIONAL_PROGRAMS,
+    ROUTE_PROFILE,
+    ROUTE_TESTS_COLLECTION,
+    ROUTE_USERS
+} from "constants/routes"
 
 const Header = () => {
 
@@ -11,23 +18,23 @@ const Header = () => {
     const [sections] = useState([
         {
             name: "Образовательные программы",
-            path: "/educationalPrograms",
+            path: ROUTE_EDUCATIONAL_PROGRAMS,
         },
         {
             name: "Пользователи",
-            path: "/users",
+            path: ROUTE_USERS,
         },
         {
             name: "Курсы",
-            path: "/courses",
+            path: ROUTE_COURSES,
         },
         {
             name: "Коллекция тестов",
-            path: "/testsCollection",
+            path: ROUTE_TESTS_COLLECTION,
         },
         {
             name: "Мой профиль",
-            path: "/",
+            path: ROUTE_PROFILE,
         }
     ])
 
