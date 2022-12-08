@@ -1,5 +1,5 @@
 import ModalWindow, { ModalWindowProps } from "components/elements/modalWindow/ModalWindow"
-import CourseForm from "components/modules/forms/courseForm"
+import CourseForm from "components/modules/forms/course"
 import { CourseType } from "components/templates/courses/useCourses"
 import React from "react"
 
