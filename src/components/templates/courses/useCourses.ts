@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useModalWindowContext } from "context/modalWindowContext"
 import axiosApi from "utils/axios"
 import { ENDPOINT_COURSES } from "constants/endpoints"
+import { Store } from "react-notifications-component"
 
 export type CourseType = {
     courseId: string,
@@ -14,9 +15,7 @@ export type CourseType = {
 const useCourses = () => {
     const {
         setConfirmActionModalWindowState,
-        closeConfirmActionModalWindow,
         setCourseModalWindowState,
-        closeCourseModalWindow
     } = useModalWindowContext()
 
     const [courses, setCourses] = useState<CourseType[]>([])
@@ -28,7 +27,15 @@ const useCourses = () => {
                 setCourses(data)
             })
             .catch(err => {
-                console.log(err)
+                Store.addNotification({
+                    type: "danger",
+                    message: "Не удалось загрузить список курсов",
+                    container: "top-right",
+                    dismiss: {
+                        onScreen: true,
+                        duration: 5000
+                    }
+                })
             })
     }
 
@@ -42,7 +49,6 @@ const useCourses = () => {
 
     const onCourseEditClick = (index: number) => {
         setCourseModalWindowState({
-            isShowing: true,
             mode: "edit",
             closable: true,
             backgroundOverlap: true,
@@ -52,15 +58,14 @@ const useCourses = () => {
 
     const onCourseDeleteClick = (index: number) => {
         setConfirmActionModalWindowState({
-            isShowing: true,
             text: `Удалить курс "${courses[index].title}"?`,
             onConfirm: () => {
                 setCourses(courses => courses.filter((el, key) => (
                     key !== index
                 )))
-                closeConfirmActionModalWindow()
+                setConfirmActionModalWindowState(undefined)
             },
-            onDismiss: closeConfirmActionModalWindow,
+            onDismiss: () => setConfirmActionModalWindowState(undefined),
             closable: true,
             backgroundOverlap: true
         })
@@ -68,7 +73,6 @@ const useCourses = () => {
 
     const onCourseAddClick = () => {
         setCourseModalWindowState({
-            isShowing: true,
             mode: "add",
             closable: true,
             backgroundOverlap: true
