@@ -47,7 +47,7 @@
 
 }
 
-.authorize_section {
+.logout_section {
     display: flex;
     flex-direction: row;
 
@@ -55,9 +55,19 @@
         margin: 0 10px;
         cursor: pointer;
         transition: all 0.2s ease-in-out;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        fill: #fff;
 
         &:hover {
             color: $mainBlueColor;
+            fill: $mainBlueColor;
+        }
+
+        &_icon {
+            margin-left: 5px;
+            fill: inherit
         }
     }
 }
