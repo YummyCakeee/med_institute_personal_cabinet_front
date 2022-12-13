@@ -4,7 +4,7 @@ import { CourseType } from "components/templates/courses/useCourses"
 import React from "react"
 
 export interface CourseModalWindowProps extends ModalWindowProps {
-    mode: "add" | "edit",
+    mode?: "add" | "edit",
     course?: CourseType
 }
 
