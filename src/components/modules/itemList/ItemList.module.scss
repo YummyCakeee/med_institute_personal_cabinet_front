@@ -24,6 +24,17 @@
         font-weight: 500;
         overflow: hidden;
         text-align: center;
+        transition: all 0.3s ease-in-out;
+        position: relative;
+
+        &_clickable {
+            cursor: pointer;
+            user-select: none;
+
+            &:hover {
+                color: $mainBlueColor;
+            }
+        }
     }
 }
 
@@ -42,7 +53,7 @@
     z-index: 1;
     backdrop-filter: blur(5px);
 
-    &:hover {
+    &:hover:not(.item_selected) {
         background-color: transparentize($mainBlueColor, 0.7);
         backdrop-filter: blur(10px);
     }
@@ -58,6 +69,7 @@
     &_field {
         font-size: 15px;
         padding: 0 10px;
+        overflow: hidden;
     }
 
 
@@ -86,6 +98,12 @@
 
             &_unselect {
                 cursor: pointer;
+                fill: transparentize($mainBlueColor, 0.2);
+                transition: all 0.3s ease-in-out;
+
+                &:hover {
+                    fill: $mainBlueColor;
+                }
             }
         }
 
@@ -96,6 +114,62 @@
             justify-content: center;
             align-items: center;
             background-color: #f7f7f7;
+        }
+
+        &_navigation_section {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+
+            & .page {
+                border: $mainBlueColor 1px solid;
+                border-radius: 10px;
+                width: 30px;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 0 5px;
+                cursor: pointer;
+                user-select: none;
+                background-color: transparentize($mainBlueColor, 0.9);
+                transition: all 0.3s ease-in-out;
+                color: transparentize($mainGreyColor, 0.4);
+
+                &:hover {
+                    color: $mainBlueColor;
+                }
+
+                &_selected {
+                    color: #fff;
+                }
+            }
+
+            & .arrow {
+
+                &_left {
+                    fill: transparentize($mainGreyColor, 0.4);
+                    transition: all 0.2s ease-in-out;
+
+                    &:hover {
+                        fill: $mainBlueColor;
+                        cursor: pointer;
+                    }
+                }
+
+                &_right {
+                    fill: transparentize($mainGreyColor, 0.4);
+                    transition: all 0.2s ease-in-out;
+                    transform: rotateY(180deg);
+
+                    &:hover {
+                        fill: $mainBlueColor;
+                        cursor: pointer;
+                    }
+                }
+            }
         }
     }
 
@@ -150,7 +224,7 @@
             }
 
             &_odd {
-                background-color: #b9b9b9;
+                background-color: transparentize($mainGreyColor, 0.7);
             }
         }
 
