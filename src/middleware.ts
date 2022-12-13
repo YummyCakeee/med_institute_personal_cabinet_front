@@ -10,5 +10,6 @@ export const config = {
     matcher: [
         //'/courses', 
         //'/users'
+        '/'
     ]
 }
