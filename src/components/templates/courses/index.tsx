@@ -42,24 +42,28 @@ const CoursesTemplate = () => {
                         },
                     ]}
                     items={courses}
-                    itemControlButtons={[
+                    itemControlButtons={() => [
                         {
                             title: "Детали",
-                            onClick: onCourseDetailsClick
+                            onClick: onCourseDetailsClick,
+                            size: "small"
                         },
                         {
                             title: "Изменить",
-                            onClick: onCourseEditClick
+                            onClick: onCourseEditClick,
+                            size: "small"
                         },
                         {
                             title: "Удалить",
-                            onClick: onCourseDeleteClick
+                            onClick: onCourseDeleteClick,
+                            size: "small"
                         }
                     ]}
                     controlButtonsBottom={[
                         {
                             title: "Добавить",
-                            onClick: onCourseAddClick
+                            onClick: onCourseAddClick,
+                            size: "small"
                         }
                     ]}
                 />
