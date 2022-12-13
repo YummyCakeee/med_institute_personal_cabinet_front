@@ -6,7 +6,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     title?: string,
     onClick?: () => void,
     size?: "small" | "medium" | "large",
-    primary?: boolean
+    primary?: boolean,
+    stretchable?: boolean
 }
 
 const Button = ({
@@ -14,15 +15,17 @@ const Button = ({
     onClick = () => { },
     size = "medium",
     primary,
+    stretchable,
     ...props
 }: ButtonProps) => {
 
     return (
         <button className={cn(
             { [styles.container]: true },
-            { [styles[size]]: true },
+            styles[size],
             { [styles.primary]: primary },
-            { [styles.disabled]: props.disabled }
+            { [styles.disabled]: props.disabled },
+            { [styles.stretchable]: stretchable }
         )}
             {... {
                 onClick,
