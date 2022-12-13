@@ -1,35 +1,33 @@
 import React, { useEffect, useMemo, useState } from "react"
 import styles from "./ItemList.module.scss"
 import cn from "classNames"
-import { CrossIcon } from "components/elements/icons"
-import Button from "components/elements/button/Button"
+import { CrossIcon, DoubleArrowIcon } from "components/elements/icons"
+import Button, { ButtonProps } from "components/elements/button/Button"
 
 type ItemListHeader = {
     title: string,
     field: string,
     colSize?: string
+    clickable?: boolean
 }
 
 type Item = {
-    [field: string]: string
+    [field: string]: any,
 }
 
-type ItemControlButton = {
-    title: string,
+interface ItemControlButton extends Omit<ButtonProps, 'onClick'> {
     onClick: (itemIndex: number) => void
-}
-
-type ItemControlButtonBottom = {
-    title: string,
-    onClick: () => void
 }
 
 type ItemListProps = {
     headers: ItemListHeader[],
     items?: Item[],
     className?: string,
-    itemControlButtons?: ItemControlButton[],
-    controlButtonsBottom?: ItemControlButtonBottom[]
+    itemControlButtons?: ({ selectedItem, items }: { selectedItem: number | null, items: Item[] | undefined }) => ItemControlButton[],
+    controlButtonsBottom?: ButtonProps[],
+    onHeaderClick?: (index: number) => void,
+    pageNavigation?: boolean,
+    pagesCount?: number
 }
 
 const ItemList = ({
@@ -37,10 +35,15 @@ const ItemList = ({
     items,
     className,
     itemControlButtons,
-    controlButtonsBottom
+    controlButtonsBottom,
+    onHeaderClick = () => { },
+    pageNavigation,
+    pagesCount = 1
 }: ItemListProps) => {
 
     const [selectedItem, setSetectedItem] = useState<number | null>(null)
+    const [pagesList, setPagesList] = useState<number[]>([])
+    const [currentPage, setCurrentPage] = useState<number>(1)
 
     const defaultColSize = useMemo(() => {
         return `${100 / headers.length}%`
@@ -55,38 +58,59 @@ const ItemList = ({
         setSetectedItem(null)
     }, [items])
 
+    useEffect(() => {
+        const offset =
+            currentPage === 1 ?
+                1 :
+                currentPage === pagesCount ?
+                    -1 :
+                    0
+        let newPagesList = [
+            currentPage - 1 + offset,
+            currentPage + offset,
+            currentPage + 1 + offset
+        ].slice(0, pagesCount)
+
+        setPagesList(newPagesList)
+
+    }, [pagesCount, currentPage])
+
     return (
         <div className={cn(styles.container, className)}>
             <div className={styles.header_list}>
                 {headers.map((el, key) => (
                     <div
                         key={key}
-                        className={styles.header_item}
+                        className={cn(
+                            styles.header_item,
+                            { [styles.header_item_clickable]: el.clickable }
+                        )}
                         style={{ width: el.colSize || defaultColSize }}
+                        onClick={() => onHeaderClick(key)}
                     >
                         {el.title}
                     </div>
                 ))}
             </div>
             <div className={styles.item_control} data-visible={selectedItem !== null}>
-                <div
+                <CrossIcon
                     className={styles.item_control_button_unselect}
                     onClick={() => setSetectedItem(null)}
-                >
-                    <CrossIcon />
-                </div>
-                {itemControlButtons?.map((el, key) => (
+                />
+                {itemControlButtons && itemControlButtons({ selectedItem, items }).map((el, key) => (
                     <div
                         key={key}
                         className={styles.item_control_button}
                     >
                         <Button
-                            title={el.title}
-                            size="small"
-                            onClick={() => {
-                                if (selectedItem !== null)
-                                    el.onClick(selectedItem)
+                            {...{
+                                ...el,
+                                onClick: () => {
+                                    if (selectedItem !== null)
+                                        el.onClick(selectedItem)
+                                }
                             }}
+
                         />
                     </div>
                 ))}
@@ -143,13 +167,37 @@ const ItemList = ({
                         className={styles.item_control_button}
                     >
                         <Button
-                            title={el.title}
-                            size="small"
-                            onClick={el.onClick}
+                            {...{
+                                ...el
+                            }}
                         />
                     </div>
                 ))}
             </div>
+            {pageNavigation &&
+                <div className={styles.item_control_navigation_section}>
+                    <DoubleArrowIcon
+                        className={styles.arrow_left}
+                        onClick={() => setCurrentPage(1)}
+                    />
+                    {pagesList.map(el => (
+                        <div
+                            key={el}
+                            className={cn(
+                                styles.page,
+                                { [styles.page_selected]: el === currentPage }
+                            )}
+                            onClick={() => setCurrentPage(el)}
+                        >
+                            {el}
+                        </div>
+                    ))}
+                    <DoubleArrowIcon
+                        className={styles.arrow_right}
+                        onClick={() => setCurrentPage(pagesCount)}
+                    />
+                </div>
+            }
         </div>
     )
 }
