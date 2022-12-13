@@ -44,4 +44,29 @@ $mainRedColor: #ff4800;
             margin: 20px 0;
         }
     }
+
+    &_text {
+        font-size: 15px;
+    }
+}
+
+.section {
+    &_title {
+        color: #000;
+        font-size: 25px;
+        font-weight: 500;
+        margin: 20px 0;
+    }
+}
+
+.text {
+    margin: 5px 0;
+
+    &_small {
+        font-size: 18px;
+    }
+
+    &_bold {
+        font-weight: 500;
+    }
 }
