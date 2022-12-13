@@ -11,6 +11,7 @@ $buttonColor: #3769c7;
     overflow: hidden;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    padding: 0 10px;
 
     &:hover:not(.disabled) {
         opacity: 0.8;
@@ -20,19 +21,23 @@ $buttonColor: #3769c7;
 .small {
     width: 130px;
     height: 30px;
-    border-radius: 15px;
+    border-radius: 12px;
 }
 
 .medium {
     width: 250px;
-    height: 40px;
-    border-radius: 20px;
+    height: 30px;
+    border-radius: 12px;
 }
 
 .large {
     width: 100%;
     height: 50px;
     border-radius: 25px;
+}
+
+.stretchable {
+    width: fit-content;
 }
 
 .primary {
