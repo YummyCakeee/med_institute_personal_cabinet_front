@@ -1,0 +1,46 @@
+@use "src/styles/utils.module.scss" as *;
+
+.container {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input {
+    &_container {
+        background-color: #ffffffa6;
+        backdrop-filter: blur(5px);
+        width: 100%;
+        height: 50px;
+        border-radius: 20px;
+        outline: none;
+        border: none;
+        font-size: 20px;
+        padding: 0 10px;
+        margin: 10px 0 20px 0;
+    }
+
+    &_label {
+        font-size: 20px;
+        margin: 10px 10px 20px 0;
+    }
+}
+
+.disabled {
+    filter: brightness(0.8)
+}
+
+.small {
+    width: 200px;
+}
+
+.medium {
+    width: 350px;
+}
+
+.large {
+    width: 100%;
+}

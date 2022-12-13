@@ -2,21 +2,20 @@ import React from "react"
 import { FieldProps } from "formik"
 import styles from "./InputField.module.scss"
 import cn from "classNames"
+import Input, { InputProps } from "components/elements/input/Input"
 
-type InputFieldProps = FieldProps & React.InputHTMLAttributes<HTMLInputElement>
+type InputFieldProps = FieldProps & InputProps
 
 const InputField = ({
     field,
     form: { touched, errors },
+    label,
+    fieldSize = "medium",
     ...props
 }: InputFieldProps) => {
     return (
         <div className={styles.container}>
-            <input
-                className={cn(
-                    styles.input_container,
-                    { [styles.disabled]: props.disabled }
-                )}
+            <Input
                 {...{
                     ...field,
                     ...props
