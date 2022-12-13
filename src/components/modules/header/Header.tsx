@@ -7,9 +7,11 @@ import {
     ROUTE_COURSES,
     ROUTE_EDUCATIONAL_PROGRAMS,
     ROUTE_PROFILE,
-    ROUTE_TESTS_COLLECTION,
+    ROUTE_REGISTRATION,
+    ROUTE_TESTING,
     ROUTE_USERS
 } from "constants/routes"
+import { LogoutIcon } from "components/elements/icons"
 
 const Header = () => {
 
@@ -29,14 +31,18 @@ const Header = () => {
             path: ROUTE_COURSES,
         },
         {
-            name: "Коллекция тестов",
-            path: ROUTE_TESTS_COLLECTION,
+            name: "Тестирование",
+            path: ROUTE_TESTING,
         },
         {
             name: "Мой профиль",
             path: ROUTE_PROFILE,
         }
     ])
+
+    const onLogoutClick = () => {
+        router.replace(ROUTE_REGISTRATION)
+    }
 
     return (
         <div className={styles.container}>
@@ -47,18 +53,23 @@ const Header = () => {
                         href={el.path}
                         className={cn(
                             styles.section,
-                            { [styles.section_selected]: router.pathname === el.path }
+                            { [styles.section_selected]: router.pathname.includes(el.path) }
                         )}>
                         <p>{el.name}</p>
                     </Link>
                 ))}
             </div>
-            <div className={styles.authorize_section}>
-                <div className={styles.authorize_section_button}>
-                    Регистрация
-                </div>
-                <div className={styles.authorize_section_button}>
-                    Авторизация
+            <div className={styles.logout_section}>
+                <div
+                    className={styles.logout_section_button}
+                    onClick={onLogoutClick}
+                >
+                    Выйти из аккаунта
+                    <LogoutIcon
+                        className={styles.logout_section_button_icon}
+                        width={15}
+                        height={15}
+                    />
                 </div>
             </div>
         </div>
