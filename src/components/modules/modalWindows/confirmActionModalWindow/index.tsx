@@ -5,8 +5,8 @@ import Button from "components/elements/button/Button"
 import utilStyles from "styles/utils.module.scss"
 
 export interface ConfirmActionModalWindowProps extends ModalWindowProps {
-    onConfirm: () => void,
-    onDismiss: () => void,
+    onConfirm?: () => void,
+    onDismiss?: () => void,
     text?: string,
 }
 
