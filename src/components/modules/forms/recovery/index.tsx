@@ -33,6 +33,7 @@ const RecoveryForm = () => {
                         name="login"
                         component={InputField}
                         placeholder="Ваш логин"
+                        fieldSize="large"
                         disabled={isSubmitting}
                         validate={(value: string) =>
                             composeValidators(value,
