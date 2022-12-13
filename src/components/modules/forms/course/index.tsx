@@ -10,13 +10,13 @@ import { notEmptyValidator } from "utils/validators"
 import utilStyles from "styles/utils.module.scss"
 
 interface CourseFormProps {
-    mode: "add" | "edit",
+    mode?: "add" | "edit",
     course?: CourseType
 }
 
 
 const CourseForm = ({
-    mode,
+    mode = "add",
     course
 }: CourseFormProps) => {
     const onSubmit = async (values: FormikValues) => {
@@ -34,7 +34,6 @@ const CourseForm = ({
                 })
         }
     }
-    console.log(course)
     return (
         <Formik
             initialValues={mode === "add" ?
