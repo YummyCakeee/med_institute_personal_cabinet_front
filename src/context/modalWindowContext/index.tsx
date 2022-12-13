@@ -1,65 +1,55 @@
 import ConfirmActionModalWindow from "components/modules/modalWindows/confirmActionModalWindow"
 import { ConfirmActionModalWindowProps } from "components/modules/modalWindows/confirmActionModalWindow"
 import CourseModalWindow, { CourseModalWindowProps } from "components/modules/modalWindows/courseModalWindow"
+import UserModalWindow, { UserModalWindowProps } from "components/modules/modalWindows/userModalWindow"
 import React, { createContext, useContext, useState } from "react"
 
 interface ModalWindowContext {
-    setConfirmActionModalWindowState: React.Dispatch<React.SetStateAction<ConfirmActionModalWindowProps>>,
-    closeConfirmActionModalWindow: () => void,
-    setCourseModalWindowState: React.Dispatch<React.SetStateAction<CourseModalWindowProps>>,
-    closeCourseModalWindow: () => void
+    setConfirmActionModalWindowState: React.Dispatch<React.SetStateAction<ConfirmActionModalWindowProps | undefined>>,
+    setCourseModalWindowState: React.Dispatch<React.SetStateAction<CourseModalWindowProps | undefined>>,
+    setUserModalWindowState: React.Dispatch<React.SetStateAction<UserModalWindowProps | undefined>>,
 }
 
 const ModalWindowContext = createContext<ModalWindowContext>({
     setConfirmActionModalWindowState: () => { },
-    closeConfirmActionModalWindow: () => { },
     setCourseModalWindowState: () => { },
-    closeCourseModalWindow: () => { }
+    setUserModalWindowState: () => { },
 })
-
-
-const defaultConfirmActionModalWindowState: ConfirmActionModalWindowProps = {
-    onConfirm: () => { },
-    onDismiss: () => { }
-}
-
-const defaultCourseModalWindowState: CourseModalWindowProps = {
-    mode: "add"
-}
 
 const ModalWindowWrapper = ({
     children
 }: { children: React.ReactNode }) => {
-    const [confirmActionModalWindowState, setConfirmActionModalWindowState] = useState<ConfirmActionModalWindowProps>(defaultConfirmActionModalWindowState)
-    const [courseModalWindowState, setCourseModalWindowState] = useState<CourseModalWindowProps>(defaultCourseModalWindowState)
-
-    const closeConfirmActionModalWindow = () => {
-        setConfirmActionModalWindowState(defaultConfirmActionModalWindowState)
-    }
-
-    const closeCourseModalWindow = () => {
-        setCourseModalWindowState(defaultCourseModalWindowState)
-    }
+    const [confirmActionModalWindowState, setConfirmActionModalWindowState] = useState<ConfirmActionModalWindowProps | undefined>(undefined)
+    const [courseModalWindowState, setCourseModalWindowState] = useState<CourseModalWindowProps | undefined>(undefined)
+    const [userModalWindowState, setUserModalWindowState] = useState<UserModalWindowProps | undefined>(undefined)
 
     return (
         <ModalWindowContext.Provider
             value={{
                 setConfirmActionModalWindowState,
-                closeConfirmActionModalWindow,
                 setCourseModalWindowState,
-                closeCourseModalWindow
+                setUserModalWindowState,
             }}
         >
             <ConfirmActionModalWindow
                 {...{
-                    onClose: closeConfirmActionModalWindow,
-                    ...confirmActionModalWindowState
+                    onClose: () => setConfirmActionModalWindowState(undefined),
+                    ...confirmActionModalWindowState,
+                    isShowing: !!confirmActionModalWindowState
                 }}
             />
             <CourseModalWindow
                 {...{
-                    onClose: closeCourseModalWindow,
-                    ...courseModalWindowState
+                    onClose: () => setCourseModalWindowState(undefined),
+                    ...courseModalWindowState,
+                    isShowing: !!courseModalWindowState
+                }}
+            />
+            <UserModalWindow
+                {...{
+                    onClose: () => setUserModalWindowState(undefined),
+                    ...userModalWindowState,
+                    isShowing: !!userModalWindowState
                 }}
             />
             {children}
