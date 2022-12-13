@@ -1,0 +1,43 @@
+@use "src/styles/utils.module.scss" as *;
+
+.container {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.input {
+    &_container {
+        height: 20px;
+        width: 20px;
+        margin-bottom: 20px;
+    }
+
+    &_error {
+        position: absolute;
+        bottom: 0;
+        color: $mainRedColor;
+        font-size: 15px;
+        max-height: 0px;
+        opacity: 0;
+        overflow: hidden;
+
+        &_shown {
+            max-height: 20px;
+            opacity: 1;
+            transition: all 0.3s ease-in-out
+        }
+    }
+
+    &_label {
+        font-size: 20px;
+        margin: 0 0 20px 10px;
+    }
+}
+
+.disabled {
+    filter: brightness(0.8)
+}
