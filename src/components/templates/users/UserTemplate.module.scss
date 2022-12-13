@@ -1,0 +1,55 @@
+@use "src/styles/utils.module.scss" as *;
+
+.personal_info {
+    &_section {}
+
+    &_data {
+        display: flex;
+        flex-direction: row;
+    }
+
+    &_text {
+        display: grid;
+        width: fit-content;
+    }
+
+    &_line {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+    }
+
+    &_col {
+        margin-right: 20px;
+    }
+
+    &_photo {
+        object-fit: cover;
+        border-radius: 15px;
+    }
+}
+
+.back_to_user_list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    fill: #000;
+    color: #000;
+    transition: all 0.3s ease-in-out;
+    margin: 20px 0 40px 0;
+
+    &:hover {
+        fill: $mainBlueColor;
+        color: $mainBlueColor;
+    }
+
+    &_arrow {
+        fill: inherit;
+        transform: rotateZ(90deg);
+        width: 15px;
+        height: 15px;
+    }
+
+    &_text {
+        margin-left: 10px;
+    }
+}
