@@ -2,7 +2,7 @@
 
 .container {
     max-width: 100%;
-    border-radius: 20px;
+    border-radius: 12px;
     overflow: hidden;
     box-sizing: border-box;
     border: transparentize($mainBlueColor, 0.5) solid 1px;
@@ -74,7 +74,6 @@
 
 
     &_control {
-
         max-height: 0px;
         overflow: hidden;
         transition: all 0.3s ease-in-out;
@@ -219,11 +218,11 @@
         }
 
         &_background_column {
-            &_even {
+            &_odd {
                 background-color: #fff;
             }
 
-            &_odd {
+            &_even {
                 background-color: transparentize($mainGreyColor, 0.7);
             }
         }

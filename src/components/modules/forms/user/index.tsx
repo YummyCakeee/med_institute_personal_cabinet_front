@@ -41,12 +41,12 @@ const UserForm = ({
 
                 } :
                 {
-                    surname: user?.surname ? user.surname : "",
-                    name: user?.name ? user.name : "",
-                    patronymic: user?.patronymic ? user.patronymic : "",
-                    login: user?.login ? user.login : "",
-                    email: user?.email ? user.email : "",
-                    roles: user?.roles ? user.roles : ""
+                    surname: user?.surname || "",
+                    name: user?.name || "",
+                    patronymic: user?.patronymic || "",
+                    login: user?.login || "",
+                    email: user?.email || "",
+                    roles: user?.roles || ""
                 }
             }
             onSubmit={onSubmit}

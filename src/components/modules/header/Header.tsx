@@ -19,7 +19,7 @@ const Header = () => {
 
     const [sections] = useState([
         {
-            name: "Образовательные программы",
+            name: "Программы обучения",
             path: ROUTE_EDUCATIONAL_PROGRAMS,
         },
         {
@@ -53,7 +53,7 @@ const Header = () => {
                         href={el.path}
                         className={cn(
                             styles.section,
-                            { [styles.section_selected]: router.pathname.includes(el.path) }
+                            { [styles.section_selected]: router.pathname.startsWith(el.path) }
                         )}>
                         <p>{el.name}</p>
                     </Link>

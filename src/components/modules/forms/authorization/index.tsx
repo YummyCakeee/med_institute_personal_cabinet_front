@@ -32,7 +32,7 @@ const AuthorizationForm = ({
                         component={InputField}
                         placeholder="Ваш логин"
                         disabled={isSubmitting}
-                        fieldSize="large"
+                        size="large"
                         validate={(value: string) =>
                             composeValidators(value,
                                 notEmptyValidator,
@@ -45,7 +45,7 @@ const AuthorizationForm = ({
                         component={InputField}
                         placeholder="Пароль"
                         type="password"
-                        fieldSize="large"
+                        size="large"
                         disabled={isSubmitting}
                         validate={(value: string) =>
                             composeValidators(value,

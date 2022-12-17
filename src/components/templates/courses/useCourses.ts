@@ -20,29 +20,6 @@ const useCourses = () => {
 
     const [courses, setCourses] = useState<CourseType[]>([])
 
-    const loadCourses = () => {
-        axiosApi.get(ENDPOINT_COURSES)
-            .then(res => {
-                const data: CourseType[] = res.data;
-                setCourses(data)
-            })
-            .catch(err => {
-                Store.addNotification({
-                    type: "danger",
-                    message: "Не удалось загрузить список курсов",
-                    container: "top-right",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
-            })
-    }
-
-    useEffect(() => {
-        loadCourses()
-    }, [])
-
     const onCourseDetailsClick = (index: number) => {
 
     }
@@ -81,6 +58,7 @@ const useCourses = () => {
 
     return {
         courses,
+        setCourses,
         onCourseDetailsClick,
         onCourseDeleteClick,
         onCourseEditClick,

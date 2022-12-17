@@ -76,9 +76,10 @@ const UsersTemplate = () => {
                             size: "small"
                         },
                         {
-                            title: "Изменить",
+                            title: "Редактировать",
                             onClick: onUserEditClick,
-                            size: "small"
+                            size: "small",
+                            stretchable: true
                         },
                         {
                             title: "Удалить",

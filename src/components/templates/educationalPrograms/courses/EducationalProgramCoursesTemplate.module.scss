@@ -1,0 +1,41 @@
+.lists_container {
+    display: flex;
+    flex-direction: row;
+}
+
+.dependent_courses {
+
+    margin-left: 30px;
+
+    &_list {
+        background-color: #b4b4b44f;
+        padding: 5px;
+        border-radius: 10px;
+        width: 500px;
+        height: 400px;
+        overflow: auto;
+
+        &_item {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin: 5px;
+            background-color: #afafaf80;
+            border-radius: 10px;
+            padding: 5px;
+
+            & .icon {
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
+.save_button_container {
+    width: 100%;
+    
+}
+
+.save_button {
+    margin: 40px auto;
+}

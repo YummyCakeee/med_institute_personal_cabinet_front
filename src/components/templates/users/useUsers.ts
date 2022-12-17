@@ -110,8 +110,6 @@ const useUsers = () => {
         let newUsers: UserType[] = []
         if (filteringFieldName) {
             newUsers = users.filter(el => {
-                console.log(filteringFieldName)
-                console.log(filteringFieldValue)
                 return el[filteringFieldName] === filteringFieldValue
             })
         }

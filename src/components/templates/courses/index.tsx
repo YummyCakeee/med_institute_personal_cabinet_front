@@ -1,19 +1,27 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Layout from "components/layouts/Layout"
 import Head from "next/head"
 import ItemList from "components/modules/itemList"
 import styles from "./CoursesTemplate.module.scss"
-import useCourses from "./useCourses"
+import useCourses, { CourseType } from "./useCourses"
 
-const CoursesTemplate = () => {
+type CoursesTemplateProps = {
+    courses: CourseType[]
+}
 
+const CoursesTemplate = ({ courses: initialCourses }: CoursesTemplateProps) => {
     const {
         courses,
+        setCourses,
         onCourseAddClick,
         onCourseDeleteClick,
         onCourseDetailsClick,
         onCourseEditClick
     } = useCourses()
+
+    useEffect(() => {
+        setCourses(initialCourses)
+    }, [initialCourses])
 
     return (
         <Layout>
@@ -49,9 +57,10 @@ const CoursesTemplate = () => {
                             size: "small"
                         },
                         {
-                            title: "Изменить",
+                            title: "Редактировать",
                             onClick: onCourseEditClick,
-                            size: "small"
+                            size: "small",
+                            stretchable: true,
                         },
                         {
                             title: "Удалить",

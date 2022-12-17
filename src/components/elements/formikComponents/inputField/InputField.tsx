@@ -9,8 +9,6 @@ type InputFieldProps = FieldProps & InputProps
 const InputField = ({
     field,
     form: { touched, errors },
-    label,
-    fieldSize = "medium",
     ...props
 }: InputFieldProps) => {
     return (

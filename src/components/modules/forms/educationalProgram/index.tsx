@@ -1,24 +1,24 @@
 import Button from "components/elements/button/Button"
 import InputField from "components/elements/formikComponents/inputField/InputField"
 import TextAreaField from "components/elements/formikComponents/textAreaField/TextAreaField"
-import { CourseType } from "components/templates/courses/useCourses"
 import { ENDPOINT_COURSES } from "constants/endpoints"
 import { Formik, Form, Field, FormikValues } from "formik"
 import React from "react"
 import axiosApi from "utils/axios"
 import { notEmptyValidator } from "utils/validators"
 import utilStyles from "styles/utils.module.scss"
+import { EducationalProgramType } from "components/templates/educationalPrograms"
 
-interface CourseFormProps {
+interface EducationalProgramFormProps {
     mode?: "add" | "edit",
-    course?: CourseType
+    program?: EducationalProgramType
 }
 
 
-const CourseForm = ({
+const EducationalProgramForm = ({
     mode = "add",
-    course
-}: CourseFormProps) => {
+    program
+}: EducationalProgramFormProps) => {
     const onSubmit = async (values: FormikValues) => {
         if (mode === "add") {
             const data = {
@@ -42,8 +42,8 @@ const CourseForm = ({
                     description: ""
                 } :
                 {
-                    title: course?.title || "",
-                    description: course?.description || ""
+                    title: program?.title || "",
+                    description: program?.description || ""
                 }
             }
             onSubmit={onSubmit}
@@ -54,14 +54,14 @@ const CourseForm = ({
                     <Field
                         name="title"
                         component={InputField}
-                        placeholder="Название курса"
+                        placeholder="Название программы"
                         validate={notEmptyValidator}
                         disabled={isSubmitting}
                     />
                     <Field
                         name="description"
                         component={TextAreaField}
-                        placeholder="Описание курса"
+                        placeholder="Описание программы"
                         validate={notEmptyValidator}
                         disabled={isSubmitting}
                     />
@@ -79,4 +79,4 @@ const CourseForm = ({
     )
 }
 
-export default CourseForm
+export default EducationalProgramForm

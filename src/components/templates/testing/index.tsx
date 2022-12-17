@@ -1,78 +1,51 @@
 import Layout from "components/layouts/Layout"
-import ItemList from "components/modules/itemList"
 import Head from "next/head"
-import React from "react"
-import utilStyles from "styles/utils.module.scss"
+import React, { useEffect } from "react"
+import Collections from "./Collections"
+import TestBlocks from "./TestBlocks"
+import useTesting, { CollectionType, TestBlockType } from "./useTesting"
 
-const TestingTemplate = () => {
+type TestingTemplateProps = {
+    testBlocks: TestBlockType[],
+    collections: CollectionType[],
+}
 
+const TestingTemplate = ({
+    collections: initialCollections,
+    testBlocks: initialTestBlocks
+}: TestingTemplateProps) => {
+
+    const {
+        collections,
+        setCollections,
+        testBlocks,
+        setTestBlocks
+    } = useTesting()
+
+    useEffect(() => {
+        setCollections(initialCollections)
+    }, [initialCollections])
+
+    useEffect(() => {
+        setTestBlocks(initialTestBlocks)
+    }, [initialTestBlocks])
 
     return (
         <Layout>
             <Head>
                 <title>
-                    Коллекция тестов
+                    Тестирование
                 </title>
             </Head>
             <div>
-                <div className={utilStyles.section_title}>Коллекция тестов</div>
-                <ItemList
-                    headers={[
-                        {
-                            title: "Тип теста",
-                            field: "testTypeId",
-                        },
-                        {
-                            title: "Тело теста",
-                            field: "testBody",
-                        },
-                        {
-                            title: "Дата создания",
-                            field: "createDate",
-                        },
-                        {
-                            title: "ID создателя",
-                            field: "creatorId",
-                        },
-                        {
-                            title: "Коллекция",
-                            field: "collection",
-                        }
-                    ]}
+                <Collections
+                    collections={collections}
+                    setCollections={setCollections}
                 />
             </div>
             <div>
-                <div className={utilStyles.section_title}>Коллекции</div>
-                <ItemList
-                    headers={[
-                        {
-                            title: "Название",
-                            field: "name",
-                        },
-                        {
-                            title: "Дата создания",
-                            field: "createDate",
-                        },
-                        {
-                            title: "ID создателя",
-                            field: "creatorId",
-                        }
-                    ]}
-                />
-            </div>
-            <div>
-                <div className={utilStyles.section_title}>Тесты</div>
-                <ItemList
-                    headers={[
-                        {
-                            title: "Процент для зачёта",
-                            field: "testScorePercent",
-                        },
-                        {
-                            title: "Дата окончания",
-                            field: "endDate",
-                        }
-                    ]}
+                <TestBlocks
+
                 />
             </div>
         </Layout>

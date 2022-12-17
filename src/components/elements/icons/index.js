@@ -26,6 +26,31 @@ export const CrossIcon = ({
     </svg>
 )
 
+export const PlusIcon = ({
+    width = 20,
+    height = 20,
+    color = "#000",
+    className = "",
+    onClick = () => { }
+}) => (
+    <svg
+        xmlns={xmlns}
+        version={version}
+        viewBox="0 0 286.376 286.376"
+        xmlSpace="preserve"
+        width={width}
+        height={height}
+        fill={color}
+        className={className}
+        onClick={onClick}
+    >
+        <path d="M268.477,125.29H161.086V17.899c0-9.885-8.013-17.898-17.898-17.898
+                s-17.898,8.013-17.898,17.898v107.39H17.9c-9.885,0-17.9,8.013-17.9,17.898c0,9.885,8.015,17.898,17.9,17.898h107.39v107.39
+                c0,9.885,8.013,17.898,17.898,17.898s17.898-8.013,17.898-17.898v-107.39h107.391c9.885,0,17.898-8.014,17.898-17.898
+                C286.376,133.303,278.362,125.29,268.477,125.29z"/>
+    </svg>
+)
+
 export const MoreOptionsIcon = ({
     width = 20,
     height = 20,
@@ -114,5 +139,28 @@ export const DoubleArrowIcon = ({
     >
         <path d="M0.001,242.606L121.305,0h121.302L121.305,242.606l121.302,242.606H121.305L0.001,242.606z M363.909,485.212h121.303
 		L363.909,242.606L485.212,0H363.909L242.607,242.606L363.909,485.212z"/>
+    </svg>
+)
+
+export const HamburgerIcon = ({
+    width = 20,
+    height = 20,
+    color = "#000",
+    className = "",
+    onClick = () => { }
+}) => (
+    <svg
+        xmlns={xmlns}
+        version={version}
+        viewBox="0 0 48 48"
+        width={width}
+        height={height}
+        fill={color}
+        className={className}
+        onClick={onClick}
+    >
+        <path d="M7.94977 11.9498H39.9498" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M7.94977 23.9498H39.9498" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M7.94977 35.9498H39.9498" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
 )

@@ -2,15 +2,15 @@ import React from "react"
 import styles from "./Input.module.scss"
 import cn from "classNames"
 
-export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
     label?: string,
-    fieldSize?: "small" | "medium" | "large",
+    size?: "small" | "medium" | "large",
     inputClassName?: string,
 }
 
 const Input = ({
     label,
-    fieldSize = "medium",
+    size = "medium",
     className,
     inputClassName,
     ...props
@@ -29,7 +29,7 @@ const Input = ({
                 className={cn(
                     styles.input_container,
                     { [styles.disabled]: props.disabled },
-                    styles[fieldSize],
+                    styles[size],
                     inputClassName
                 )}
                 {...{

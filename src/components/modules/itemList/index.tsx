@@ -16,7 +16,12 @@ type Item = {
 }
 
 interface ItemControlButton extends Omit<ButtonProps, 'onClick'> {
-    onClick: (itemIndex: number) => void
+    onClick?: (itemIndex: number) => void
+}
+
+type CustomFieldRenderingType = {
+    render: (value: any) => string,
+    fieldName: string
 }
 
 type ItemListProps = {
@@ -24,6 +29,7 @@ type ItemListProps = {
     items?: Item[],
     className?: string,
     itemControlButtons?: ({ selectedItem, items }: { selectedItem: number | null, items: Item[] | undefined }) => ItemControlButton[],
+    customFieldsRendering?: CustomFieldRenderingType[],
     controlButtonsBottom?: ButtonProps[],
     onHeaderClick?: (index: number) => void,
     pageNavigation?: boolean,
@@ -35,6 +41,7 @@ const ItemList = ({
     items,
     className,
     itemControlButtons,
+    customFieldsRendering,
     controlButtonsBottom,
     onHeaderClick = () => { },
     pageNavigation,
@@ -75,6 +82,16 @@ const ItemList = ({
 
     }, [pagesCount, currentPage])
 
+    const getItemFieldValue = (item: Item, fieldName: string): string => {
+        if (customFieldsRendering) {
+            const renderRule = customFieldsRendering.find(el => el.fieldName === fieldName)
+            return renderRule ?
+                renderRule.render(item[fieldName]) :
+                item[fieldName]
+        }
+        return item[fieldName]
+    }
+
     return (
         <div className={cn(styles.container, className)}>
             <div className={styles.header_list}>
@@ -106,7 +123,7 @@ const ItemList = ({
                             {...{
                                 ...el,
                                 onClick: () => {
-                                    if (selectedItem !== null)
+                                    if (selectedItem !== null && el.onClick)
                                         el.onClick(selectedItem)
                                 }
                             }}
@@ -146,7 +163,7 @@ const ItemList = ({
                                             className={styles.item_field}
                                             style={{ width: header?.colSize || defaultColSize }}
                                         >
-                                            {item[header.field]}
+                                            {getItemFieldValue(item, header.field)}
                                         </div>
                                     ))}
                                 </div>
