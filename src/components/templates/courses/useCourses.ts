@@ -1,18 +1,34 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useModalWindowContext } from "context/modalWindowContext"
-import axiosApi from "utils/axios"
-import { ENDPOINT_COURSES } from "constants/endpoints"
-import { Store } from "react-notifications-component"
+import { useRouter } from "next/router"
+import { ROUTE_COURSES } from "constants/routes"
+import { TestBlockType } from "../testing/useTesting"
 
 export type CourseType = {
     courseId: string,
     title: string,
     description: string,
     createDate: string,
-    creatorId: string
+    creatorId: string,
+    themes: ThemeType[]
+}
+
+export type ThemeType = {
+    themeId: string,
+    courseId: string
+    html: string,
+    themeFiles?: string
+    testBlockId?: string,
+    sortOrder: number,
+    createDate: string,
+    themePassed: boolean
+    userThemes?: null
+    course?: CourseType,
+    testBlock?: TestBlockType
 }
 
 const useCourses = () => {
+    const router = useRouter()
     const {
         setConfirmActionModalWindowState,
         setCourseModalWindowState,
@@ -20,8 +36,9 @@ const useCourses = () => {
 
     const [courses, setCourses] = useState<CourseType[]>([])
 
-    const onCourseDetailsClick = (index: number) => {
-
+    const onCourseSetupClick = (index: number) => {
+        const id = courses[index].courseId
+        router.push(`${ROUTE_COURSES}/${id}`)
     }
 
     const onCourseEditClick = (index: number) => {
@@ -59,7 +76,7 @@ const useCourses = () => {
     return {
         courses,
         setCourses,
-        onCourseDetailsClick,
+        onCourseSetupClick,
         onCourseDeleteClick,
         onCourseEditClick,
         onCourseAddClick

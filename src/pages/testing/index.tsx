@@ -1,7 +1,7 @@
 import LoadingErrorTemplate from "components/templates/loadingError"
 import TestingTemplate from "components/templates/testing"
 import { CollectionType, TestBlockType } from "components/templates/testing/useTesting"
-import { ENDPOINT_COLLECTIONS } from "constants/endpoints"
+import { ENDPOINT_COLLECTIONS, ENDPOINT_TEST_BLOCKS } from "constants/endpoints"
 import React from "react"
 import axiosApi from "utils/axios"
 
@@ -47,15 +47,22 @@ export const getServerSideProps = async () => {
     await axiosApi.get(ENDPOINT_COLLECTIONS)
         .then(res => {
             const data: any[] = res.data
-            const collections: CollectionType[] = data
-            pageProps.collections = collections
+            pageProps.collections = data
         })
         .catch(err => {
             pageProps.success = false
             pageProps.error = err.code
         })
 
-
+    await axiosApi.get(ENDPOINT_TEST_BLOCKS)
+        .then(res => {
+            const data: any[] = res.data
+            pageProps.testBlocks = data
+        })
+        .catch(err => {
+            pageProps.success = false
+            pageProps.error = err.code
+        })
 
     return {
         props: pageProps

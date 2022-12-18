@@ -39,13 +39,18 @@ const TestingTemplate = ({
             </Head>
             <div>
                 <Collections
-                    collections={collections}
-                    setCollections={setCollections}
+                    {...{
+                        collections,
+                        setCollections
+                    }}
                 />
             </div>
             <div>
                 <TestBlocks
-
+                    {...{
+                        testBlocks,
+                        setTestBlocks
+                    }}
                 />
             </div>
         </Layout>

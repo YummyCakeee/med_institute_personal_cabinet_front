@@ -25,15 +25,30 @@ export type TestAnswerType = {
 }
 
 export type TestBlockType = {
-    test: TestType,
+    testBlockId: string,
+    percentSuccess: number,
+    timeLimit: number,
+    dateEnd: string,
+    creatorId: string,
+    createDate: string,
+    isFileTestBlock: boolean,
+    testBlockCollections: []
+}
+
+export type TestBlockCollections = {
+    testBlockCollectionId: string,
+    testBlockId: string,
+    collectionId: string,
+    questionsAmount: string,
+    createDate: string,
+    testBlock: TestBlockType,
     collection: CollectionType
 }
 
 const useTesting = () => {
 
-    const [tests, setTests] = useState<TestType[]>([])
     const [collections, setCollections] = useState<CollectionType[]>([])
-    const [testBlocks, setTestBlocks] = useState<TestBlockType[]>()
+    const [testBlocks, setTestBlocks] = useState<TestBlockType[]>([])
 
     return {
         collections,

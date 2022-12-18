@@ -87,9 +87,9 @@ const ItemList = ({
             const renderRule = customFieldsRendering.find(el => el.fieldName === fieldName)
             return renderRule ?
                 renderRule.render(item[fieldName]) :
-                item[fieldName]
+                item[fieldName]?.toString()
         }
-        return item[fieldName]
+        return item[fieldName]?.toString()
     }
 
     return (

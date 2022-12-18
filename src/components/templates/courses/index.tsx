@@ -15,7 +15,7 @@ const CoursesTemplate = ({ courses: initialCourses }: CoursesTemplateProps) => {
         setCourses,
         onCourseAddClick,
         onCourseDeleteClick,
-        onCourseDetailsClick,
+        onCourseSetupClick,
         onCourseEditClick
     } = useCourses()
 
@@ -52,11 +52,6 @@ const CoursesTemplate = ({ courses: initialCourses }: CoursesTemplateProps) => {
                     items={courses}
                     itemControlButtons={() => [
                         {
-                            title: "Детали",
-                            onClick: onCourseDetailsClick,
-                            size: "small"
-                        },
-                        {
                             title: "Редактировать",
                             onClick: onCourseEditClick,
                             size: "small",
@@ -65,6 +60,11 @@ const CoursesTemplate = ({ courses: initialCourses }: CoursesTemplateProps) => {
                         {
                             title: "Удалить",
                             onClick: onCourseDeleteClick,
+                            size: "small"
+                        },
+                        {
+                            title: "Настройка",
+                            onClick: onCourseSetupClick,
                             size: "small"
                         }
                     ]}
