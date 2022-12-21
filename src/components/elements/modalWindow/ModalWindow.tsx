@@ -4,7 +4,6 @@ import styles from "./ModalWindow.module.scss"
 import utilStyles from "styles/utils.module.scss"
 
 export interface ModalWindowProps {
-    isShowing?: boolean,
     onClose?: () => void
     closable?: boolean,
     children?: React.ReactNode,
@@ -13,7 +12,6 @@ export interface ModalWindowProps {
 }
 
 const ModalWindow = ({
-    isShowing,
     onClose = () => { },
     closable,
     children,
@@ -27,37 +25,33 @@ const ModalWindow = ({
 
     return (
         <>
-            {isShowing &&
-                <>
-                    <div className={styles.container}>
-                        {closable &&
-                            <div
-                                className={styles.close_button}
-                                onClick={onClose}
-                            >
-                                <CrossIcon
-                                    width={15}
-                                    height={15}
-                                />
-                            </div>
-                        }
-                        <div className={styles.content}>
-                            {title &&
-                                <div className={utilStyles.modal_window_title}>
-                                    {title}
-                                </div>
-                            }
-                            {children}
-                        </div>
+            <div className={styles.container}>
+                {closable &&
+                    <div
+                        className={styles.close_button}
+                        onClick={onClose}
+                    >
+                        <CrossIcon
+                            width={15}
+                            height={15}
+                        />
                     </div>
-                    {backgroundOverlap &&
-                        <div
-                            className={styles.background}
-                            onClick={onBackgroundlClick}
-                        >
+                }
+                <div className={styles.content}>
+                    {title &&
+                        <div className={utilStyles.modal_window_title}>
+                            {title}
                         </div>
                     }
-                </>
+                    {children}
+                </div>
+            </div>
+            {backgroundOverlap &&
+                <div
+                    className={styles.background}
+                    onClick={onBackgroundlClick}
+                >
+                </div>
             }
         </>
     )

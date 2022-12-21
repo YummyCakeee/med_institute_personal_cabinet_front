@@ -1,0 +1,41 @@
+@use "src/styles/utils.module.scss" as *;
+
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.list {
+    background-color: #b4b4b44f;
+    padding: 5px;
+    border-radius: 10px;
+    width: 500px;
+    height: 300px;
+    overflow: auto;
+    margin: 0 10px;
+
+    &_item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 5px;
+        cursor: grab;
+        background-color: #ffffffa6;
+        border-radius: 10px;
+        padding: 5px;
+        transition: background-color 0.3s ease-in-out;
+        backdrop-filter: blur(5px);
+
+        &:hover:not(.selected) {
+            background-color: transparentize($mainBlueColor, 0.7);
+        }
+
+        &.selected {
+            background-color: transparentize($mainBlueColor, 0.4);
+        }
+
+        & .icon {
+            margin-right: 10px;
+        }
+    }
+}

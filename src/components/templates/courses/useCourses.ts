@@ -1,31 +1,9 @@
 import { useState } from "react"
 import { useModalWindowContext } from "context/modalWindowContext"
 import { useRouter } from "next/router"
-import { ROUTE_COURSES } from "constants/routes"
-import { TestBlockType } from "../testing/useTesting"
-
-export type CourseType = {
-    courseId: string,
-    title: string,
-    description: string,
-    createDate: string,
-    creatorId: string,
-    themes: ThemeType[]
-}
-
-export type ThemeType = {
-    themeId: string,
-    courseId: string
-    html: string,
-    themeFiles?: string
-    testBlockId?: string,
-    sortOrder: number,
-    createDate: string,
-    themePassed: boolean
-    userThemes?: null
-    course?: CourseType,
-    testBlock?: TestBlockType
-}
+import { ROUTE_COURSES, ROUTE_THEMES } from "constants/routes"
+import { TestBlockType } from "../testing/types"
+import { CourseType } from "./types"
 
 const useCourses = () => {
     const router = useRouter()
@@ -38,7 +16,7 @@ const useCourses = () => {
 
     const onCourseSetupClick = (index: number) => {
         const id = courses[index].courseId
-        router.push(`${ROUTE_COURSES}/${id}`)
+        router.push(`${ROUTE_COURSES}/${id}/${ROUTE_THEMES}`)
     }
 
     const onCourseEditClick = (index: number) => {

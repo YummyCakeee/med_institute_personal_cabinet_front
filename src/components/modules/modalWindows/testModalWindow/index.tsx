@@ -1,6 +1,6 @@
 import ModalWindow, { ModalWindowProps } from "components/elements/modalWindow/ModalWindow"
 import TestForm from "components/modules/forms/test"
-import { TestType } from "components/templates/testing/useTesting"
+import { TestType } from "components/templates/testing/types"
 import React from "react"
 
 export interface TestModalWindowProps extends ModalWindowProps {

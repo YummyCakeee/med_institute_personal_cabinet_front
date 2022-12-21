@@ -14,7 +14,7 @@ export const createAxiosInstance = () => {
     const instance = axios.create({
         baseURL,
         headers,
-        withCredentials: false
+        withCredentials: true
     })
 
     return instance

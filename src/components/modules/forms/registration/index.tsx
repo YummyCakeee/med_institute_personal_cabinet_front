@@ -5,30 +5,29 @@ import InputField from "components/elements/formikComponents/inputField/InputFie
 import utilStyles from "styles/utils.module.scss"
 import { composeValidators, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator } from "utils/validators"
 import axiosApi from "utils/axios"
-import { ENDPOINT_LOGIN } from "constants/endpoints"
+import { ENDPOINT_REGISTER } from "constants/endpoints"
 import { Store } from "react-notifications-component"
 
-type AutorizationFormProps = {
+type RegistrationFormProps = {
     onSuccess: () => void
 }
 
-type UserLoginType = {
-    userName: string,
+type UserRegisterType = {
+    email: string,
     password: string
 }
 
-const AuthorizationForm = ({
+const RegistrationForm = ({
     onSuccess
-}: AutorizationFormProps) => {
+}: RegistrationFormProps) => {
 
     const onSubmit = async (values: FormikValues) => {
-        const data: UserLoginType = {
-            userName: values.userName,
+        const data: UserRegisterType = {
+            email: values.email,
             password: values.password
         }
-        return axiosApi.post(ENDPOINT_LOGIN, data)
+        return axiosApi.post(ENDPOINT_REGISTER, data)
             .then(res => {
-                console.log(res)
                 if (res.status === 200) {
                     onSuccess()
                 }
@@ -38,7 +37,7 @@ const AuthorizationForm = ({
                     container: "top-right",
                     type: "danger",
                     title: "Ошибка",
-                    message: "Не удалось войти в аккаунт"
+                    message: "Не удалось зарегистрироваться"
                 })
                 console.log(err)
             })
@@ -47,7 +46,7 @@ const AuthorizationForm = ({
     return (
         <Formik
             initialValues={{
-                userName: "",
+                email: "",
                 password: ""
             }}
             onSubmit={onSubmit}
@@ -55,9 +54,9 @@ const AuthorizationForm = ({
             {({ isSubmitting, isValid }) => (
                 <Form>
                     <Field
-                        name="userName"
+                        name="email"
                         component={InputField}
-                        placeholder="Ваш логин"
+                        placeholder="Email"
                         disabled={isSubmitting}
                         size="large"
                         validate={(value: string) =>
@@ -95,4 +94,4 @@ const AuthorizationForm = ({
     )
 }
 
-export default AuthorizationForm
+export default RegistrationForm

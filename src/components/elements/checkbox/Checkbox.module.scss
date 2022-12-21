@@ -1,0 +1,27 @@
+@use "src/styles/utils.module.scss" as *;
+
+.container {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.input {
+    &_container {
+        height: 20px;
+        width: 20px;
+        margin-bottom: 20px;
+    }
+
+    &_label {
+        font-size: 20px;
+        margin: 0 0 20px 10px;
+    }
+}
+
+.disabled {
+    filter: brightness(0.8)
+}

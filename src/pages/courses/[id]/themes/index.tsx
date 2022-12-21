@@ -1,7 +1,7 @@
-import CourseTemplate from "components/templates/courses/CourseTemplate"
+import CourseTemplate from "components/templates/courses/course"
 import React from "react"
 import { GetServerSideProps } from "next"
-import { CourseType } from "components/templates/courses/useCourses"
+import { CourseType } from "components/templates/courses/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import axiosApi from "utils/axios"
 import { ENDPOINT_COURSES } from "constants/endpoints"
@@ -17,7 +17,6 @@ const Course = ({
     error,
     course
 }: CoursePageProps) => {
-
 
     return (
         <>
@@ -44,7 +43,8 @@ export const getServerSideProps: GetServerSideProps<CoursePageProps> = async ({ 
 
     await axiosApi.get(`${ENDPOINT_COURSES}/${params?.id}`)
         .then(res => {
-            pageProps.course = res.data
+            const data: CourseType = res.data
+            pageProps.course = data
         })
         .catch(err => {
             pageProps.success = false

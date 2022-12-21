@@ -164,3 +164,29 @@ export const HamburgerIcon = ({
         <path d="M7.94977 35.9498H39.9498" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
 )
+
+export const FileIcon = ({
+    width = 20,
+    height = 20,
+    color = "#000",
+    className = "",
+    onClick = () => { }
+}) => (
+    <svg
+        xmlns={xmlns}
+        version={version}
+        viewBox="0 0 30 30"
+        width={width}
+        height={height}
+        fill={color}
+        className={className}
+        onClick={onClick}
+    >
+        <path d="M8.5 19h13c.277 0 .5.223.5.5s-.223.5-.5.5h-13c-.277 0-.5-.223-.5-.5s.223-.5.5-.5zm0-4h13c.277 0 
+        .5.223.5.5s-.223.5-.5.5h-13c-.277 0-.5-.223-.5-.5s.223-.5.5-.5zm0-4h13c.277 0 .5.223.5.5s-.223.5-.5.5h-13c-.277 
+        0-.5-.223-.5-.5s.223-.5.5-.5zm10-9c-.276.004-.504.224-.5.5v4c0 .822.678 1.5 1.5 1.5h4c.665 0 .66-1 0-1h-4c-.286 
+        0-.5-.214-.5-.5v-4c.004-.282-.218-.504-.5-.5zm-14-2C3.678 0 3 .678 3 1.5v27c0 .822.678 1.5 1.5 1.5h21c.822 0 
+        1.5-.678 1.5-1.5v-21c0-.133-.053-.26-.146-.354l-7-7C19.76.053 19.634 0 19.5 0zm0 1h14.793L26 7.707V28.5c0 
+        .286-.214.5-.5.5h-21c-.286 0-.5-.214-.5-.5v-27c0-.286.214-.5.5-.5z"/>
+    </svg>
+)

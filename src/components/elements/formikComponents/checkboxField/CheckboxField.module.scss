@@ -10,11 +10,6 @@
 }
 
 .input {
-    &_container {
-        height: 20px;
-        width: 20px;
-        margin-bottom: 20px;
-    }
 
     &_error {
         position: absolute;
@@ -36,8 +31,4 @@
         font-size: 20px;
         margin: 0 0 20px 10px;
     }
-}
-
-.disabled {
-    filter: brightness(0.8)
 }

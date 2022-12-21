@@ -2,8 +2,9 @@ import React from "react"
 import styles from "./CheckboxField.module.scss"
 import { FieldProps } from "formik"
 import cn from "classNames"
+import Checkbox, { CheckBoxProps } from "components/elements/checkbox/Checkbox"
 
-type CheckBoxFieldProps = FieldProps & React.InputHTMLAttributes<HTMLInputElement> & {
+type CheckBoxFieldProps = FieldProps & CheckBoxProps & {
     label?: string
 }
 
@@ -17,22 +18,13 @@ const CheckboxField = ({
 
     return (
         <div className={styles.container}>
-            <input
-                className={cn(
-                    styles.input_container,
-                    { [styles.disabled]: props.disabled }
-                )}
-                type={"checkbox"}
+            <Checkbox
                 {...{
                     ...field,
+                    label,
                     ...props
                 }}
             />
-            {label &&
-                <div className={styles.input_label}>
-                    {label}
-                </div>
-            }
             <div className={cn(
                 styles.input_error,
                 { [styles.input_error_shown]: touched[field.name] && errors[field.name] }

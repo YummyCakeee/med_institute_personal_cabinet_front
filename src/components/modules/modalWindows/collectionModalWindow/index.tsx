@@ -1,6 +1,6 @@
 import ModalWindow, { ModalWindowProps } from "components/elements/modalWindow/ModalWindow"
 import CollectionForm from "components/modules/forms/collection"
-import { CollectionType } from "components/templates/testing/useTesting"
+import { CollectionType } from "components/templates/testing/types"
 import React from "react"
 
 export interface CollectionModalWindowProps extends ModalWindowProps {

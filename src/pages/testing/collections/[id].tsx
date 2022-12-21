@@ -1,6 +1,6 @@
 import LoadingErrorTemplate from "components/templates/loadingError"
 import CollectionTemplate from "components/templates/testing/collections/index"
-import { CollectionType } from "components/templates/testing/useTesting"
+import { CollectionType } from "components/templates/testing/types"
 import { ENDPOINT_COLLECTIONS } from "constants/endpoints"
 import { GetServerSideProps } from "next"
 import axiosApi from "utils/axios"
@@ -45,8 +45,9 @@ export const getServerSideProps: GetServerSideProps<CollectionPageProps> = async
                 const testBody = JSON.parse(el.testBody || "")
                 return {
                     ...el,
-                    questionText: testBody.QuestionText,
-                    answers: testBody.Answers.map((el: any) => ({ text: el.Text, correct: el.Correct })),
+                    exerciseText: testBody.ExerciseText || testBody.QuestionTex || "",
+                    questionText: testBody.QuestionText || testBody.ExerciseText || "",
+                    answers: testBody.Answers?.map((el: any) => ({ text: el.Text, correct: el.Correct })) || [],
                 }
             })
 

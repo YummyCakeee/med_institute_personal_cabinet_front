@@ -3,7 +3,7 @@ import ItemList from "components/modules/itemList"
 import { useModalWindowContext } from "context/modalWindowContext"
 import Head from "next/head"
 import { useEffect, useState } from "react"
-import { CollectionType, TestAnswerType, TestType } from "../useTesting"
+import { CollectionType, TestAnswerType, TestType } from "../types"
 
 type CollectionTemplateProps = {
     collection: CollectionType
@@ -12,6 +12,7 @@ type CollectionTemplateProps = {
 const CollectionTemplate = ({ collection }: CollectionTemplateProps) => {
 
     const [tests, setTests] = useState<TestType[]>([])
+    console.log(tests)
     const {
         setConfirmActionModalWindowState,
         setTestModalWindowState
@@ -82,7 +83,10 @@ const CollectionTemplate = ({ collection }: CollectionTemplateProps) => {
                         render: (value) =>
                         (value === 0 ?
                             "С одним правильным вариантом" :
-                            "С несколькими правильными ответами"),
+                            value === 1 ?
+                                "С несколькими правильными ответами" :
+                                "С ответом в виде файла"
+                        ),
                         fieldName: "testTypeId"
                     },
                     {
