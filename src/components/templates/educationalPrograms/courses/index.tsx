@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import Layout from "components/layouts/Layout"
 import Head from "next/head"
-import { EducationalProgramType } from ".."
-import { CourseType } from "components/templates/courses/useCourses"
+import { ProgramType } from "../types"
+import { CourseType } from "components/templates/courses/types"
 import utilStyles from "styles/utils.module.scss"
 import styles from "./EducationalProgramCoursesTemplate.module.scss"
 import SwapLists from "components/modules/swapLists"
@@ -11,7 +11,7 @@ import CheckboxField from "components/elements/formikComponents/checkboxField/Ch
 import Button from "components/elements/button/Button"
 
 type EducationalProgramCoursesTemplateProps = {
-    program: EducationalProgramType,
+    program: ProgramType,
     courses: CourseType[]
 }
 
@@ -25,8 +25,10 @@ const EducationalProgramCoursesTemplate = ({
     const [selectedCourseIndex, setSelectedCourseIndex] = useState<number | undefined>(undefined)
 
     useEffect(() => {
-        setProgramCourses(courses)
-    }, [courses])
+        const selectedCourses = courses.filter(course => program.programCourses.find(programCourse => programCourse.courseId === course.courseId))
+        setProgramCourses(selectedCourses)
+        setRestCourses(courses.filter(course => !selectedCourses.find(selectedCourse => course.courseId === selectedCourse.courseId)))
+    }, [program, courses])
 
     const onCourseSelected = (index: number | undefined) => {
         setSelectedCourseIndex(index)
@@ -89,6 +91,7 @@ const EducationalProgramCoursesTemplate = ({
                                                     name="dependentCourses"
                                                     component={CheckboxField}
                                                     value={el.courseId}
+                                                    type="checkbox"
                                                 />
                                             </div>
                                         ))}

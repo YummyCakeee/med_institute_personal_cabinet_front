@@ -5,6 +5,7 @@ import cn from "classNames"
 import styles from "./Header.module.scss"
 import {
     ROUTE_COURSES,
+    ROUTE_EDUCATION,
     ROUTE_EDUCATIONAL_PROGRAMS,
     ROUTE_PROFILE,
     ROUTE_REGISTRATION,
@@ -20,30 +21,33 @@ const Header = () => {
     const [sections] = useState([
         {
             name: "Программы обучения",
-            path: ROUTE_EDUCATIONAL_PROGRAMS,
+            path: ROUTE_EDUCATIONAL_PROGRAMS
         },
         {
             name: "Пользователи",
-            path: ROUTE_USERS,
+            path: ROUTE_USERS
         },
         {
             name: "Курсы",
-            path: ROUTE_COURSES,
+            path: ROUTE_COURSES
         },
         {
             name: "Тестирование",
-            path: ROUTE_TESTING,
+            path: ROUTE_TESTING
+        },
+        {
+            name: "Обучение",
+            path: ROUTE_EDUCATION
         },
         {
             name: "Мой профиль",
-            path: ROUTE_PROFILE,
+            path: ROUTE_PROFILE
         }
     ])
 
     const onLogoutClick = () => {
         router.replace(ROUTE_REGISTRATION)
     }
-
     return (
         <div className={styles.container}>
             <div className={styles.sections_list}>
@@ -53,7 +57,7 @@ const Header = () => {
                         href={el.path}
                         className={cn(
                             styles.section,
-                            { [styles.section_selected]: router.pathname.startsWith(el.path) }
+                            { [styles.section_selected]: router.pathname.match(`^${el.path}(/.*|$)`) }
                         )}>
                         <p>{el.name}</p>
                     </Link>

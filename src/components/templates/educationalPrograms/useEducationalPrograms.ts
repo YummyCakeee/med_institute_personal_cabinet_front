@@ -2,11 +2,11 @@ import { ROUTE_EDUCATIONAL_PROGRAMS } from "constants/routes"
 import { useModalWindowContext } from "context/modalWindowContext"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import { EducationalProgramType } from "."
+import { ProgramType } from "./types"
 
 const useEducationalPrograms = () => {
 
-    const [programs, setPrograms] = useState<EducationalProgramType[]>([])
+    const [programs, setPrograms] = useState<ProgramType[]>([])
     const router = useRouter()
 
     const {

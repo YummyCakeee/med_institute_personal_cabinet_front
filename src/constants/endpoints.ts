@@ -5,6 +5,7 @@ export const ENDPOINT_COURSES = "api/Courses"
 export const ENDPOINT_THEMES = "api/Themes"
 export const getCourseThemesEndpoint = (courseId: string) =>
     `${ENDPOINT_COURSES}/${courseId}/Themes`
+export const ENDPOINT_USER_THEMES = "api/UserTheme"
 export const ENDPOINT_USERS = ""
 export const ENDPOINT_COLLECTIONS = "api/Collections"
 export const ENDPOINT_TEST_BLOCKS = "api/TestBlocks"

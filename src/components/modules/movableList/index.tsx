@@ -11,7 +11,8 @@ type MovableListProps = {
     className?: string,
     title?: string,
     renderItem?: (value: any) => string,
-    onItemSelected?: (index: number) => void
+    onItemSelected?: (index: number) => void,
+    selectedItemClass?: string
 }
 
 const MovableList = ({
@@ -20,54 +21,55 @@ const MovableList = ({
     className,
     title,
     renderItem,
-    onItemSelected = () => { }
+    onItemSelected = () => { },
+    selectedItemClass
 }: MovableListProps) => {
 
     const [selectedItemIndex, setSelectedItemIndex] = useState<number | undefined>(undefined)
 
     const onListItemClick = (index: number) => {
-        if (index === selectedItemIndex)
+        if (index === selectedItemIndex) {
             setSelectedItemIndex(undefined)
+        }
         else {
             setSelectedItemIndex(index)
-            onItemSelected(index)
         }
+        onItemSelected(index)
     }
 
     return (
-        <div className={styles.container}>
-            <div className={className}>
-                <div className={utilStyles.text_medium}>{title}</div>
-                <List
-                    beforeDrag={({ index }) => onListItemClick(index)}
-                    lockVertically
-                    values={items}
-                    onChange={({ oldIndex, newIndex }) => {
-                        setItems(arrayMove(items, oldIndex, newIndex))
-                    }}
-                    renderList={({ children, props }) =>
-                        <div
-                            className={styles.list}
-                            {...props}
-                        >
-                            {children}
-                        </div>
-                    }
-                    renderItem={({ value, props, index }) =>
-                        <div className={cn(
-                            styles.list_item,
-                            { [styles.selected]: index === selectedItemIndex }
-                        )}
-                            {...props}
-                        >
-                            <HamburgerIcon
-                                className={styles.icon}
-                            />
-                            <div className={utilStyles.text_small}>{renderItem ? renderItem(value) : ""}</div>
-                        </div>
-                    }
-                />
-            </div>
+        <div className={className}>
+            <div className={utilStyles.text_medium}>{title}</div>
+            <List
+                beforeDrag={({ index }) => onListItemClick(index)}
+                lockVertically
+                values={items}
+                onChange={({ oldIndex, newIndex }) => {
+                    setItems(arrayMove(items, oldIndex, newIndex))
+                }}
+                renderList={({ children, props }) =>
+                    <div
+                        className={styles.list}
+                        {...props}
+                    >
+                        {children}
+                    </div>
+                }
+                renderItem={({ value, props, index }) =>
+                    <div className={cn(
+                        styles.list_item,
+                        { [styles.selected]: index === selectedItemIndex },
+                        { [`${selectedItemClass}`]: index === selectedItemIndex }
+                    )}
+                        {...props}
+                    >
+                        <HamburgerIcon
+                            className={styles.icon}
+                        />
+                        <div className={utilStyles.text_small}>{renderItem ? renderItem(value) : ""}</div>
+                    </div>
+                }
+            />
         </div>
     )
 }

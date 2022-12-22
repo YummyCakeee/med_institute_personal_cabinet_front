@@ -11,7 +11,7 @@ export type CourseType = {
 
 export type ThemeType = {
     themeId: string,
-    title?: string,
+    title: string,
     courseId: string
     html: string,
     themeFiles?: string

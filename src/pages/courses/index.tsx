@@ -2,7 +2,7 @@ import CoursesTemplate from "components/templates/courses"
 import React from "react"
 import axiosApi from "utils/axios"
 import { ENDPOINT_COURSES } from "constants/endpoints"
-import { CourseType } from "components/templates/courses/useCourses"
+import { CourseType } from "components/templates/courses/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 
 type CoursesPageProps = {
@@ -14,7 +14,6 @@ const Courses = ({
     success,
     courses
 }: CoursesPageProps) => {
-    console.log(success)
     return (
         <>
             {success ?

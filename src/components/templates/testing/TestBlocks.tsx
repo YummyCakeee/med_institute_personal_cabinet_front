@@ -1,7 +1,7 @@
 import React from "react"
 import utilStyles from "styles/utils.module.scss"
 import ItemList from "components/modules/itemList"
-import { TestBlockType } from "./useTesting"
+import { TestBlockType } from "./types"
 import { useRouter } from "next/router"
 import { useModalWindowContext } from "context/modalWindowContext"
 

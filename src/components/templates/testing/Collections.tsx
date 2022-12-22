@@ -1,7 +1,7 @@
 import React from "react"
 import utilStyles from "styles/utils.module.scss"
 import ItemList from "components/modules/itemList"
-import { CollectionType } from "./useTesting"
+import { CollectionType } from "./types"
 import { useModalWindowContext } from "context/modalWindowContext"
 import { useRouter } from "next/router"
 import { ROUTE_COLLECTIONS } from "constants/routes"

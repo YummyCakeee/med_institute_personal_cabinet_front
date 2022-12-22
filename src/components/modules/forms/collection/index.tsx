@@ -1,6 +1,6 @@
 import Button from "components/elements/button/Button"
 import InputField from "components/elements/formikComponents/inputField/InputField"
-import { CollectionType } from "components/templates/testing/useTesting"
+import { CollectionType } from "components/templates/testing/types"
 import { Field, Formik, Form } from "formik"
 import { notEmptyValidator } from "utils/validators"
 import utilStyles from "styles/utils.module.scss"

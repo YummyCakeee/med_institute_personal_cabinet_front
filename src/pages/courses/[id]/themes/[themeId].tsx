@@ -1,11 +1,11 @@
 import React from "react"
 import { GetServerSideProps } from "next"
-import { ThemeType } from "components/templates/courses/useCourses"
+import { ThemeType } from "components/templates/courses/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import axiosApi from "utils/axios"
 import { ENDPOINT_COLLECTIONS, ENDPOINT_TEST_BLOCKS, ENDPOINT_THEMES } from "constants/endpoints"
 import ThemeTemplate from "components/templates/courses/theme"
-import { CollectionType, TestBlockType } from "components/templates/testing/useTesting"
+import { CollectionType, TestBlockType } from "components/templates/testing/types"
 import axios from "axios"
 
 type ThemePageProps = {
@@ -59,8 +59,8 @@ export const getServerSideProps: GetServerSideProps<ThemePageProps> = async ({ p
             pageProps.error = err.code
         })
 
-    if (pageProps.theme?.testBlockId !== undefined) {
-        await axiosApi.get(`${ENDPOINT_TEST_BLOCKS}/${pageProps.theme.testBlockId}`)
+    if (pageProps.theme?.testBlockId !== null) {
+        await axiosApi.get(`${ENDPOINT_TEST_BLOCKS}/${pageProps.theme?.testBlockId}`)
             .then(res => {
                 if (pageProps.theme)
                     pageProps.theme.testBlock = res.data
@@ -68,10 +68,10 @@ export const getServerSideProps: GetServerSideProps<ThemePageProps> = async ({ p
             .catch(err => {
                 pageProps.success = false
                 pageProps.error = err.code
+                console.log(err)
             })
     }
 
-    console.log(pageProps)
     return {
         props: pageProps
     }

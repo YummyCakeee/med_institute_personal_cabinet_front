@@ -1,7 +1,7 @@
 import Layout from "components/layouts/Layout"
 import Head from "next/head"
 import React from "react"
-import { CourseType } from "../useCourses"
+import { CourseType } from "../types"
 import utilStyles from "styles/utils.module.scss"
 import ItemList from "components/modules/itemList"
 
@@ -31,15 +31,15 @@ const CourseTemplate = ({
     return (
         <Layout>
             <Head>
-                <title>Настройка курса "{course.title}"</title>
+                <title>{`Настройка курса ${course.title}`}</title>
             </Head>
             <div>
                 <div className={utilStyles.section_title}>Темы курса</div>
                 <ItemList
                     headers={[
                         {
-                            title: "Id",
-                            field: "themeId"
+                            title: "Название",
+                            field: "title"
                         }
                     ]}
                     items={themes}

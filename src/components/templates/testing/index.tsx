@@ -3,7 +3,8 @@ import Head from "next/head"
 import React, { useEffect } from "react"
 import Collections from "./Collections"
 import TestBlocks from "./TestBlocks"
-import useTesting, { CollectionType, TestBlockType } from "./useTesting"
+import useTesting from "./useTesting"
+import { CollectionType, TestBlockType } from "./types"
 
 type TestingTemplateProps = {
     testBlocks: TestBlockType[],

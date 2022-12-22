@@ -1,8 +1,7 @@
 import Button from "components/elements/button/Button"
 import InputField from "components/elements/formikComponents/inputField/InputField"
-import TextAreaField from "components/elements/formikComponents/textAreaField/TextAreaField"
-import { CourseType, ThemeType } from "components/templates/courses/useCourses"
-import { ENDPOINT_COURSES, getCourseThemesEndpoint } from "constants/endpoints"
+import { CourseType, ThemeType } from "components/templates/courses/types"
+import { getCourseThemesEndpoint } from "constants/endpoints"
 import { Formik, Form, Field, FormikValues } from "formik"
 import React from "react"
 import axiosApi from "utils/axios"
@@ -40,6 +39,7 @@ const ThemeForm = ({
                 })
                 .catch(err => {
                     onError(err)
+                    console.log(err)
                 })
         }
     }

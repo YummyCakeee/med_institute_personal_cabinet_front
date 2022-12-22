@@ -2,23 +2,11 @@ import React, { useEffect } from "react"
 import Layout from "components/layouts/Layout"
 import Head from "next/head"
 import ItemList from "components/modules/itemList"
-import { CourseType } from "../courses/useCourses"
 import useEducationalPrograms from "./useEducationalPrograms"
-
-export type EducationalProgramType = {
-    programId: string,
-    createDate: string,
-    creatorId: string,
-    description: string,
-    programCourses: CourseType[]
-    programCriteria: any
-    title: string,
-    commonFiles: any[],
-    userPrograms: any[]
-}
+import { ProgramType } from "./types"
 
 type EducationalProgramsTemplateProps = {
-    educationalPrograms: EducationalProgramType[]
+    educationalPrograms: ProgramType[]
 }
 
 const EducationalProgramsTemplate = ({

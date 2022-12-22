@@ -16,7 +16,7 @@ const useCourses = () => {
 
     const onCourseSetupClick = (index: number) => {
         const id = courses[index].courseId
-        router.push(`${ROUTE_COURSES}/${id}/${ROUTE_THEMES}`)
+        router.push(`${ROUTE_COURSES}/${id}${ROUTE_THEMES}`)
     }
 
     const onCourseEditClick = (index: number) => {

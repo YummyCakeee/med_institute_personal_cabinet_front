@@ -4,5 +4,6 @@ export const ROUTE_THEMES = "/themes"
 export const ROUTE_EDUCATIONAL_PROGRAMS = "/educationalPrograms"
 export const ROUTE_USERS = "/users"
 export const ROUTE_TESTING = "/testing"
+export const ROUTE_EDUCATION = "/education"
 export const ROUTE_PROFILE = "/profile"
 export const ROUTE_COLLECTIONS = `${ROUTE_TESTING}/collections`

@@ -1,4 +1,5 @@
-import EducationalProgramsTemplate, { EducationalProgramType } from 'components/templates/educationalPrograms'
+import EducationalProgramsTemplate from 'components/templates/educationalPrograms'
+import { ProgramType } from 'components/templates/educationalPrograms/types'
 import LoadingErrorTemplate from 'components/templates/loadingError'
 import { ENDPOINT_EDUCATIONAL_PROGRAMS } from 'constants/endpoints'
 import axiosApi from 'utils/axios'
@@ -6,7 +7,7 @@ import axiosApi from 'utils/axios'
 type EducationalProgramsPageProps = {
   success: boolean,
   error: string,
-  educationalPrograms: EducationalProgramType[]
+  educationalPrograms: ProgramType[]
 }
 
 const EducationalPrograms = ({

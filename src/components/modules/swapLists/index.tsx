@@ -4,6 +4,7 @@ import { ArrowIcon, HamburgerIcon } from "components/elements/icons"
 import cn from "classNames"
 import styles from "./SwapLists.module.scss"
 import utilStyles from "styles/utils.module.scss"
+import MovableList from "../movableList"
 
 type SwapListsProps = {
     firstListItems: any[],
@@ -32,7 +33,8 @@ const SwapLists = ({
     const [selectedItemIndex, setSelectedItemIndex] = useState<number | undefined>(undefined)
     const [activeList, setActiveList] = useState<"first" | "second" | undefined>(undefined)
 
-    const onListItemClick = (index: number | undefined, list: "first" | "second") => {
+    const onListItemClick = (index: number, list: "first" | "second") => {
+        console.log('aaa')
         if (index === selectedItemIndex && activeList === list) {
             setSelectedItemIndex(undefined)
             setActiveList(undefined)
@@ -66,42 +68,17 @@ const SwapLists = ({
 
     return (
         <div className={styles.container}>
-            <div className={firstListClassName}>
-                <div className={utilStyles.text_medium}>{firstListTitle}</div>
-                <List
-                    beforeDrag={({ index }) => onListItemClick(index, "first")}
-                    lockVertically
-                    values={firstListItems}
-                    onChange={({ oldIndex, newIndex }) => {
-                        setFirstListItems(arrayMove(firstListItems, oldIndex, newIndex))
-                    }}
-                    renderList={({ children, props }) =>
-                        <div
-                            className={styles.course_list}
-                            {...props}
-                        >
-                            {children}
-                        </div>
-                    }
-                    renderItem={({ value, props, index }) =>
-                        <div className={cn(
-                            styles.course_list_item,
-                            {
-                                [styles.course_list_item_selected]:
-                                    index === selectedItemIndex &&
-                                    activeList === "first"
-                            }
-                        )}
-                            {...props}
-                        >
-                            <HamburgerIcon
-                                className={styles.icon}
-                            />
-                            <div className={utilStyles.text_small}>{value.title}</div>
-                        </div>
-                    }
-                />
-            </div>
+            <MovableList
+                items={firstListItems}
+                onItemSelected={(index) => onListItemClick(index, "first")}
+                setItems={setFirstListItems}
+                renderItem={(value) => (
+                    value.title
+                )}
+                title={firstListTitle}
+                className={firstListClassName}
+                selectedItemClass={cn({ [styles.item_not_selected]: activeList !== "first" })}
+            />
             <div className={styles.swap_arrows_container}>
                 <ArrowIcon
                     className={cn(
@@ -113,42 +90,17 @@ const SwapLists = ({
                     onClick={onArrowClick}
                 />
             </div>
-            <div className={secondListClassName}>
-                <div className={utilStyles.text_medium}>{secondListTitle}</div>
-                <List
-                    beforeDrag={({ index }) => onListItemClick(index, "second")}
-                    lockVertically
-                    values={secondListItems}
-                    onChange={({ oldIndex, newIndex }) => {
-                        setSecondListItems(arrayMove(secondListItems, oldIndex, newIndex))
-                    }}
-                    renderList={({ children, props }) =>
-                        <div
-                            className={styles.course_list}
-                            {...props}
-                        >
-                            {children}
-                        </div>
-                    }
-                    renderItem={({ value, props, index }) =>
-                        <div className={cn(
-                            styles.course_list_item,
-                            {
-                                [styles.course_list_item_selected]:
-                                    index === selectedItemIndex &&
-                                    activeList === "second"
-                            }
-                        )}
-                            {...props}
-                        >
-                            <HamburgerIcon
-                                className={styles.icon}
-                            />
-                            <div className={utilStyles.text_small}>{value.title}</div>
-                        </div>
-                    }
-                />
-            </div>
+            <MovableList
+                items={secondListItems}
+                onItemSelected={(index) => onListItemClick(index, "second")}
+                setItems={setSecondListItems}
+                renderItem={(value) => (
+                    value.title
+                )}
+                title={secondListTitle}
+                className={secondListClassName}
+                selectedItemClass={cn({ [styles.item_not_selected]: activeList !== "second" })}
+            />
         </div>
     )
 }

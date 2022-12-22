@@ -5,33 +5,8 @@
     flex-direction: row;
 }
 
-.course_list {
-    background-color: #b4b4b44f;
-    padding: 5px;
-    border-radius: 10px;
-    width: 500px;
-    height: 400px;
-    overflow: auto;
-    margin: 0 10px;
-
-    &_item {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin: 5px;
-        cursor: grab;
-        background-color: #afafaf80;
-        border-radius: 10px;
-        padding: 5px;
-
-        &_selected {
-            background-color: transparentize($mainBlueColor, 0.5);
-        }
-
-        & .icon {
-            margin-right: 10px;
-        }
-    }
+.item_not_selected {
+    background-color: #ffffffa6 !important;
 }
 
 .swap_arrows_container {
@@ -43,7 +18,6 @@
     & .arrow {
 
         fill: #000000;
-        cursor: pointer;
         transition: all 0.3s ease-in-out;
         width: 30px;
         height: 30px;
@@ -51,6 +25,7 @@
 
         &_active {
             opacity: 1;
+            cursor: pointer;
         }
 
         &:hover {

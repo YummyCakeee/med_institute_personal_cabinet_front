@@ -1,7 +1,7 @@
 import Button from "components/elements/button/Button"
 import InputField from "components/elements/formikComponents/inputField/InputField"
 import TextAreaField from "components/elements/formikComponents/textAreaField/TextAreaField"
-import { CourseType } from "components/templates/courses/useCourses"
+import { CourseType } from "components/templates/courses/types"
 import { ENDPOINT_COURSES } from "constants/endpoints"
 import { Formik, Form, Field, FormikValues } from "formik"
 import React from "react"

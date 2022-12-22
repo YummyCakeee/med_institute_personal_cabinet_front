@@ -3,7 +3,8 @@ import Layout from "components/layouts/Layout"
 import Head from "next/head"
 import ItemList from "components/modules/itemList"
 import styles from "./CoursesTemplate.module.scss"
-import useCourses, { CourseType } from "./useCourses"
+import useCourses from "./useCourses"
+import { CourseType } from "./types"
 
 type CoursesTemplateProps = {
     courses: CourseType[]

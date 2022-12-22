@@ -29,8 +29,8 @@ const useCourse = (course: CourseType) => {
 
     const onThemeEditClick = (index: number) => {
         const courseId = course.courseId
-        const themeId = themes[index].themeId
-        router.push(`${ROUTE_COURSES}/${courseId}/${ROUTE_THEMES}/${themeId}`)
+        const themeId = themes[index].themeId        
+        router.push(`${ROUTE_COURSES}/${courseId}${ROUTE_THEMES}/${themeId}`)
     }
 
     const onThemeDeleteClick = (index: number) => {
@@ -104,6 +104,7 @@ const useCourse = (course: CourseType) => {
                     }
                 })
             },
+            mode: "add",
             backgroundOverlap: true,
             closable: true
         })
