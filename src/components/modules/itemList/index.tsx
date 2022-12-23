@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react"
 import styles from "./ItemList.module.scss"
-import cn from "classNames"
+import cn from "classnames"
 import { CrossIcon, DoubleArrowIcon } from "components/elements/icons"
 import Button, { ButtonProps } from "components/elements/button/Button"
 

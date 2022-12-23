@@ -1,6 +1,6 @@
 import React from "react"
 import styles from "./Checkbox.module.scss"
-import cn from "classNames"
+import cn from "classnames"
 
 export interface CheckBoxProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string

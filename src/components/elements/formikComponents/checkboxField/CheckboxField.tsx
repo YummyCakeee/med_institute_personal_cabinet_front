@@ -1,7 +1,7 @@
 import React from "react"
 import styles from "./CheckboxField.module.scss"
 import { FieldProps } from "formik"
-import cn from "classNames"
+import cn from "classnames"
 import Checkbox, { CheckBoxProps } from "components/elements/checkbox/Checkbox"
 
 type CheckBoxFieldProps = FieldProps & CheckBoxProps & {

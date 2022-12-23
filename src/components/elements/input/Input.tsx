@@ -1,6 +1,6 @@
 import React from "react"
 import styles from "./Input.module.scss"
-import cn from "classNames"
+import cn from "classnames"
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
     label?: string,

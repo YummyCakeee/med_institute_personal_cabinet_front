@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
-import cn from "classNames"
+import cn from "classnames"
 import styles from "./Header.module.scss"
 import {
     ROUTE_COURSES,

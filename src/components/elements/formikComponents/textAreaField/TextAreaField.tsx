@@ -1,6 +1,6 @@
 import React from "react"
 import { FieldProps } from "formik"
-import cn from "classNames"
+import cn from "classnames"
 import styles from "./TextAreaField.module.scss"
 
 type TextAreaFieldProps = FieldProps & React.TextareaHTMLAttributes<HTMLTextAreaElement>

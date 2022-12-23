@@ -1,7 +1,7 @@
 import React from "react"
 import { FieldProps } from "formik"
 import styles from "./InputField.module.scss"
-import cn from "classNames"
+import cn from "classnames"
 import Input, { InputProps } from "components/elements/input/Input"
 
 type InputFieldProps = FieldProps & InputProps

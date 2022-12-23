@@ -4,7 +4,7 @@ import RegistrationForm from "components/modules/forms/registration"
 import RecoveryForm from "components/modules/forms/recovery"
 import React, { useState } from "react"
 import utilStyles from "styles/utils.module.scss"
-import cn from "classNames"
+import cn from "classnames"
 
 export interface AuthorizationModalWindowProps extends ModalWindowProps {
     onSuccess: () => void,

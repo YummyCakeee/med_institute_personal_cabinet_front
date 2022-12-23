@@ -2,7 +2,7 @@ import { CrossIcon, FileIcon } from "components/elements/icons"
 import { useModalWindowContext } from "context/modalWindowContext"
 import React, { useState } from "react"
 import styles from "./FileLoader.module.scss"
-import cn from "classNames"
+import cn from "classnames"
 
 type FileLoaderProps = {
     files: File[],

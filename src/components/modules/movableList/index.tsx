@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { List, arrayMove } from "react-movable"
 import { HamburgerIcon } from "components/elements/icons"
-import cn from "classNames"
+import cn from "classnames"
 import styles from "./MovableList.module.scss"
 import utilStyles from "styles/utils.module.scss"
 
