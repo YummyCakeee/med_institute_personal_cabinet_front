@@ -1,7 +1,7 @@
 import Button from "components/elements/button/Button"
 import InputField from "components/elements/formikComponents/inputField/InputField"
 import { CourseType, ThemeType } from "components/templates/courses/types"
-import { getCourseThemesEndpoint } from "constants/endpoints"
+import { ENDPOINT_COURSES, getCourseThemesEndpoint } from "constants/endpoints"
 import { Formik, Form, Field, FormikValues } from "formik"
 import React from "react"
 import axiosApi from "utils/axios"
@@ -9,7 +9,7 @@ import { notEmptyValidator } from "utils/validators"
 import utilStyles from "styles/utils.module.scss"
 
 interface ThemeFormProps {
-    mode?: "add" | "edit",
+    mode: "add" | "edit",
     theme?: ThemeType,
     course: CourseType,
     onSuccess?: (theme: ThemeType) => void,
@@ -18,21 +18,21 @@ interface ThemeFormProps {
 
 
 const ThemeForm = ({
-    mode = "add",
+    mode,
     theme,
     course,
     onSuccess = () => { },
     onError = () => { }
 }: ThemeFormProps) => {
     const onSubmit = async (values: FormikValues) => {
+        const data = {
+            courseId: course.courseId,
+            title: values.title,
+            html: "<div></div>",
+            sortOrder: 0
+        }
         if (mode === "add") {
-            const data = {
-                courseId: course.courseId,
-                title: values.title,
-                html: "<div></div>",
-                sortOrder: 0
-            }
-            axiosApi.post(getCourseThemesEndpoint(course.courseId), data)
+            return axiosApi.post(getCourseThemesEndpoint(course.courseId), data)
                 .then(res => {
                     const theme: ThemeType = res.data
                     onSuccess(theme)
@@ -42,6 +42,21 @@ const ThemeForm = ({
                     console.log(err)
                 })
         }
+        if (!theme) return
+        data.sortOrder = theme?.sortOrder
+        data.html = theme.html
+        return axiosApi.put(`${ENDPOINT_COURSES}/Themes/${theme.themeId}`, data)
+            .then(res => {
+                const updatedTheme: ThemeType = {
+                    ...theme,
+                    ...data
+                }
+                onSuccess(updatedTheme)
+            })
+            .catch(err => {
+                onError(err)
+                console.log(err)
+            })
     }
     return (
         <Formik

@@ -34,7 +34,6 @@ const SwapLists = ({
     const [activeList, setActiveList] = useState<"first" | "second" | undefined>(undefined)
 
     const onListItemClick = (index: number, list: "first" | "second") => {
-        console.log('aaa')
         if (index === selectedItemIndex && activeList === list) {
             setSelectedItemIndex(undefined)
             setActiveList(undefined)

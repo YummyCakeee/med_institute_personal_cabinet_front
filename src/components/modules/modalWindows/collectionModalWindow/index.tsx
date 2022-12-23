@@ -4,13 +4,17 @@ import { CollectionType } from "components/templates/testing/types"
 import React from "react"
 
 export interface CollectionModalWindowProps extends ModalWindowProps {
-    mode?: "add" | "edit",
-    collection?: CollectionType
+    mode: "add" | "edit",
+    collection?: CollectionType,
+    onSuccess?: (collection: CollectionType) => void,
+    onError?: (error: any) => void
 }
 
 const CollectionModalWindow = ({
     mode,
     collection,
+    onSuccess,
+    onError,
     ...props
 }: CollectionModalWindowProps) => {
     return (
@@ -23,8 +27,12 @@ const CollectionModalWindow = ({
             }}
         >
             <CollectionForm
-                mode={mode}
-                collection={collection}
+                {...{
+                    mode,
+                    collection,
+                    onSuccess,
+                    onError
+                }}
             />
         </ModalWindow>
     )

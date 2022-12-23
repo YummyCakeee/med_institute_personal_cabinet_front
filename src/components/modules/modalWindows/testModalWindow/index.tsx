@@ -4,17 +4,19 @@ import { TestType } from "components/templates/testing/types"
 import React from "react"
 
 export interface TestModalWindowProps extends ModalWindowProps {
-    mode?: "add" | "edit",
+    mode: "add" | "edit",
     test?: TestType,
-    collectionId?: string,
-    setTests?: React.Dispatch<React.SetStateAction<TestType[]>>
+    collectionId: string,
+    onSuccess?: (test: TestType) => void,
+    onError?: (error: any) => void
 }
 
 const TestModalWindow = ({
     mode,
     test,
     collectionId,
-    setTests,
+    onSuccess,
+    onError,
     ...props
 }: TestModalWindowProps) => {
     return (
@@ -27,10 +29,13 @@ const TestModalWindow = ({
             }}
         >
             <TestForm
-                mode={mode}
-                test={test}
-                collectionId={collectionId}
-                setTests={setTests}
+                {...{
+                    mode,
+                    test,
+                    collectionId,
+                    onSuccess,
+                    onError
+                }}
             />
         </ModalWindow>
     )

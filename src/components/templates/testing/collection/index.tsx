@@ -4,6 +4,9 @@ import { useModalWindowContext } from "context/modalWindowContext"
 import Head from "next/head"
 import { useEffect, useState } from "react"
 import { CollectionType, TestAnswerType, TestType } from "../types"
+import { Store } from "react-notifications-component"
+import axiosApi from "utils/axios"
+import { ENDPOINT_TESTS } from "constants/endpoints"
 
 type CollectionTemplateProps = {
     collection: CollectionType
@@ -12,40 +15,119 @@ type CollectionTemplateProps = {
 const CollectionTemplate = ({ collection }: CollectionTemplateProps) => {
 
     const [tests, setTests] = useState<TestType[]>([])
-    console.log(tests)
     const {
         setConfirmActionModalWindowState,
         setTestModalWindowState
     } = useModalWindowContext()
 
     useEffect(() => {
-        setTests(collection.tests)
+        if (collection.tests)
+            setTests(collection.tests)
     }, [collection.tests])
 
     const onTestAddClick = () => {
         setTestModalWindowState({
             mode: "add",
-            collectionId: collection.collectionId,
-            setTests: setTests,
+            collectionId: collection.collectionId!,
             backgroundOverlap: true,
-            closable: true
+            closable: true,
+            onSuccess: (test) => {
+                setTests(prev => [...prev, test])
+                setTestModalWindowState(undefined)
+                Store.addNotification({
+                    container: "top-right",
+                    type: "success",
+                    title: "Тест добавлен",
+                    dismiss: {
+                        onScreen: true,
+                        duration: 5000
+                    }
+                })
+            },
+            onError: (error) => {
+                Store.addNotification({
+                    container: "top-right",
+                    type: "danger",
+                    title: "Не удалось добавить тест",
+                    message: error.code,
+                    dismiss: {
+                        onScreen: true,
+                        duration: 5000
+                    }
+                })
+            }
         })
     }
 
     const onTestEditClick = (index: number) => {
         setTestModalWindowState({
             mode: "edit",
-            test: tests[index],
+            collectionId: collection.collectionId!,
             backgroundOverlap: true,
-            closable: true
+            test: tests[index],
+            closable: true,
+            onSuccess: (test) => {
+                setTests(prev => prev.map(el => {
+                    if (el.testId === test.testId)
+                        return test
+                    return el
+                }))
+                setTestModalWindowState(undefined)
+                Store.addNotification({
+                    container: "top-right",
+                    type: "success",
+                    title: "Тест изменён",
+                    dismiss: {
+                        onScreen: true,
+                        duration: 5000
+                    }
+                })
+            },
+            onError: (error) => {
+                Store.addNotification({
+                    container: "top-right",
+                    type: "danger",
+                    title: "Не удалось добавить тест",
+                    message: error.code,
+                    dismiss: {
+                        onScreen: true,
+                        duration: 5000
+                    }
+                })
+            }
         })
     }
 
     const deleteTest = (index: number) => {
         const id = tests[index].testId
 
-        setTests(prev => prev.filter(el => el.testId !== id))
-        setConfirmActionModalWindowState(undefined)
+        axiosApi.delete(`${ENDPOINT_TESTS}/${tests[index].testId}`)
+            .then(res => {
+                setTests(prev => prev.filter(el => el.testId !== id))
+                setConfirmActionModalWindowState(undefined)
+                Store.addNotification({
+                    container: "top-right",
+                    type: "success",
+                    title: "Тест удалён",
+                    dismiss: {
+                        onScreen: true,
+                        duration: 5000
+                    }
+                })
+            })
+            .catch(err => {
+                Store.addNotification({
+                    container: "top-right",
+                    type: "danger",
+                    title: "Не удалось удалить тест",
+                    message: err.code,
+                    dismiss: {
+                        onScreen: true,
+                        duration: 5000
+                    }
+                })
+            })
+
     }
 
     const onTestDeleteClick = (index: number) => {

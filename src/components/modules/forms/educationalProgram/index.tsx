@@ -7,7 +7,7 @@ import React from "react"
 import axiosApi from "utils/axios"
 import { notEmptyValidator } from "utils/validators"
 import utilStyles from "styles/utils.module.scss"
-import { ProgramType } from "components/templates/educationalPrograms"
+import { ProgramType } from "components/templates/educationalPrograms/types"
 
 interface EducationalProgramFormProps {
     mode?: "add" | "edit",

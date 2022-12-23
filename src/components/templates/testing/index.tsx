@@ -1,35 +1,31 @@
 import Layout from "components/layouts/Layout"
 import Head from "next/head"
 import React, { useEffect } from "react"
-import Collections from "./Collections"
-import TestBlocks from "./TestBlocks"
 import useTesting from "./useTesting"
-import { CollectionType, TestBlockType } from "./types"
+import { CollectionType } from "./types"
+import utilStyles from "styles/utils.module.scss"
+import ItemList from "components/modules/itemList"
 
 type TestingTemplateProps = {
-    testBlocks: TestBlockType[],
-    collections: CollectionType[],
+    collections: CollectionType[]
 }
 
 const TestingTemplate = ({
-    collections: initialCollections,
-    testBlocks: initialTestBlocks
+    collections: initialCollections
 }: TestingTemplateProps) => {
 
     const {
         collections,
         setCollections,
-        testBlocks,
-        setTestBlocks
+        onCollectionAddClick,
+        onCollectionDeleteClick,
+        onCollectionEditClick,
+        onCollectionTestsEditClick
     } = useTesting()
 
     useEffect(() => {
         setCollections(initialCollections)
     }, [initialCollections])
-
-    useEffect(() => {
-        setTestBlocks(initialTestBlocks)
-    }, [initialTestBlocks])
 
     return (
         <Layout>
@@ -39,20 +35,45 @@ const TestingTemplate = ({
                 </title>
             </Head>
             <div>
-                <Collections
-                    {...{
-                        collections,
-                        setCollections
-                    }}
-                />
-            </div>
-            <div>
-                <TestBlocks
-                    {...{
-                        testBlocks,
-                        setTestBlocks
-                    }}
-                />
+            <div className={utilStyles.section_title}>Коллекции</div>
+            <ItemList
+                headers={[
+                    {
+                        title: "Название",
+                        field: "collectionName",
+                    },
+                    {
+                        title: "ID создателя",
+                        field: "creatorId",
+                    },
+                ]}
+                items={collections}
+                itemControlButtons={() => [
+                    {
+                        title: "Редактировать",
+                        size: "small",
+                        stretchable: true,
+                        onClick: onCollectionEditClick
+                    },
+                    {
+                        title: "Редактировать тесты",
+                        stretchable: true,
+                        onClick: onCollectionTestsEditClick
+                    },
+                    {
+                        title: "Удалить",
+                        size: "small",
+                        onClick: onCollectionDeleteClick
+                    }
+                ]}
+                controlButtonsBottom={[
+                    {
+                        title: "Добавить",
+                        size: "small",
+                        onClick: onCollectionAddClick
+                    }
+                ]}
+            />
             </div>
         </Layout>
     )

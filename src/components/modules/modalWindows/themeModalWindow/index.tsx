@@ -4,7 +4,7 @@ import { CourseType, ThemeType } from "components/templates/courses/types"
 import React from "react"
 
 export interface ThemeModalWindowProps extends ModalWindowProps {
-    mode?: "add" | "edit",
+    mode: "add" | "edit",
     theme?: ThemeType,
     course: CourseType,
     onSuccess?: (theme: ThemeType) => void,

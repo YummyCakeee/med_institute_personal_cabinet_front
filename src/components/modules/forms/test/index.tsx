@@ -10,37 +10,72 @@ import utilStyles from "styles/utils.module.scss"
 import styles from "./Test.module.scss"
 import { CrossIcon, PlusIcon } from "components/elements/icons"
 import { TestTypeId } from "components/templates/testing/types"
+import axiosApi from "utils/axios"
+import { ENDPOINT_TESTS } from "constants/endpoints"
+import { convertServerTestToClient } from "utils/serverData"
 
 interface TestFormProps {
-    mode?: "add" | "edit",
+    mode: "add" | "edit",
     test?: TestType,
-    collectionId?: string,
-    setTests?: React.Dispatch<React.SetStateAction<TestType[]>>
+    collectionId: string,
+    onSuccess?: (test: TestType) => void,
+    onError?: (error: any) => void
 }
 
 
 const TestForm = ({
-    mode = "add",
+    mode,
     test,
     collectionId,
-    setTests
+    onSuccess = () => { },
+    onError = () => { }
 }: TestFormProps) => {
 
     const onSubmit = async (values: FormikValues) => {
-        console.log(values)
-        if (mode === "add" && collectionId !== undefined && setTests) {
-            const newTest: TestType = {
-                answers: values.answers,
-                questionText: values.questionText,
-                collectionId: collectionId,
-                testId: "",
-                exerciseText: "",
-                testTypeId: values.answers.filter((el: TestAnswerType) => el.correct).length > 1 ? 1 : 0,
-            }
-            setTests(prev => [...prev, newTest])
-            values.questionText = ""
-            values.answers = []
+        let testBody = {
+            ...(values.fileAnswer ?
+                {
+                    ExerciseText: values.questionText
+                } :
+                {
+                    QuestionText: values.questionText,
+                    Answers: values.answers.map((el: TestAnswerType) => ({
+                        Text: el.text,
+                        Correct: el.correct
+                    }))
+                }
+            ),
         }
+
+        let data: TestType = {
+            collectionId: collectionId,
+            testBody: JSON.stringify(testBody),
+            testTypeId: values.fileAnswer ? 2 :
+                values.answers.filter((el: TestAnswerType) => el.correct).length > 1 ? 1 : 0
+        }
+
+        if (mode === "add" && collectionId !== undefined) {
+            return axiosApi.post(ENDPOINT_TESTS, data)
+                .then(res => {
+                    const test = convertServerTestToClient(res.data)
+                    onSuccess(test)
+                })
+                .catch(err => {
+                    onError(err)
+                })
+        }
+        data.testId = test?.testId
+        return await axiosApi.put(`${ENDPOINT_TESTS}/${test?.testId}`, data)
+            .then(res => {
+                const updatedTest = {
+                    ...test,
+                    ...data
+                }
+                onSuccess(updatedTest)
+            })
+            .catch(err => {
+                onError(err)
+            })
     }
 
     return (

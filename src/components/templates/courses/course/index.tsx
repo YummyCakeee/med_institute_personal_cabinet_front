@@ -23,6 +23,7 @@ const CourseTemplate = ({
         setThemes,
         onThemeAddClick,
         onThemeEditClick,
+        onThemeSetupClick,
         onThemeDeleteClick,
         onThemesOrderSaveClick,
     } = useCourse(course)
@@ -47,7 +48,11 @@ const CourseTemplate = ({
                         {
                             title: "Редактировать",
                             onClick: onThemeEditClick,
-                            size: "small",
+                            stretchable: true
+                        },
+                        {
+                            title: "Настройка",
+                            onClick: onThemeSetupClick,
                             stretchable: true
                         },
                         {

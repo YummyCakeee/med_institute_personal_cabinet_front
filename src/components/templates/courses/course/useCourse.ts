@@ -28,8 +28,48 @@ const useCourse = (course: CourseType) => {
     }
 
     const onThemeEditClick = (index: number) => {
+        setThemeModalWindowState({
+            course,
+            mode: "edit",
+            theme: themes[index],
+            onSuccess: (theme) => {
+                setThemes(prev => prev.map(el => {
+                    if (el.themeId === theme.themeId) {
+                        return theme
+                    }
+                    return el
+                }).sort(sortThemes))
+                Store.addNotification({
+                    container: "top-right",
+                    type: "success",
+                    title: "Тема изменена",
+                    dismiss: {
+                        onScreen: true,
+                        duration: 5000
+                    }
+                })
+                setThemeModalWindowState(undefined)
+            },
+            onError: (err) => {
+                Store.addNotification({
+                    container: "top-right",
+                    type: "danger",
+                    title: "Не удалось изменить тему",
+                    message: `${err.code}`,
+                    dismiss: {
+                        onScreen: true,
+                        duration: 5000
+                    }
+                })
+            },
+            backgroundOverlap: true,
+            closable: true
+        })
+    }
+
+    const onThemeSetupClick = (index: number) => {
         const courseId = course.courseId
-        const themeId = themes[index].themeId        
+        const themeId = themes[index].themeId
         router.push(`${ROUTE_COURSES}/${courseId}${ROUTE_THEMES}/${themeId}`)
     }
 
@@ -112,9 +152,10 @@ const useCourse = (course: CourseType) => {
 
     const onThemesOrderSaveClick = () => {
         axios.all(themes.map((el, index) => {
-            const data = {
+            const data: ThemeType = {
                 courseId: course.courseId,
                 themeId: el.themeId,
+                title: el.title,
                 html: el.html,
                 sortOrder: index
             }
@@ -150,6 +191,7 @@ const useCourse = (course: CourseType) => {
         setThemes,
         onThemeAddClick,
         onThemeEditClick,
+        onThemeSetupClick,
         onThemeDeleteClick,
         onThemesOrderSaveClick
     }

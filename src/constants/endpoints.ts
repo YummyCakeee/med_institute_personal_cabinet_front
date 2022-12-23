@@ -8,5 +8,6 @@ export const getCourseThemesEndpoint = (courseId: string) =>
 export const ENDPOINT_USER_THEMES = "api/UserTheme"
 export const ENDPOINT_USERS = ""
 export const ENDPOINT_COLLECTIONS = "api/Collections"
+export const ENDPOINT_TESTS = "api/Tests"
 export const ENDPOINT_TEST_BLOCKS = "api/TestBlocks"
 export const ENDPOINT_EDUCATIONAL_PROGRAMS = "api/Program"

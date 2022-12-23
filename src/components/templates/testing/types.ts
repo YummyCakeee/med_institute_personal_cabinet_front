@@ -1,9 +1,9 @@
 export type CollectionType = {
-    collectionId: string,
+    collectionId?: string,
     collectionName: string,
-    creatorId: string,
-    createDate: string,
-    tests: TestType[]
+    creatorId?: string,
+    createDate?: string,
+    tests?: TestType[]
 }
 
 export enum TestTypeId {
@@ -11,12 +11,13 @@ export enum TestTypeId {
 }
 
 export type TestType = {
-    testId: string,
+    testId?: string,
     collectionId: string,
     testTypeId: TestTypeId,
-    questionText: string,
-    exerciseText: string,
-    answers: TestAnswerType[]
+    testBody?: string,
+    questionText?: string,
+    exerciseText?: string,
+    answers?: TestAnswerType[]
     creatorId?: string,
     createDate?: string,
     collection?: string,

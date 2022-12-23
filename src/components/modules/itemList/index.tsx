@@ -185,7 +185,11 @@ const ItemList = ({
                     >
                         <Button
                             {...{
-                                ...el
+                                ...el,
+                                onClick: () => {
+                                    setSetectedItem(null)
+                                    el.onClick && el.onClick()
+                                }
                             }}
                         />
                     </div>

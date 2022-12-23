@@ -8,14 +8,12 @@ import axiosApi from "utils/axios"
 type TestingPageProps = {
     success: boolean,
     error: string,
-    testBlocks: TestBlockType[],
     collections: CollectionType[],
 }
 
 const Testing = ({
     success,
     error,
-    testBlocks,
     collections,
 }: TestingPageProps) => {
 
@@ -23,10 +21,7 @@ const Testing = ({
         <>
             {success ?
                 <TestingTemplate
-                    {...{
-                        testBlocks,
-                        collections,
-                    }}
+                    collections={collections}
                 />
                 : <LoadingErrorTemplate
                     error={error}
@@ -40,7 +35,6 @@ export const getServerSideProps = async () => {
     const pageProps: TestingPageProps = {
         success: true,
         error: "",
-        testBlocks: [],
         collections: [],
     }
 
@@ -48,16 +42,6 @@ export const getServerSideProps = async () => {
         .then(res => {
             const data: any[] = res.data
             pageProps.collections = data
-        })
-        .catch(err => {
-            pageProps.success = false
-            pageProps.error = err.code
-        })
-
-    await axiosApi.get(ENDPOINT_TEST_BLOCKS)
-        .then(res => {
-            const data: any[] = res.data
-            pageProps.testBlocks = data
         })
         .catch(err => {
             pageProps.success = false

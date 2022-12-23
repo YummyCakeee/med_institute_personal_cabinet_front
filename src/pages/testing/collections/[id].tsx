@@ -1,5 +1,5 @@
 import LoadingErrorTemplate from "components/templates/loadingError"
-import CollectionTemplate from "components/templates/testing/collections/index"
+import CollectionTemplate from "components/templates/testing/collection/index"
 import { CollectionType } from "components/templates/testing/types"
 import { ENDPOINT_COLLECTIONS } from "constants/endpoints"
 import { GetServerSideProps } from "next"
@@ -45,7 +45,7 @@ export const getServerSideProps: GetServerSideProps<CollectionPageProps> = async
                 const testBody = JSON.parse(el.testBody || "")
                 return {
                     ...el,
-                    exerciseText: testBody.ExerciseText || testBody.QuestionTex || "",
+                    exerciseText: testBody.ExerciseText || testBody.QuestionText || "",
                     questionText: testBody.QuestionText || testBody.ExerciseText || "",
                     answers: testBody.Answers?.map((el: any) => ({ text: el.Text, correct: el.Correct })) || [],
                 }
