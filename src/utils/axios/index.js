@@ -5,7 +5,7 @@ export const createAxiosInstance = () => {
     const baseURL =
         (!process.env.NODE_ENV || process.env.NODE_ENV === "development") ?
             "http://localhost:5000" :
-            "http://localhost:5000"
+            "http://1085037-cq23779.tmweb.ru"
 
     const headers = {
         'Content-Type': 'application/json',
