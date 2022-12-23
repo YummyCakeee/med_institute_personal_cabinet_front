@@ -23,7 +23,7 @@ const TestBlockModalWindow = ({
     const [questionsAmount, setQuestionsAmount] = useState<number>(0)
 
     const onQuestionsAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setQuestionsAmount(maxMinConstraint(parseInt(e.target.value || "0"), 0, collection.tests.length))
+        setQuestionsAmount(maxMinConstraint(parseInt(e.target.value || "0"), 0, collection.tests?.length || 0))
     }
 
     return (
@@ -40,7 +40,7 @@ const TestBlockModalWindow = ({
                 value={questionsAmount}
                 onChange={onQuestionsAmountChange}
                 min={0}
-                max={collection.tests.length}
+                max={collection.tests?.length || 0}
             />
             <div className={utilStyles.modal_window_buttons_list}>
                 <div className={utilStyles.modal_window_button}>

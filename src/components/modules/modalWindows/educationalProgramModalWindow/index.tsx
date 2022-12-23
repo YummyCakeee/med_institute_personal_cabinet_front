@@ -1,6 +1,6 @@
 import ModalWindow, { ModalWindowProps } from "components/elements/modalWindow/ModalWindow"
 import EducationalProgramForm from "components/modules/forms/educationalProgram"
-import { ProgramType } from "components/templates/educationalPrograms"
+import { ProgramType } from "components/templates/educationalPrograms/types"
 import React from "react"
 
 export interface EducationalProgramModalWindowProps extends ModalWindowProps {

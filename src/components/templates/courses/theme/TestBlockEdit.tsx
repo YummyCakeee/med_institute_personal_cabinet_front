@@ -62,7 +62,7 @@ const TestBlockEdit = ({
 
         const onAddCollectionConfirm = (questionsAmount: number) => {
             const newTestBlockCollection: TestBlockCollectionsType & { collectionName: string } = {
-                collectionId: collections[index].collectionId,
+                collectionId: collections[index].collectionId!,
                 testBlockId: "",
                 questionsAmount: questionsAmount,
                 collectionName: collections[index].collectionName
