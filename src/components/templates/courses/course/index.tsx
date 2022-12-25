@@ -29,7 +29,7 @@ const CourseTemplate = ({
             <Head>
                 <title>{`Настройка курса ${course.title}`}</title>
             </Head>
-            <div className={utilStyles.title}>Темы курса "{course.title}"</div>
+            <div className={utilStyles.title}>{`Темы курса "${course.title}"`}</div>
             <div>
                 <div className={utilStyles.section_title}>Темы курса</div>
                 <ItemList

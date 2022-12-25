@@ -25,7 +25,7 @@ const TestingTemplate = ({
 
     useEffect(() => {
         setCollections(initialCollections)
-    }, [initialCollections])
+    }, [initialCollections, setCollections])
 
     return (
         <Layout>

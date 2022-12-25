@@ -22,7 +22,7 @@ const CoursesTemplate = ({ courses: initialCourses }: CoursesTemplateProps) => {
 
     useEffect(() => {
         setCourses(initialCourses)
-    }, [initialCourses])
+    }, [initialCourses, setCourses])
 
     return (
         <Layout>

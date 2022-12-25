@@ -38,7 +38,7 @@ const EducationalProgramCoursesTemplate = ({
     const [restCourses, setRestCourses] = useState<CourseExtendedType[]>([])
     const [selectedCourseIndex, setSelectedCourseIndex] = useState<number | undefined>(undefined)
 
-    const percentageTypes = new Map<PercentageType, string>([
+    const percentageTypes = useMemo(() => new Map<PercentageType, string>([
         [
             PercentageType.MIN,
             "Минимальный"
@@ -51,14 +51,14 @@ const EducationalProgramCoursesTemplate = ({
             PercentageType.AVG,
             "Средний"
         ]
-    ])
+    ]), [])
 
     const percentageTypeDefaultValue = useMemo(() => {
         if (selectedCourseIndex !== undefined && programCourses[selectedCourseIndex]) {
             return percentageTypes.get(programCourses[selectedCourseIndex].percentageType)
         }
         return "Не выбрано"
-    }, [selectedCourseIndex, programCourses])
+    }, [selectedCourseIndex, programCourses, percentageTypes])
 
     useEffect(() => {
         const selectedCourses = courses.filter(course => program.programCourses?.find(

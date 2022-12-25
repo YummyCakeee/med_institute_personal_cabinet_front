@@ -71,6 +71,7 @@ const useUsers = () => {
         setUserModalWindowState,
         setUserBlockModalWindowState
     } = useModalWindowContext()
+
     useEffect(() => {
         const params = {
             filterField: filteringFieldName
@@ -83,26 +84,25 @@ const useUsers = () => {
                 console.log(err)
             })
 
-    }, [])
-
-    const getUsers = () => {
-        const params = {
-            limit: usersPerPage,
-            offset: (currentPage - 1) * usersPerPage,
-            ...(filteringFieldName && { filterField: filteringFieldName }),
-            ...(filteringFieldName && { filterString: filteringFieldValue }),
-            ...(sortingFieldName && { sortFieldEnum: sortingFieldName })
-        }
-        axiosApi.get(ENDPOINT_USERS, { params })
-            .then(res => {
-                setUsers(res.data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
+    }, [filteringFieldName])
 
     useEffect(() => {
+        const getUsers = () => {
+            const params = {
+                limit: usersPerPage,
+                offset: (currentPage - 1) * usersPerPage,
+                ...(filteringFieldName && { filterField: filteringFieldName }),
+                ...(filteringFieldName && { filterString: filteringFieldValue }),
+                ...(sortingFieldName && { sortFieldEnum: sortingFieldName })
+            }
+            axiosApi.get(ENDPOINT_USERS, { params })
+                .then(res => {
+                    setUsers(res.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
         getUsers()
     }, [sortingFieldName, filteringFieldName, filteringFieldValue, currentPage, usersPerPage])
 

@@ -101,7 +101,7 @@ const ItemList = ({
 
     useEffect(() => {
         onPageClick(currentPage)
-    }, [currentPage])
+    }, [currentPage, onPageClick])
 
     const getItemFieldValue = (item: Item, fieldName: string): string => {
 

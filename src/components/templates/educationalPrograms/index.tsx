@@ -25,7 +25,7 @@ const EducationalProgramsTemplate = ({
 
     useEffect(() => {
         setPrograms(educationalPrograms)
-    }, [educationalPrograms])
+    }, [educationalPrograms, setPrograms])
 
     return (
         <Layout>

@@ -44,7 +44,7 @@ const UserTemplate = ({
         },
         {
             name: "Доступ",
-            value: user.blocked ? "Заблокирован" : "Открыт"
+            value: user.user?.lockoutEnd && new Date(user.user.lockoutEnd) > new Date() ? "Заблокирован" : "Открыт"
         },
     ]
 

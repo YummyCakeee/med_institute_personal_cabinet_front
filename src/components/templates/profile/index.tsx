@@ -16,14 +16,14 @@ const ProfileTemplate = () => {
             <div>
                 <p className={utilStyles.section_title}>Сертификаты</p>
                 <div className={styles.certificates}>
-                    <ItemList
+                    {/* <ItemList
                         headers={[
                             {
                                 title: "Название",
                                 field: "name"
                             }
                         ]}
-                    />
+                    /> */}
                 </div>
             </div>
             <div>
