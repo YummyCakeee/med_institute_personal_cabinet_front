@@ -67,6 +67,7 @@ const EducationalProgramStudentsTemplate = ({
             })
         ])
             .then(res => {
+                setInitialProgramUsers(programUsers)
                 Store.addNotification({
                     container: "top-right",
                     type: "success",

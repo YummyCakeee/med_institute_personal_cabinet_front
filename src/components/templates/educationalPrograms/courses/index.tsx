@@ -175,6 +175,7 @@ const EducationalProgramCoursesTemplate = ({
             })
         ])
             .then(res => {
+                setInitialProgramCourses(programCourses)
                 Store.addNotification({
                     container: "top-right",
                     type: "success",
