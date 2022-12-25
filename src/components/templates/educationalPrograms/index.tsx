@@ -36,11 +36,13 @@ const EducationalProgramsTemplate = ({
                 headers={[
                     {
                         title: "Название",
-                        field: "title"
+                        field: "title",
+                        colSize: "400px"
                     },
                     {
                         title: "Описание",
-                        field: "description"
+                        field: "description",
+                        colSize: "800px"
                     }
                 ]}
                 items={programs}
@@ -59,7 +61,7 @@ const EducationalProgramsTemplate = ({
                     {
                         title: "Курсы",
                         onClick: onEducationalProgramCoursesClick,
-                        stretchable: true
+                        size: "small",
                     },
                     {
                         title: "Обучающиеся",

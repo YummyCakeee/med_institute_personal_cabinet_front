@@ -4,13 +4,17 @@ import { ProgramType } from "components/templates/educationalPrograms/types"
 import React from "react"
 
 export interface EducationalProgramModalWindowProps extends ModalWindowProps {
-    mode?: "add" | "edit",
-    program?: ProgramType
+    mode: "add" | "edit",
+    program?: ProgramType,
+    onSuccess?: (program: ProgramType) => void,
+    onError?: (error: any) => void
 }
 
 const EducationalProgramModalWindow = ({
     mode,
     program,
+    onSuccess,
+    onError,
     ...props
 }: EducationalProgramModalWindowProps) => {
     return (
@@ -23,8 +27,12 @@ const EducationalProgramModalWindow = ({
             }}
         >
             <EducationalProgramForm
-                mode={mode}
-                program={program}
+                {...{
+                    mode,
+                    program,
+                    onSuccess,
+                    onError
+                }}
             />
         </ModalWindow>
     )

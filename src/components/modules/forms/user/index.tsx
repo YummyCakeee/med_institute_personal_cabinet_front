@@ -4,12 +4,12 @@ import { Formik, Form, Field, FormikValues } from "formik"
 import React from "react"
 import { composeValidators, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator } from "utils/validators"
 import utilStyles from "styles/utils.module.scss"
-import { UserType } from "components/templates/users/useUsers"
+import { UserProfileType } from "components/templates/users/types"
 import CheckboxField from "components/elements/formikComponents/checkboxField/CheckboxField"
 
 interface UserFormProps {
     mode?: "add" | "edit",
-    user?: UserType
+    user?: UserProfileType
 }
 
 

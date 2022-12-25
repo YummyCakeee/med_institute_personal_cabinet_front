@@ -2,6 +2,7 @@ import CollectionModalWindow, { CollectionModalWindowProps } from "components/mo
 import ConfirmActionModalWindow from "components/modules/modalWindows/confirmActionModalWindow"
 import { ConfirmActionModalWindowProps } from "components/modules/modalWindows/confirmActionModalWindow"
 import CourseModalWindow, { CourseModalWindowProps } from "components/modules/modalWindows/courseModalWindow"
+import ThemesOrderModalWindow, { ThemesOrderModalWindowProps } from "components/modules/modalWindows/courseModalWindow/themesOrderModalWindow"
 import EducationalProgramModalWindow, { EducationalProgramModalWindowProps } from "components/modules/modalWindows/educationalProgramModalWindow"
 import TestBlockModalWindow, { TestBlockModalWindowProps } from "components/modules/modalWindows/testBlockModalWindow"
 import TestModalWindow, { TestModalWindowProps } from "components/modules/modalWindows/testModalWindow"
@@ -18,6 +19,7 @@ interface ModalWindowContext {
     setTestModalWindowState: React.Dispatch<React.SetStateAction<TestModalWindowProps | undefined>>,
     setThemeModalWindowState: React.Dispatch<React.SetStateAction<ThemeModalWindowProps | undefined>>,
     setTestBlockModalWindowState: React.Dispatch<React.SetStateAction<TestBlockModalWindowProps | undefined>>,
+    setThemesOrderModalWindowState: React.Dispatch<React.SetStateAction<ThemesOrderModalWindowProps | undefined>>
 }
 
 const ModalWindowContext = createContext<ModalWindowContext>({
@@ -28,7 +30,8 @@ const ModalWindowContext = createContext<ModalWindowContext>({
     setCollectionModalWindowState: () => { },
     setTestModalWindowState: () => { },
     setThemeModalWindowState: () => { },
-    setTestBlockModalWindowState: () => { }
+    setTestBlockModalWindowState: () => { },
+    setThemesOrderModalWindowState: () => { }
 })
 
 const ModalWindowWrapper = ({
@@ -42,6 +45,7 @@ const ModalWindowWrapper = ({
     const [testModalWindowState, setTestModalWindowState] = useState<TestModalWindowProps>()
     const [themeModalWindowState, setThemeModalWindowState] = useState<ThemeModalWindowProps>()
     const [testBlockModalWindowState, setTestBlockModalWindowState] = useState<TestBlockModalWindowProps>()
+    const [themesOrderModalWindowState, setThemesOrderModalWindowState] = useState<ThemesOrderModalWindowProps>()
 
     return (
         <ModalWindowContext.Provider
@@ -53,7 +57,8 @@ const ModalWindowWrapper = ({
                 setCollectionModalWindowState,
                 setTestModalWindowState,
                 setThemeModalWindowState,
-                setTestBlockModalWindowState
+                setTestBlockModalWindowState,
+                setThemesOrderModalWindowState
             }}
         >
             {!!confirmActionModalWindowState &&
@@ -119,6 +124,14 @@ const ModalWindowWrapper = ({
                         ...testBlockModalWindowState
                     }}
 
+                />
+            }
+            {!!themesOrderModalWindowState &&
+                <ThemesOrderModalWindow
+                    {...{
+                        onClose: () => setThemesOrderModalWindowState(undefined),
+                        ...themesOrderModalWindowState
+                    }}
                 />
             }
             {children}

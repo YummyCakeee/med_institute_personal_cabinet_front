@@ -1,4 +1,4 @@
-import 'styles/globals.css'
+import 'styles/globals.scss'
 import type { AppProps } from 'next/app'
 import ModalWindowWrapper from 'context/modalWindowContext'
 import { ReactNotifications } from 'react-notifications-component'

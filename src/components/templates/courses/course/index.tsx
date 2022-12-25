@@ -4,10 +4,6 @@ import React from "react"
 import { CourseType } from "../types"
 import utilStyles from "styles/utils.module.scss"
 import ItemList from "components/modules/itemList"
-
-import MovableList from "components/modules/movableList"
-import Button from "components/elements/button/Button"
-import styles from "./CourseTemplate.module.scss"
 import useCourse from "./useCourse"
 
 type CourseTemplateProps = {
@@ -20,12 +16,11 @@ const CourseTemplate = ({
 
     const {
         themes,
-        setThemes,
         onThemeAddClick,
         onThemeEditClick,
         onThemeSetupClick,
         onThemeDeleteClick,
-        onThemesOrderSaveClick,
+        onThemesChangeOrderClick
     } = useCourse(course)
 
 
@@ -34,6 +29,7 @@ const CourseTemplate = ({
             <Head>
                 <title>{`Настройка курса ${course.title}`}</title>
             </Head>
+            <div className={utilStyles.title}>Темы курса "{course.title}"</div>
             <div>
                 <div className={utilStyles.section_title}>Темы курса</div>
                 <ItemList
@@ -66,28 +62,14 @@ const CourseTemplate = ({
                             title: "Добавить",
                             size: "small",
                             onClick: onThemeAddClick
+                        },
+                        {
+                            title: "Порядок изучения тем",
+                            stretchable: true,
+                            onClick: onThemesChangeOrderClick
                         }
                     ]}
                 />
-            </div>
-            <div>
-                <div className={utilStyles.section_title}>Порядок изучения тем</div>
-                <div className={styles.courses_order}>
-                    <MovableList
-                        items={themes}
-                        setItems={setThemes}
-                        renderItem={({ themeId }) => (
-                            `${themeId}`
-                        )}
-                    />
-                    <div className={styles.courses_order_button_container}>
-                        <Button
-                            title="Сохранить"
-                            size="small"
-                            onClick={onThemesOrderSaveClick}
-                        />
-                    </div>
-                </div>
             </div>
         </Layout>
     )

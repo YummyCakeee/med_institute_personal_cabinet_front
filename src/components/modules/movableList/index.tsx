@@ -38,7 +38,7 @@ const MovableList = ({
     }
 
     return (
-        <div className={className}>
+        <div className={cn(styles.container, className)}>
             <div className={utilStyles.text_medium}>{title}</div>
             <List
                 beforeDrag={({ index }) => onListItemClick(index)}

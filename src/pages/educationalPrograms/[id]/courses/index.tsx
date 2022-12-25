@@ -6,6 +6,7 @@ import { ENDPOINT_COURSES, ENDPOINT_EDUCATIONAL_PROGRAMS } from "constants/endpo
 import { GetServerSideProps } from "next"
 import React from "react"
 import axiosApi from "utils/axios"
+import axios from "axios"
 
 type EducationalProgramCoursesPageProps = {
     success: boolean,
@@ -47,23 +48,16 @@ export const getServerSideProps: GetServerSideProps<EducationalProgramCoursesPag
         courses: []
     }
 
-    await axiosApi.get(`${ENDPOINT_EDUCATIONAL_PROGRAMS}/${params?.id}`)
-        .then(res => {
-            pageProps.program = res.data
-        })
-        .catch(err => {
-            pageProps.error = err.code
-            pageProps.success = false
-        })
-
-    await axiosApi.get(ENDPOINT_COURSES)
-        .then(res => {
-            pageProps.courses = res.data
-        })
-        .catch(err => {
-            pageProps.error = err.code
-            pageProps.success = false
-        })
+    await axios.all([
+        axiosApi.get(`${ENDPOINT_EDUCATIONAL_PROGRAMS}/${params?.id}`),
+        axiosApi.get(ENDPOINT_COURSES)
+    ]).then(axios.spread(({ data: program }, { data: courses }) => {
+        pageProps.program = program
+        pageProps.courses = courses
+    })).catch(err => {
+        pageProps.error = err.code
+        pageProps.success = false
+    })
 
     return {
         props: pageProps

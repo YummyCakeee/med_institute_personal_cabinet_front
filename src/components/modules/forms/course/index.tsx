@@ -10,29 +10,46 @@ import { notEmptyValidator } from "utils/validators"
 import utilStyles from "styles/utils.module.scss"
 
 interface CourseFormProps {
-    mode?: "add" | "edit",
-    course?: CourseType
+    mode: "add" | "edit",
+    course?: CourseType,
+    onSuccess?: (course: CourseType) => void,
+    onError?: (error: any) => void
 }
 
 
 const CourseForm = ({
-    mode = "add",
-    course
+    mode,
+    course,
+    onSuccess = () => { },
+    onError = () => { }
 }: CourseFormProps) => {
     const onSubmit = async (values: FormikValues) => {
+        let data: CourseType = {
+            title: values.title,
+            description: values.description
+        }
         if (mode === "add") {
-            const data = {
-                title: values.title,
-                description: values.description
-            }
-            return await axiosApi.post(ENDPOINT_COURSES, data)
+            return axiosApi.post(ENDPOINT_COURSES, data)
                 .then(res => {
-                    console.log(res.data)
+                    onSuccess(res.data)
                 })
                 .catch(err => {
-                    console.log(err)
+                    onError(err)
                 })
         }
+        if (!course) return
+        data.courseId = course.courseId
+        return axiosApi.put(`${ENDPOINT_COURSES}/${course.courseId}`, data)
+            .then(res => {
+                const updatedCourse = {
+                    ...course,
+                    ...data
+                }
+                onSuccess(updatedCourse)
+            })
+            .catch(err => {
+                onError(err)
+            })
     }
     return (
         <Formik

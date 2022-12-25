@@ -1,12 +1,12 @@
 import { TestBlockType } from "../testing/types"
 
 export type CourseType = {
-    courseId: string,
+    courseId?: string,
     title: string,
     description: string,
-    createDate: string,
-    creatorId: string,
-    themes: ThemeType[]
+    createDate?: string,
+    creatorId?: string,
+    themes?: ThemeType[]
 }
 
 export type ThemeType = {

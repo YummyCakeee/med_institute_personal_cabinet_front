@@ -1,0 +1,49 @@
+@use "src/styles/utils.module.scss" as *;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: #e6e6e6;
+
+  //Scroll-bar
+
+  scrollbar-width: thin;
+  scrollbar-color: $mainBlueColor #6b6b6b;
+
+  ::-webkit-scrollbar {
+    height: 12px;
+    width: 2px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #6b6b6b;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: $mainBlueColor;
+    border-radius: 5px;
+  }
+
+  //~Scroll-Bar
+}
+
+p {
+  margin: 0;
+  font-size: 20px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input[type="file"] {
+  display: none;
+}

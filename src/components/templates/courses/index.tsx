@@ -29,55 +29,45 @@ const CoursesTemplate = ({ courses: initialCourses }: CoursesTemplateProps) => {
             <Head>
                 <title>Курсы</title>
             </Head>
-            <div className={styles.courses_list_container}>
-                <ItemList
-                    className={styles.courses_list}
-                    headers={[
-                        {
-                            title: "Название",
-                            field: "title"
-                        },
-                        {
-                            title: "Описание",
-                            field: "description"
-                        },
-                        {
-                            title: "Дата создания",
-                            field: "createDate"
-                        },
-                        {
-                            title: "ID создателя",
-                            field: "creatorId"
-                        },
-                    ]}
-                    items={courses}
-                    itemControlButtons={() => [
-                        {
-                            title: "Редактировать",
-                            onClick: onCourseEditClick,
-                            size: "small",
-                            stretchable: true,
-                        },
-                        {
-                            title: "Удалить",
-                            onClick: onCourseDeleteClick,
-                            size: "small"
-                        },
-                        {
-                            title: "Настройка",
-                            onClick: onCourseSetupClick,
-                            size: "small"
-                        }
-                    ]}
-                    controlButtonsBottom={[
-                        {
-                            title: "Добавить",
-                            onClick: onCourseAddClick,
-                            size: "small"
-                        }
-                    ]}
-                />
-            </div>
+            <ItemList
+                className={styles.courses_list}
+                headers={[
+                    {
+                        title: "Название",
+                        field: "title"
+                    },
+                    {
+                        title: "Описание",
+                        field: "description"
+                    }
+                ]}
+                items={courses}
+                itemControlButtons={() => [
+                    {
+                        title: "Редактировать",
+                        onClick: onCourseEditClick,
+                        size: "small",
+                        stretchable: true,
+                    },
+                    {
+                        title: "Удалить",
+                        onClick: onCourseDeleteClick,
+                        size: "small"
+                    },
+                    {
+                        title: "Настройка тем курса",
+                        onClick: onCourseSetupClick,
+                        stretchable: true
+                    }
+                ]}
+                controlButtonsBottom={[
+                    {
+                        title: "Добавить",
+                        onClick: onCourseAddClick,
+                        size: "small"
+                    }
+                ]}
+            />
         </Layout>
     )
 }

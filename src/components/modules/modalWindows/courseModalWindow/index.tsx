@@ -4,13 +4,17 @@ import { CourseType } from "components/templates/courses/types"
 import React from "react"
 
 export interface CourseModalWindowProps extends ModalWindowProps {
-    mode?: "add" | "edit",
-    course?: CourseType
+    mode: "add" | "edit",
+    course?: CourseType,
+    onSuccess?: (course: CourseType) => void,
+    onError?: (error: any) => void
 }
 
 const CourseModalWindow = ({
     mode,
     course,
+    onSuccess = () => { },
+    onError = () => { },
     ...props
 }: CourseModalWindowProps) => {
     return (
@@ -23,8 +27,12 @@ const CourseModalWindow = ({
             }}
         >
             <CourseForm
-                mode={mode}
-                course={course}
+                {...{
+                    mode,
+                    course,
+                    onSuccess,
+                    onError
+                }}
             />
         </ModalWindow>
     )

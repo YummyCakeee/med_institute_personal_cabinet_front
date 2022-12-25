@@ -1,8 +1,7 @@
 @use "src/styles/utils.module.scss" as *;
 
 .container {
-    display: flex;
-    flex-direction: row;
+    margin: 0 10px;
 }
 
 .list {
@@ -12,7 +11,6 @@
     width: 500px;
     height: 300px;
     overflow: auto;
-    margin: 0 10px;
 
     &_item {
         display: flex;
@@ -32,6 +30,7 @@
 
         &.selected {
             background-color: transparentize($mainBlueColor, 0.4);
+            z-index: 10000;
         }
 
         & .icon {

@@ -6,7 +6,6 @@ import { ENDPOINT_COURSES } from "constants/endpoints"
 import { Store } from "react-notifications-component"
 import { useEffect, useState } from "react"
 import { CourseType, ThemeType } from "../types"
-import axios from "axios"
 
 const useCourse = (course: CourseType) => {
 
@@ -14,11 +13,13 @@ const useCourse = (course: CourseType) => {
     const router = useRouter()
     const {
         setConfirmActionModalWindowState,
-        setThemeModalWindowState
+        setThemeModalWindowState,
+        setThemesOrderModalWindowState
     } = useModalWindowContext()
 
     useEffect(() => {
-        setThemes(course.themes.sort(sortThemes))
+        if (course.themes)
+            setThemes(course.themes.sort(sortThemes))
     }, [course.themes])
 
     const sortThemes = (a: ThemeType, b: ThemeType) => {
@@ -150,18 +151,15 @@ const useCourse = (course: CourseType) => {
         })
     }
 
-    const onThemesOrderSaveClick = () => {
-        axios.all(themes.map((el, index) => {
-            const data: ThemeType = {
-                courseId: course.courseId,
-                themeId: el.themeId,
-                title: el.title,
-                html: el.html,
-                sortOrder: index
-            }
-            return axiosApi.put(`${ENDPOINT_COURSES}/Themes/${el.themeId}`, data)
-        }))
-            .then(res => {
+    const onThemesChangeOrderClick = () => {
+        setThemesOrderModalWindowState({
+            courseId: course.courseId!,
+            themes: themes,
+            closable: true,
+            backgroundOverlap: true,
+            onSuccess: (themes) => {
+                setThemes(themes)
+                setThemesOrderModalWindowState(undefined)
                 Store.addNotification({
                     container: "top-right",
                     type: "success",
@@ -171,19 +169,21 @@ const useCourse = (course: CourseType) => {
                         duration: 5000
                     }
                 })
-            })
-            .catch(err => {
+            },
+            onError: () => {
                 Store.addNotification({
                     container: "top-right",
                     type: "danger",
-                    title: "Не удалось сохранить порядок тем",
-                    message: `${err.code}`,
+                    title: "Не удалось изменить порядок тем",
                     dismiss: {
                         onScreen: true,
                         duration: 5000
                     }
                 })
-            })
+            },
+            onDismiss: () => setThemesOrderModalWindowState(undefined)
+        })
+
     }
 
     return {
@@ -193,7 +193,7 @@ const useCourse = (course: CourseType) => {
         onThemeEditClick,
         onThemeSetupClick,
         onThemeDeleteClick,
-        onThemesOrderSaveClick
+        onThemesChangeOrderClick
     }
 }
 

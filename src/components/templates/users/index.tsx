@@ -1,19 +1,21 @@
 import Layout from "components/layouts/Layout"
 import ItemList from "components/modules/itemList"
 import Head from "next/head"
-import React from "react"
-import useUsers from "./useUsers"
+import React, { useMemo } from "react"
+import useUsers, { UserField } from "./useUsers"
 import styles from "./UsersTemplate.module.scss"
-import ComboBox from "react-responsive-combo-box"
-import 'react-responsive-combo-box/dist/index.css'
+import ComboBox from "components/elements/comboBox/ComboBox"
 import InputField from "components/elements/input/Input"
 import utilStyles from "styles/utils.module.scss"
+import { ApplicationUserRole } from "./types"
 
 const UsersTemplate = () => {
     const {
         headers,
         sortingFieldName,
         users,
+        totalUsersCount,
+        usersPerPage,
         onUserDetailsClick,
         onUserEditClick,
         onUserDeleteClick,
@@ -23,6 +25,10 @@ const UsersTemplate = () => {
         onFieldFilterSelect,
         onFieldFilterValueChanged
     } = useUsers()
+
+    const pagesCount = useMemo(() => {
+        return Math.max(totalUsersCount / usersPerPage, 1)
+    }, [totalUsersCount, usersPerPage])
 
     const sortingFieldHeaderTitle = headers.find(el => el.field === sortingFieldName)?.title
     return (
@@ -50,9 +56,7 @@ const UsersTemplate = () => {
                                 ))
                             ]}
                             defaultValue="Не фильтровать"
-                            editable={false}
                             onSelect={onFieldFilterSelect}
-                            inputClassName={styles.combobox}
                         />
                         <p className={utilStyles.text_small}>Значение:</p>
                         <InputField
@@ -68,7 +72,15 @@ const UsersTemplate = () => {
                     items={users}
                     onHeaderClick={onHeaderClick}
                     pageNavigation
-                    pagesCount={10}
+                    pagesCount={pagesCount}
+                    customFieldsRendering={[
+                        {
+                            render: (value: ApplicationUserRole[]) =>
+                                value.map(el => el.role.name).join(', ')
+                            ,
+                            fieldName: UserField.ROLES
+                        }
+                    ]}
                     itemControlButtons={({ items, selectedItem }) => [
                         {
                             title: "Детали",

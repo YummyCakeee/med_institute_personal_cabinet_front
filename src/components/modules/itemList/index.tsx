@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import styles from "./ItemList.module.scss"
 import cn from "classnames"
 import { CrossIcon, DoubleArrowIcon } from "components/elements/icons"
@@ -33,7 +33,8 @@ type ItemListProps = {
     controlButtonsBottom?: ButtonProps[],
     onHeaderClick?: (index: number) => void,
     pageNavigation?: boolean,
-    pagesCount?: number
+    pagesCount?: number,
+    onPageClick?: (pageNumber: number) => void
 }
 
 const ItemList = ({
@@ -45,16 +46,32 @@ const ItemList = ({
     controlButtonsBottom,
     onHeaderClick = () => { },
     pageNavigation,
-    pagesCount = 1
+    pagesCount = 1,
+    onPageClick = () => { },
 }: ItemListProps) => {
 
     const [selectedItem, setSetectedItem] = useState<number | null>(null)
     const [pagesList, setPagesList] = useState<number[]>([])
     const [currentPage, setCurrentPage] = useState<number>(1)
+    const headersRef = useRef<HTMLDivElement>(null)
 
     const defaultColSize = useMemo(() => {
+        if (headersRef?.current) {
+            const paddingCorrection = 10
+            const containerWidth = headersRef.current.clientWidth - paddingCorrection
+            let customWidthHeadersCount = 0
+            let customWidthSum = 0
+            const childNodesCount = headersRef.current.childNodes.length
+            headersRef.current.childNodes.forEach((el: any) => {
+                if (el.dataset.width) {
+                    customWidthSum += el.clientWidth
+                    customWidthHeadersCount++
+                }
+            })
+            return `${(containerWidth - customWidthSum) / (childNodesCount - customWidthHeadersCount)}px`
+        }
         return `${100 / headers.length}%`
-    }, [headers.length])
+    }, [headers, headersRef])
 
     const onItemClick = (index: number) => {
         if (selectedItem !== index) setSetectedItem(index)
@@ -82,19 +99,35 @@ const ItemList = ({
 
     }, [pagesCount, currentPage])
 
+    useEffect(() => {
+        onPageClick(currentPage)
+    }, [currentPage])
+
     const getItemFieldValue = (item: Item, fieldName: string): string => {
+
+        let field: any = null
+        const fieldPath: string[] = fieldName.split('.')
+        field = item[fieldPath[0]]
+
+        for (let i = 1; i < fieldPath.length; i++) {
+            field = field[fieldPath[i]]
+        }
+
         if (customFieldsRendering) {
             const renderRule = customFieldsRendering.find(el => el.fieldName === fieldName)
             return renderRule ?
-                renderRule.render(item[fieldName]) :
-                item[fieldName]?.toString()
+                renderRule.render(field) :
+                field?.toString()
         }
-        return item[fieldName]?.toString()
+        return field?.toString()
     }
 
     return (
         <div className={cn(styles.container, className)}>
-            <div className={styles.header_list}>
+            <div
+                className={styles.header_list}
+                ref={headersRef}
+            >
                 {headers.map((el, key) => (
                     <div
                         key={key}
@@ -104,6 +137,7 @@ const ItemList = ({
                         )}
                         style={{ width: el.colSize || defaultColSize }}
                         onClick={() => onHeaderClick(key)}
+                        data-width={el.colSize}
                     >
                         {el.title}
                     </div>
@@ -141,7 +175,8 @@ const ItemList = ({
                                     key={key}
                                     className={key % 2 ?
                                         styles.item_list_background_column_even :
-                                        styles.item_list_background_column_odd}
+                                        styles.item_list_background_column_odd
+                                    }
                                     style={{ width: el.colSize || defaultColSize }}
                                 >
                                 </div>

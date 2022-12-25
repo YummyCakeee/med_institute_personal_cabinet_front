@@ -1,9 +1,9 @@
 $buttonColor: #3769c7;
 
 .container {
-    background-color: transparentize($buttonColor, 0.8);
+    background: linear-gradient(to top, transparentize($buttonColor, 0.8), transparentize($buttonColor, 1), transparentize($buttonColor, 0.8));
     color: $buttonColor;
-    border: $buttonColor solid 2px;
+    border: transparentize($buttonColor, 0.5) solid 2px;
     font-size: 20px;
     display: flex;
     align-items: center;

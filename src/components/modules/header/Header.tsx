@@ -13,6 +13,8 @@ import {
     ROUTE_USERS
 } from "constants/routes"
 import { LogoutIcon } from "components/elements/icons"
+import axiosApi from "utils/axios"
+import { ENDPOINT_LOGOUT } from "constants/endpoints"
 
 const Header = () => {
 
@@ -46,7 +48,13 @@ const Header = () => {
     ])
 
     const onLogoutClick = () => {
-        router.replace(ROUTE_REGISTRATION)
+        axiosApi.post(ENDPOINT_LOGOUT)
+            .then(res => {
+                router.replace(ROUTE_REGISTRATION)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
     return (
         <div className={styles.container}>

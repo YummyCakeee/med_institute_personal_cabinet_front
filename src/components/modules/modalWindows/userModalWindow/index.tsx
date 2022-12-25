@@ -1,11 +1,11 @@
 import ModalWindow, { ModalWindowProps } from "components/elements/modalWindow/ModalWindow"
 import UserForm from "components/modules/forms/user"
-import { UserType } from "components/templates/users/useUsers"
+import { UserProfileType } from "components/templates/users/types"
 import React from "react"
 
 export interface UserModalWindowProps extends ModalWindowProps {
     mode?: "add" | "edit",
-    user?: UserType
+    user?: UserProfileType
 }
 
 const UserModalWindow = ({

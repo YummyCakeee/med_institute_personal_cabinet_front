@@ -1,15 +1,15 @@
 import { CourseType } from "../courses/types"
 
 export type ProgramType = {
-    programId: string,
-    createDate: string,
-    creatorId: string,
-    description: string,
-    programCourses: ProgramCourseType[]
-    programCriteria: any
+    programId?: string,
     title: string,
-    commonFiles: any[],
-    userPrograms: any[]
+    createDate?: string,
+    creatorId?: string,
+    description: string,
+    programCourses?: ProgramCourseType[]
+    programCriteria?: any
+    commonFiles?: any[],
+    userPrograms?: any[]
 }
 
 export type ProgramCourseType = {
@@ -22,14 +22,17 @@ export type ProgramCourseType = {
     courseCriteria: CriteriaType,
     course?: CourseType,
     program?: ProgramType
-
 }
 
 export type CourseDependencyType = {
     courseIds: string[]
 }
 
+export enum PercentageType {
+    MIN, MAX, AVG
+}
+
 export type CriteriaType = {
-    percentageType: 0 | 1 | 2,
+    percentageType: PercentageType,
     value: number
 }

@@ -1,7 +1,7 @@
 import Button from "components/elements/button/Button"
 import InputField from "components/elements/formikComponents/inputField/InputField"
 import TextAreaField from "components/elements/formikComponents/textAreaField/TextAreaField"
-import { ENDPOINT_COURSES } from "constants/endpoints"
+import { ENDPOINT_PROGRAMS } from "constants/endpoints"
 import { Formik, Form, Field, FormikValues } from "formik"
 import React from "react"
 import axiosApi from "utils/axios"
@@ -10,29 +10,46 @@ import utilStyles from "styles/utils.module.scss"
 import { ProgramType } from "components/templates/educationalPrograms/types"
 
 interface EducationalProgramFormProps {
-    mode?: "add" | "edit",
-    program?: ProgramType
+    mode: "add" | "edit",
+    program?: ProgramType,
+    onSuccess?: (program: ProgramType) => void,
+    onError?: (error: any) => void
 }
 
 
 const EducationalProgramForm = ({
-    mode = "add",
-    program
+    mode,
+    program,
+    onSuccess = () => { },
+    onError = () => { }
 }: EducationalProgramFormProps) => {
     const onSubmit = async (values: FormikValues) => {
+        let data: ProgramType = {
+            title: values.title,
+            description: values.description
+        }
         if (mode === "add") {
-            const data = {
-                title: values.title,
-                description: values.description
-            }
-            return await axiosApi.post(ENDPOINT_COURSES, data)
+            return axiosApi.post(ENDPOINT_PROGRAMS, data)
                 .then(res => {
-                    console.log(res.data)
+                    onSuccess(res.data)
                 })
                 .catch(err => {
-                    console.log(err)
+                    onError(err)
                 })
         }
+        if (!program) return
+        data.programId = program.programId
+        return axiosApi.put(`${ENDPOINT_PROGRAMS}/${program.programId}`, data)
+        .then(res => {
+            const updatedProgram = {
+                ...program,
+                ...data
+            }
+            onSuccess(updatedProgram)
+        })
+        .catch(err => {
+            onError(err)
+        })
     }
     return (
         <Formik

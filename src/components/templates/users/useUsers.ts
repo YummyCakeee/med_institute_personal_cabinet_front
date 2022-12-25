@@ -1,72 +1,27 @@
+import { ENDPOINT_USERS } from "constants/endpoints"
 import { ROUTE_USERS } from "constants/routes"
 import { useModalWindowContext } from "context/modalWindowContext"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import axiosApi from "utils/axios"
+import { UserProfileType } from "./types"
 
-enum UserField {
-    SURNAME = "surname", NAME = "name", PATRONYMIC = "patronymic",
-    LOGIN = "login", EMAIL = "email", ROLES = "roles"
-}
-
-export type UserType = {
-    id: number,
-    surname: string,
-    name: string,
-    patronymic: string,
-    login: string,
-    email: string,
-    roles: string[],
-    blocked: boolean,
+export enum UserField {
+    SURNAME = "secondName", NAME = "firstName", PATRONYMIC = "lastName",
+    LOGIN = "user.userName", EMAIL = "user.email", ROLES = "user.userRoles"
 }
 
 const useUsers = () => {
 
+    const router = useRouter()
     const [sortingFieldName, setSortingFieldName] = useState<UserField | undefined>(UserField.SURNAME)
     const [filteringFieldName, setFilteringFieldName] = useState<UserField | undefined>(undefined)
     const [filteringFieldValue, setFilteringFieldValue] = useState<string>("")
-    const [users, setUsers] = useState<UserType[]>([
-        {
-            id: 1,
-            surname: "Иванов",
-            name: "Иван",
-            patronymic: "Иванович",
-            login: "dangerous_man_3000",
-            email: "cuteBarbie@yandex.ru",
-            roles: ["administrator", "student"],
-            blocked: false
-        },
-        {
-            id: 2,
-            surname: "Петров",
-            name: "Дмитрий",
-            patronymic: "Евгеньевич",
-            login: "good_man",
-            email: "mrMister@yandex.ru",
-            roles: ["student"],
-            blocked: false
-        },
-        {
-            id: 3,
-            surname: "Алексеев",
-            name: "Никита",
-            patronymic: "Никифорович",
-            login: "unused_login1111",
-            email: "chebupelly@yandex.ru",
-            roles: ["administrator"],
-            blocked: false
-        },
-        {
-            id: 4,
-            surname: "Тарасов",
-            name: "Олег",
-            patronymic: "Богданович",
-            login: "ghdfgredfrf",
-            email: "cacaboba@yandex.ru",
-            roles: ["teacher"],
-            blocked: false
-        }
-    ])
-    const [itemListUsers, setItemListUsers] = useState<UserType[]>([])
+    const [totalUsersCount, setTotalUsersCount] = useState<number>(0)
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const usersPerPage = 10
+
+    const [users, setUsers] = useState<UserProfileType[]>([])
     const [headers] = useState([
         {
             title: "Фамилия",
@@ -99,7 +54,6 @@ const useUsers = () => {
             clickable: true
         }
     ])
-    const router = useRouter()
 
     const {
         setConfirmActionModalWindowState,
@@ -107,27 +61,35 @@ const useUsers = () => {
     } = useModalWindowContext()
 
     useEffect(() => {
-        let newUsers: UserType[] = []
-        if (filteringFieldName) {
-            newUsers = users.filter(el => {
-                return el[filteringFieldName] === filteringFieldValue
+        // TODO: Поменять на более оптимизированный расчёт
+
+        axiosApi.get(ENDPOINT_USERS)
+            .then(res => {
+                setTotalUsersCount(res.data.length)
             })
-        }
-        else {
-            newUsers = users.slice()
-        }
-        if (sortingFieldName) {
-            newUsers.sort((a, b) => {
-                if (a[sortingFieldName] < b[sortingFieldName]) return -1;
-                if (a[sortingFieldName] > b[sortingFieldName]) return 1;
-                return 0;
+            .catch(err => {
+                console.log(err)
             })
-            setItemListUsers(newUsers)
+
+    }, [])
+
+    const getUsers = () => {
+        const params = {
+            limit: usersPerPage,
+            offset: (currentPage - 1) * usersPerPage,
         }
-        else {
-            setItemListUsers(newUsers)
-        }
-    }, [users, sortingFieldName, filteringFieldName, filteringFieldValue])
+        axiosApi.get(ENDPOINT_USERS, { params })
+            .then(res => {
+                setUsers(res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    useEffect(() => {
+        getUsers()
+    }, [sortingFieldName, filteringFieldName, filteringFieldValue, currentPage, usersPerPage])
 
     const onFieldFilterSelect = (option: string) => {
         const field = headers.find(el => el.title === option)?.field
@@ -147,14 +109,14 @@ const useUsers = () => {
     }
 
     const onUserDetailsClick = (index: number) => {
-        const id = itemListUsers[index].id
+        const id = users[index].userId
         router.push(`${ROUTE_USERS}/${id}`)
     }
 
     const onUserEditClick = (index: number) => {
         setUserModalWindowState({
             mode: "edit",
-            user: itemListUsers[index],
+            user: users[index],
             closable: true,
             backgroundOverlap: true
         })
@@ -164,29 +126,29 @@ const useUsers = () => {
         setConfirmActionModalWindowState({
             onDismiss: () => setConfirmActionModalWindowState(undefined),
             onConfirm: () => {
-                const deletedUserId = itemListUsers[index].id
-                setUsers(users.filter(el => el.id !== deletedUserId))
+                const deletedUserId = users[index].userId
+                setUsers(users.filter(el => el.userId !== deletedUserId))
                 setConfirmActionModalWindowState(undefined)
             },
-            text: `Удалить пользователя ${itemListUsers[index].surname} ${itemListUsers[index].name}?`,
+            text: `Удалить пользователя ${users[index].secondName} ${users[index].firstName}?`,
             backgroundOverlap: true,
             closable: true
         })
     }
 
     const onUserBlockClick = (index: number) => {
-        const blocked = itemListUsers[index].blocked
+        const blocked = users[index].blocked
         setConfirmActionModalWindowState({
             onDismiss: () => setConfirmActionModalWindowState(undefined),
             onConfirm: () => {
-                const id = itemListUsers[index].id
+                const id = users[index].userId
                 setUsers(users.map(el => {
-                    if (el.id === id) return { ...el, blocked: !el.blocked }
+                    if (el.userId === id) return { ...el, blocked: !el.blocked }
                     return el
                 }))
                 setConfirmActionModalWindowState(undefined)
             },
-            text: `${blocked ? 'Разблокировать' : 'Заблокировать'} пользователя ${itemListUsers[index].surname} ${itemListUsers[index].name}?`,
+            text: `${blocked ? 'Разблокировать' : 'Заблокировать'} пользователя ${users[index].secondName} ${users[index].firstName}?`,
             backgroundOverlap: true,
             closable: true
         })
@@ -203,7 +165,9 @@ const useUsers = () => {
     return {
         headers,
         sortingFieldName,
-        users: itemListUsers,
+        users,
+        totalUsersCount,
+        usersPerPage,
         onUserDetailsClick,
         onUserEditClick,
         onUserDeleteClick,

@@ -3,14 +3,14 @@ import React from "react"
 import utilStyles from "styles/utils.module.scss"
 import styles from "./UserTemplate.module.scss"
 import cn from "classnames"
-import { UserType } from "./useUsers"
+import { UserProfileType } from "./types"
 import Image from "next/image"
 import Link from "next/link"
 import { ROUTE_USERS } from "constants/routes"
 import { ArrowIcon } from "components/elements/icons"
 
 type UserTemplateProps = {
-    user: UserType
+    user: UserProfileType
 }
 
 const UserTemplate = ({
@@ -20,27 +20,27 @@ const UserTemplate = ({
     const userInfo = [
         {
             name: "Фамилия",
-            value: user.surname,
+            value: user.secondName,
         },
         {
             name: "Имя",
-            value: user.surname,
+            value: user.firstName,
         },
         {
             name: "Отчество",
-            value: user.patronymic,
+            value: user.lastName,
         },
         {
             name: "Логин",
-            value: user.login,
+            value: user.user?.userName,
         },
         {
             name: "Email",
-            value: user.email,
+            value: user.user?.email,
         },
         {
             name: "Роли",
-            value: user.roles.join(', '),
+            value: user.user?.userRoles?.map(el => el.role.name).join(', '),
         },
         {
             name: "Доступ",
