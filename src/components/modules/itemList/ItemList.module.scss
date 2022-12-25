@@ -4,11 +4,11 @@
     width: fit-content;
     min-width: 400px;
     margin: 50px auto;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
     box-sizing: border-box;
     border: transparentize($mainBlueColor, 0.5) solid 1px;
-    box-shadow: 0px 10px 20px #0000001c;
+    box-shadow: 0px 10px 20px #0000003f;
 }
 
 .header {
@@ -17,7 +17,7 @@
         flex-direction: row;
         justify-content: space-around;
         padding: 10px 0;
-        background-color: #d3d3d380;
+        background-color: $mainGreyColor;
     }
 
     &_item {
@@ -28,6 +28,7 @@
         transition: all 0.3s ease-in-out;
         position: relative;
         box-sizing: border-box;
+        color: #fff;
 
         &_clickable {
             cursor: pointer;
@@ -86,7 +87,7 @@
         padding: 0;
         opacity: 0;
         border-bottom: black solid 1px;
-        background-color: #f7f7f7;
+        background-color: $mainLighterGreyColor;
 
         &[data-visible="true"] {
             max-height: 100px;
@@ -114,7 +115,7 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
-            background-color: #f7f7f7;
+            background-color: $mainLighterGreyColor;
         }
 
         &_navigation_section {
@@ -123,6 +124,7 @@
             justify-content: center;
             align-items: center;
             padding: 10px 0;
+            background-color: $mainGreyColor;
 
             & .page {
                 border: $mainBlueColor 1px solid;
@@ -151,7 +153,7 @@
             & .arrow {
 
                 &_left {
-                    fill: transparentize($mainGreyColor, 0.4);
+                    fill: transparentize(#fff, 0.4);
                     transition: all 0.2s ease-in-out;
 
                     &:hover {
@@ -161,7 +163,7 @@
                 }
 
                 &_right {
-                    fill: transparentize($mainGreyColor, 0.4);
+                    fill: transparentize(#fff, 0.4);
                     transition: all 0.2s ease-in-out;
                     transform: rotateY(180deg);
 
