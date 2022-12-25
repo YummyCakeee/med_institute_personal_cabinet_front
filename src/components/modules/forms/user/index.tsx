@@ -6,6 +6,8 @@ import { composeValidators, maxLengthValueValidator, minLengthValueValidator, no
 import utilStyles from "styles/utils.module.scss"
 import { UserProfileType } from "components/templates/users/types"
 import CheckboxField from "components/elements/formikComponents/checkboxField/CheckboxField"
+import axiosApi from "utils/axios"
+import { ENDPOINT_USERS } from "constants/endpoints"
 
 interface UserFormProps {
     mode?: "add" | "edit",
@@ -19,34 +21,59 @@ const UserForm = ({
 }: UserFormProps) => {
 
     const onSubmit = async (values: FormikValues) => {
+        let data: UserProfileType = {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            secondName: values.secondName,
+            user: {
+                userName: values.login,
+                email: values.email,
+                userRoles: values.roles.map((el: string) => ({
+                    role: {
+                        name: el
+                    }
+                }))
+            }
+
+        }
+        if (mode === "add") {
+            return axiosApi.post(ENDPOINT_USERS, data)
+                .then(res => {
+
+                })
+                .catch(err => {
+
+                })
+
+        }
         console.log(values)
     }
 
     const userRoles = [
-        "administrator",
-        "student",
-        "teacher"
+        "Administrator",
+        "Student",
+        "Teacher"
     ]
 
     return (
         <Formik
             initialValues={mode === "add" ?
                 {
-                    surname: "",
-                    name: "",
-                    patronymic: "",
+                    lastName: "",
+                    firstName: "",
+                    secondName: "",
                     login: "",
                     email: "",
                     roles: []
 
                 } :
                 {
-                    // surname: user?.surname || "",
-                    // name: user?.name || "",
-                    // patronymic: user?.patronymic || "",
-                    // login: user?.login || "",
-                    // email: user?.email || "",
-                    // roles: user?.roles || ""
+                    lastName: user?.lastName || "",
+                    firstName: user?.firstName || "",
+                    secondName: user?.secondName || "",
+                    login: user?.user?.userName || "",
+                    email: user?.user?.email || "",
+                    roles: user?.user?.userRoles?.map(el => el.role.name) || ""
                 }
             }
             onSubmit={onSubmit}
