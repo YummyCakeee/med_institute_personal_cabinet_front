@@ -16,6 +16,7 @@ type SwapListsProps = {
     firstListTitle?: string,
     secondListTitle?: string,
     onLeftListItemSelected?: (index: number | undefined) => void
+    renderItem: (item: any) => string,
 }
 
 const SwapLists = ({
@@ -27,7 +28,8 @@ const SwapLists = ({
     secondListClassName,
     firstListTitle,
     secondListTitle,
-    onLeftListItemSelected = () => { }
+    onLeftListItemSelected = () => { },
+    renderItem
 }: SwapListsProps) => {
 
     const [selectedItemIndex, setSelectedItemIndex] = useState<number | undefined>(undefined)
@@ -71,9 +73,7 @@ const SwapLists = ({
                 items={firstListItems}
                 onItemSelected={(index) => onListItemClick(index, "first")}
                 setItems={setFirstListItems}
-                renderItem={(value) => (
-                    value.title
-                )}
+                renderItem={renderItem}
                 title={firstListTitle}
                 className={firstListClassName}
                 selectedItemClass={cn({ [styles.item_not_selected]: activeList !== "first" })}
@@ -93,9 +93,7 @@ const SwapLists = ({
                 items={secondListItems}
                 onItemSelected={(index) => onListItemClick(index, "second")}
                 setItems={setSecondListItems}
-                renderItem={(value) => (
-                    value.title
-                )}
+                renderItem={renderItem}
                 title={secondListTitle}
                 className={secondListClassName}
                 selectedItemClass={cn({ [styles.item_not_selected]: activeList !== "second" })}

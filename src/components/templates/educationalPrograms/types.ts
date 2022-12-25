@@ -9,7 +9,7 @@ export type ProgramType = {
     programCourses?: ProgramCourseType[]
     programCriteria?: any
     commonFiles?: any[],
-    userPrograms?: any[]
+    userPrograms?: UserProgramType[]
 }
 
 export type ProgramCourseType = {
@@ -35,4 +35,15 @@ export enum PercentageType {
 export type CriteriaType = {
     percentageType: PercentageType,
     value: number
+}
+
+export type UserProgramType = {
+    userProgramId: string,
+    userId: string,
+    programId: string,
+    report?: string
+    certificateDate?: string,
+    certificateName?: string,
+    createDate?: string,
+    program?: ProgramType
 }

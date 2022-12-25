@@ -9,7 +9,6 @@ import Button from "components/elements/button/Button"
 import axiosApi from "utils/axios"
 import axios from "axios"
 import { ENDPOINT_PROGRAMS } from "constants/endpoints"
-import cn from "classnames"
 import { Store } from "react-notifications-component"
 import { UserProfileType } from "components/templates/users/types"
 
@@ -29,44 +28,14 @@ const EducationalProgramStudentsTemplate = ({
     const [selectedUserIndex, setSelectedUserIndex] = useState<number | undefined>(undefined)
 
     useEffect(() => {
-        const selectedCourses = courses.filter(course => program.programCourses?.find(
-            programCourse => programCourse.courseId === course.courseId))
-        setInitialProgramUsers(selectedCourses)
+        const selectedUsers = users.filter(user => program.userPrograms?.find(
+            userProgram => userProgram.userId === user.userId))
 
-        setProgramUsers(selectedCourses.map(el => {
-            const programCourse = program.programCourses!.find(programCourse =>
-                programCourse.courseId === el.courseId)
+        setInitialProgramUsers(selectedUsers)
+        setProgramUsers(selectedUsers)
 
-            const dependencies = []
-            let percentageType = 0
-            let value = 0
-            let sortOrder = 0
-            if (programCourse) {
-                dependencies.push(...programCourse.dependencies?.courseIds || [])
-                percentageType = programCourse.courseCriteria?.percentageType || 0
-                value = programCourse.courseCriteria?.value || 0,
-                    sortOrder = programCourse.sortOrder
-            }
-
-            return {
-                ...el,
-                dependencies,
-                percentageType,
-                value,
-                sortOrder
-            }
-        }))
-
-        setRestUsers(courses.filter(course =>
-            !selectedCourses.find(selectedCourse => course.courseId === selectedCourse.courseId))
-            .map(el => (
-                {
-                    ...el,
-                    dependencies: [],
-                    percentageType: PercentageType.MIN,
-                    value: 0
-                }
-            )))
+        setRestUsers(users.filter(user =>
+            !selectedUsers.find(selectedUser => user.userId === selectedUser.userId)))
 
     }, [program, users])
 
@@ -76,64 +45,32 @@ const EducationalProgramStudentsTemplate = ({
 
 
     const onSubmit = useCallback(() => {
-        const newCourses = programCourses.filter(programCourse =>
-            !initialProgramCourses.find(initialProgramCourse =>
-                programCourse.courseId === initialProgramCourse.courseId
+        const newUsers = programUsers.filter(programUser =>
+            !initialProgramUsers.find(initialProgramUser =>
+                programUser.userId === initialProgramUser.userId
             ))
 
-        const updatedCourses = programCourses.filter(programCourse =>
-            initialProgramCourses.find(initialProgramCourse =>
-                programCourse.courseId === initialProgramCourse.courseId
-            ))
+        const deletedUsersIds = initialProgramUsers.filter(initialProgramUser =>
+            !programUsers.find(programUser => initialProgramUser.userId === programUser.userId
+            )).map(el => el.userId)
 
-        const deletedCoursesIds = initialProgramCourses.filter(initialProgramCourse =>
-            !programCourses.find(programCourse => initialProgramCourse.courseId === programCourse.courseId
-            )).map(el => el.courseId)
-
-        const deletedProgramCoursesIds = program.programCourses?.filter(programCourse =>
-            deletedCoursesIds.find(deletedCourseId => deletedCourseId === programCourse.courseId
-            )).map(el => el.programCourseId) || []
+        const deletedProgramUsersIds = program.userPrograms?.filter(userProgram =>
+            deletedUsersIds.find(deletedUserId => deletedUserId === userProgram.userId
+            )).map(el => el.userProgramId) || []
 
         axios.all([
-            ...newCourses.map(course => {
-                const data = {
-                    courseDependency: {
-                        courseIds: course.dependencies.filter(dependencyId =>
-                            programCourses.find(programCourse => programCourse.courseId === dependencyId))
-                            .map(el => parseInt(el))
-                    },
-                    courseCriteria: {
-                        percentageType: course.percentageType,
-                        value: course.value
-                    },
-                    sortOrder: programCourses.findIndex(el => el.courseId === course.courseId)
-                }
-                return axiosApi.post(`${ENDPOINT_PROGRAMS}/${program.programId}/Course/${course.courseId}`, data)
+            ...newUsers.map(user => {
+                return axiosApi.post(`${ENDPOINT_PROGRAMS}/${program.programId}/User/${user.userId}`)
             }),
-            ...updatedCourses.map(course => {
-                const data = {
-                    courseDependency: {
-                        courseIds: course.dependencies.filter(dependencyId =>
-                            programCourses.find(programCourse => programCourse.courseId === dependencyId))
-                            .map(el => parseInt(el))
-                    },
-                    courseCriteria: {
-                        percentageType: course.percentageType,
-                        value: course.value
-                    },
-                    sortOrder: programCourses.findIndex(el => el.courseId === course.courseId)
-                }
-                return axiosApi.put(`${ENDPOINT_PROGRAMS}/${program.programId}/Course/${course.courseId}`, data)
-            }),
-            ...deletedProgramCoursesIds.map(el => {
-                return axiosApi.delete(`${ENDPOINT_PROGRAMS}/Course/${el}`)
+            ...deletedProgramUsersIds.map(el => {
+                return axiosApi.delete(`${ENDPOINT_PROGRAMS}/User/${el}`)
             })
         ])
             .then(res => {
                 Store.addNotification({
                     container: "top-right",
                     type: "success",
-                    title: "Курсы обновлены",
+                    title: "Обучающиеся программы обновлены",
                     dismiss: {
                         onScreen: true,
                         duration: 5000
@@ -144,7 +81,7 @@ const EducationalProgramStudentsTemplate = ({
                 Store.addNotification({
                     container: "top-right",
                     type: "danger",
-                    title: "Не удалось обновить курсы",
+                    title: "Не удалось обновить обучающихся программы",
                     message: `${err.code}`,
                     dismiss: {
                         onScreen: true,
@@ -153,7 +90,7 @@ const EducationalProgramStudentsTemplate = ({
                 })
             })
 
-    }, [initialProgramCourses, programCourses, program])
+    }, [initialProgramUsers, programUsers, program])
 
     return (
         <Layout>
@@ -174,6 +111,9 @@ const EducationalProgramStudentsTemplate = ({
                         firstListTitle="Обучающиеся программы"
                         secondListTitle="Остальные обучающиеся"
                         onLeftListItemSelected={onUserSelected}
+                        renderItem={({ firstName, secondName, lastName, user: { userName } }) =>
+                            `${lastName} ${firstName} ${secondName}  (${userName})`
+                        }
                     />
                 </div>
                 <div className={styles.save_button_container}>

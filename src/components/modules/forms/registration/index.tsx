@@ -5,7 +5,7 @@ import InputField from "components/elements/formikComponents/inputField/InputFie
 import utilStyles from "styles/utils.module.scss"
 import { composeValidators, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator } from "utils/validators"
 import axiosApi from "utils/axios"
-import { ENDPOINT_REGISTER } from "constants/endpoints"
+import { ENDPOINT_ACCOUNT } from "constants/endpoints"
 import { Store } from "react-notifications-component"
 
 type RegistrationFormProps = {
@@ -26,7 +26,7 @@ const RegistrationForm = ({
             email: values.email,
             password: values.password
         }
-        return axiosApi.post(ENDPOINT_REGISTER, data)
+        return axiosApi.post(`${ENDPOINT_ACCOUNT}/Register`, data)
             .then(res => {
                 if (res.status === 200) {
                     onSuccess()

@@ -1,6 +1,4 @@
-export const ENDPOINT_REGISTER = "api/Account/Register"
-export const ENDPOINT_LOGIN = "api/Account/Login"
-export const ENDPOINT_LOGOUT = "api/Account/Logout"
+export const ENDPOINT_ACCOUNT = "api/Account"
 export const ENDPOINT_COURSES = "api/Courses"
 export const ENDPOINT_PROGRAMS = "api/Program"
 export const ENDPOINT_THEMES = "api/Themes"

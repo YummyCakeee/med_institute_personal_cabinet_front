@@ -30,7 +30,9 @@ const UsersTemplate = () => {
         return Math.max(totalUsersCount / usersPerPage, 1)
     }, [totalUsersCount, usersPerPage])
 
-    const sortingFieldHeaderTitle = headers.find(el => el.field === sortingFieldName)?.title
+    const sortingFieldHeaderTitle = useMemo(() => {
+        return headers.find(el => el.filterSortFieldName === sortingFieldName)?.title
+    }, [headers, sortingFieldName])
     return (
         <Layout>
             <Head>
@@ -83,9 +85,9 @@ const UsersTemplate = () => {
                     ]}
                     itemControlButtons={({ items, selectedItem }) => [
                         {
-                            title: "Детали",
+                            title: "Подробнее",
                             onClick: onUserDetailsClick,
-                            size: "small"
+                            stretchable: true
                         },
                         {
                             title: "Редактировать",
@@ -99,9 +101,12 @@ const UsersTemplate = () => {
                             size: "small"
                         },
                         {
-                            title: items && selectedItem !== null &&
-                                items[selectedItem]?.blocked ?
-                                "Разблокировать" : "Заблокировать",
+                            title: (() => {
+                                const lockoutEnd = new Date(selectedItem.user.lockoutEnd)
+                                console.log(selectedItem.user.lockoutEnd)
+                                return lockoutEnd > new Date() ?
+                                    "Разблокировать" : "Заблокировать"
+                            })(),
                             onClick: onUserBlockClick,
                             size: "small",
                             stretchable: true,

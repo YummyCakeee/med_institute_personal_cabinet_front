@@ -266,6 +266,7 @@ const EducationalProgramCoursesTemplate = ({
                         firstListTitle="Последовательность изучения курсов программы"
                         secondListTitle="Остальные курсы"
                         onLeftListItemSelected={onCourseSelected}
+                        renderItem={({ title }) => title}
                     />
                 </div>
                 <div className={cn(
@@ -286,8 +287,8 @@ const EducationalProgramCoursesTemplate = ({
                                     </div>
                                     <Checkbox
                                         checked={selectedCourseIndex !== undefined &&
-                                            programCourses[selectedCourseIndex]?.dependencies?.includes(el.courseId)}
-                                        onChange={() => onDependencyCourseChange(el.courseId)}
+                                            programCourses[selectedCourseIndex]?.dependencies?.includes(el.courseId!)}
+                                        onChange={() => onDependencyCourseChange(el.courseId!)}
                                     />
                                 </div>
                             ))}

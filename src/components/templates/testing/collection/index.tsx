@@ -149,15 +149,18 @@ const CollectionTemplate = ({ collection }: CollectionTemplateProps) => {
                 headers={[
                     {
                         title: "Вопрос",
-                        field: "questionText"
+                        field: "questionText",
+                        colSize: "400px"
                     },
                     {
                         title: "Ответы",
-                        field: "answers"
+                        field: "answers",
+                        colSize: "400px"
                     },
                     {
                         title: "Тип теста",
-                        field: "testTypeId"
+                        field: "testTypeId",
+                        colSize: "300px"
                     }
                 ]}
                 customFieldsRendering={[

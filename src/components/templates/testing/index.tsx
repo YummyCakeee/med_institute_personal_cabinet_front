@@ -35,45 +35,47 @@ const TestingTemplate = ({
                 </title>
             </Head>
             <div>
-            <div className={utilStyles.section_title}>Коллекции</div>
-            <ItemList
-                headers={[
-                    {
-                        title: "Название",
-                        field: "collectionName",
-                    },
-                    {
-                        title: "ID создателя",
-                        field: "creatorId",
-                    },
-                ]}
-                items={collections}
-                itemControlButtons={() => [
-                    {
-                        title: "Редактировать",
-                        size: "small",
-                        stretchable: true,
-                        onClick: onCollectionEditClick
-                    },
-                    {
-                        title: "Редактировать тесты",
-                        stretchable: true,
-                        onClick: onCollectionTestsEditClick
-                    },
-                    {
-                        title: "Удалить",
-                        size: "small",
-                        onClick: onCollectionDeleteClick
-                    }
-                ]}
-                controlButtonsBottom={[
-                    {
-                        title: "Добавить",
-                        size: "small",
-                        onClick: onCollectionAddClick
-                    }
-                ]}
-            />
+                <div className={utilStyles.section_title}>Коллекции</div>
+                <ItemList
+                    headers={[
+                        {
+                            title: "Название",
+                            field: "collectionName",
+                            colSize: "300px"
+                        },
+                        {
+                            title: "ID создателя",
+                            field: "creatorId",
+                            colSize: "300px"
+                        },
+                    ]}
+                    items={collections}
+                    itemControlButtons={() => [
+                        {
+                            title: "Редактировать",
+                            size: "small",
+                            stretchable: true,
+                            onClick: onCollectionEditClick
+                        },
+                        {
+                            title: "Редактировать тесты",
+                            stretchable: true,
+                            onClick: onCollectionTestsEditClick
+                        },
+                        {
+                            title: "Удалить",
+                            size: "small",
+                            onClick: onCollectionDeleteClick
+                        }
+                    ]}
+                    controlButtonsBottom={[
+                        {
+                            title: "Добавить",
+                            size: "small",
+                            onClick: onCollectionAddClick
+                        }
+                    ]}
+                />
             </div>
         </Layout>
     )

@@ -32,7 +32,7 @@ const ThemeForm = ({
             sortOrder: 0
         }
         if (mode === "add") {
-            return axiosApi.post(getCourseThemesEndpoint(course.courseId), data)
+            return axiosApi.post(getCourseThemesEndpoint(course.courseId!), data)
                 .then(res => {
                     const theme: ThemeType = res.data
                     onSuccess(theme)
@@ -49,7 +49,8 @@ const ThemeForm = ({
             .then(res => {
                 const updatedTheme: ThemeType = {
                     ...theme,
-                    ...data
+                    ...data,
+                    courseId: theme.courseId,
                 }
                 onSuccess(updatedTheme)
             })

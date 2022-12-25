@@ -1,10 +1,6 @@
 import Button from "components/elements/button/Button"
 import Input from "components/elements/input/Input"
 import { CollectionType, TestBlockCollectionsType, TestBlockType } from "components/templates/testing/types"
-import dynamic from "next/dynamic"
-const Datetime = dynamic(() => import('react-datetime'), { ssr: false })
-import { Moment } from 'moment';
-import "react-datetime/css/react-datetime.css"
 import React, { useState } from "react"
 import styles from "./Theme.module.scss"
 import 'moment/locale/ru';
@@ -14,6 +10,8 @@ import Checkbox from "components/elements/checkbox/Checkbox"
 import { maxMinConstraint } from "utils/computations"
 import { Store } from "react-notifications-component"
 import { useModalWindowContext } from "context/modalWindowContext"
+import Datetime from "components/elements/datetime"
+import { Moment } from "moment"
 
 type TestBlockEditProps = {
     testBlock?: TestBlockType,

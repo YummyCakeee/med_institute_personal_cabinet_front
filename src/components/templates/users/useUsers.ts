@@ -3,19 +3,25 @@ import { ROUTE_USERS } from "constants/routes"
 import { useModalWindowContext } from "context/modalWindowContext"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import { Store } from "react-notifications-component"
 import axiosApi from "utils/axios"
 import { UserProfileType } from "./types"
 
 export enum UserField {
-    SURNAME = "secondName", NAME = "firstName", PATRONYMIC = "lastName",
+    SECOND_NAME = "secondName", FIRST_NAME = "firstName", LAST_NAME = "lastName",
     LOGIN = "user.userName", EMAIL = "user.email", ROLES = "user.userRoles"
+}
+
+export enum FilterSortField {
+    LAST_NAME = "LastName", FIRST_NAME = "FirstName",
+    SECOND_NAME = "SecondName", LOGIN = "Login", EMAIL = "Email", ROLES = "Roles"
 }
 
 const useUsers = () => {
 
     const router = useRouter()
-    const [sortingFieldName, setSortingFieldName] = useState<UserField | undefined>(UserField.SURNAME)
-    const [filteringFieldName, setFilteringFieldName] = useState<UserField | undefined>(undefined)
+    const [sortingFieldName, setSortingFieldName] = useState<FilterSortField | undefined>(FilterSortField.LAST_NAME)
+    const [filteringFieldName, setFilteringFieldName] = useState<FilterSortField | undefined>(undefined)
     const [filteringFieldValue, setFilteringFieldValue] = useState<string>("")
     const [totalUsersCount, setTotalUsersCount] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(1)
@@ -25,47 +31,53 @@ const useUsers = () => {
     const [headers] = useState([
         {
             title: "Фамилия",
-            field: UserField.SURNAME,
+            field: UserField.LAST_NAME,
+            filterSortFieldName: FilterSortField.LAST_NAME,
             clickable: true
         },
         {
             title: "Имя",
-            field: UserField.NAME,
+            field: UserField.FIRST_NAME,
+            filterSortFieldName: FilterSortField.FIRST_NAME,
             clickable: true
         },
         {
             title: "Отчество",
-            field: UserField.PATRONYMIC,
+            field: UserField.SECOND_NAME,
+            filterSortFieldName: FilterSortField.SECOND_NAME,
             clickable: true
         },
         {
             title: "Логин",
             field: UserField.LOGIN,
+            filterSortFieldName: FilterSortField.LOGIN,
             clickable: true
         },
         {
             title: "Email",
             field: UserField.EMAIL,
+            filterSortFieldName: FilterSortField.EMAIL,
             clickable: true
         },
         {
             title: "Роли",
             field: UserField.ROLES,
-            clickable: true
+            filterSortFieldName: FilterSortField.ROLES
         }
     ])
 
     const {
         setConfirmActionModalWindowState,
-        setUserModalWindowState
+        setUserModalWindowState,
+        setUserBlockModalWindowState
     } = useModalWindowContext()
-
     useEffect(() => {
-        // TODO: Поменять на более оптимизированный расчёт
-
-        axiosApi.get(ENDPOINT_USERS)
+        const params = {
+            filterField: filteringFieldName
+        }
+        axiosApi.get(`${ENDPOINT_USERS}/Count`, { params })
             .then(res => {
-                setTotalUsersCount(res.data.length)
+                setTotalUsersCount(res.data)
             })
             .catch(err => {
                 console.log(err)
@@ -77,6 +89,9 @@ const useUsers = () => {
         const params = {
             limit: usersPerPage,
             offset: (currentPage - 1) * usersPerPage,
+            ...(filteringFieldName && { filterField: filteringFieldName }),
+            ...(filteringFieldName && { filterString: filteringFieldValue }),
+            ...(sortingFieldName && { sortFieldEnum: sortingFieldName })
         }
         axiosApi.get(ENDPOINT_USERS, { params })
             .then(res => {
@@ -93,7 +108,28 @@ const useUsers = () => {
 
     const onFieldFilterSelect = (option: string) => {
         const field = headers.find(el => el.title === option)?.field
-        setFilteringFieldName(field || undefined)
+        let filterField: FilterSortField | undefined = undefined
+        switch (field) {
+            case UserField.FIRST_NAME:
+                filterField = FilterSortField.FIRST_NAME
+                break
+            case UserField.SECOND_NAME:
+                filterField = FilterSortField.SECOND_NAME
+                break
+            case UserField.LAST_NAME:
+                filterField = FilterSortField.LAST_NAME
+                break
+            case UserField.LOGIN:
+                filterField = FilterSortField.LOGIN
+                break
+            case UserField.EMAIL:
+                filterField = FilterSortField.EMAIL
+                break
+            case UserField.ROLES:
+                filterField = FilterSortField.ROLES
+                break
+        }
+        setFilteringFieldName(filterField)
     }
 
     const onFieldFilterValueChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,11 +137,11 @@ const useUsers = () => {
     }
 
     const onHeaderClick = (index: number) => {
-        const newSortingFieldName = headers[index].field
+        const newSortingFieldName = headers[index].filterSortFieldName
         if (newSortingFieldName === sortingFieldName)
             setSortingFieldName(undefined)
         else
-            setSortingFieldName(headers[index].field)
+            setSortingFieldName(newSortingFieldName)
     }
 
     const onUserDetailsClick = (index: number) => {
@@ -137,18 +173,47 @@ const useUsers = () => {
     }
 
     const onUserBlockClick = (index: number) => {
-        const blocked = users[index].blocked
-        setConfirmActionModalWindowState({
-            onDismiss: () => setConfirmActionModalWindowState(undefined),
-            onConfirm: () => {
-                const id = users[index].userId
-                setUsers(users.map(el => {
-                    if (el.userId === id) return { ...el, blocked: !el.blocked }
+        setUserBlockModalWindowState({
+            user: users[index],
+            onSuccess: (result, lockoutEnd) => {
+                setUsers(prev => prev.map(el => {
+                    if (el.userId === users[index].userId) {
+                        return {
+                            ...el,
+                            user: {
+                                ...el.user,
+                                lockoutEnd
+                            }
+                        }
+                    }
                     return el
                 }))
-                setConfirmActionModalWindowState(undefined)
+                setUserBlockModalWindowState(undefined)
+                Store.addNotification({
+                    container: "top-right",
+                    type: "success",
+                    title: result === "blocked" ?
+                        "Пользователь заблокирован" :
+                        "Пользователь разблокирован",
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
             },
-            text: `${blocked ? 'Разблокировать' : 'Заблокировать'} пользователя ${users[index].secondName} ${users[index].firstName}?`,
+            onError: (err) => {
+                Store.addNotification({
+                    container: "top-right",
+                    type: "danger",
+                    title: "Ошибка",
+                    message: err.code,
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
+            },
+            onDismiss: () => setUserBlockModalWindowState(undefined),
             backgroundOverlap: true,
             closable: true
         })

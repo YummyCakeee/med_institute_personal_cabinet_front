@@ -36,7 +36,8 @@ const CourseTemplate = ({
                     headers={[
                         {
                             title: "Название",
-                            field: "title"
+                            field: "title",
+                            colSize: "600px"
                         }
                     ]}
                     items={themes}

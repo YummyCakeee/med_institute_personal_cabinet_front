@@ -26,9 +26,9 @@ type CustomFieldRenderingType = {
 
 type ItemListProps = {
     headers: ItemListHeader[],
-    items?: Item[],
+    items: Item[],
     className?: string,
-    itemControlButtons?: ({ selectedItem, items }: { selectedItem: number | null, items: Item[] | undefined }) => ItemControlButton[],
+    itemControlButtons?: ({ selectedItem, items }: { selectedItem: Item, items: Item[] }) => ItemControlButton[],
     customFieldsRendering?: CustomFieldRenderingType[],
     controlButtonsBottom?: ButtonProps[],
     onHeaderClick?: (index: number) => void,
@@ -50,7 +50,7 @@ const ItemList = ({
     onPageClick = () => { },
 }: ItemListProps) => {
 
-    const [selectedItem, setSetectedItem] = useState<number | null>(null)
+    const [selectedItemIndex, setSetectedItemIndex] = useState<number | null>(null)
     const [pagesList, setPagesList] = useState<number[]>([])
     const [currentPage, setCurrentPage] = useState<number>(1)
     const headersRef = useRef<HTMLDivElement>(null)
@@ -74,12 +74,12 @@ const ItemList = ({
     }, [headers, headersRef])
 
     const onItemClick = (index: number) => {
-        if (selectedItem !== index) setSetectedItem(index)
-        else setSetectedItem(null)
+        if (selectedItemIndex !== index) setSetectedItemIndex(index)
+        else setSetectedItemIndex(null)
     }
 
     useEffect(() => {
-        setSetectedItem(null)
+        setSetectedItemIndex(null)
     }, [items])
 
     useEffect(() => {
@@ -143,28 +143,29 @@ const ItemList = ({
                     </div>
                 ))}
             </div>
-            <div className={styles.item_control} data-visible={selectedItem !== null}>
+            <div className={styles.item_control} data-visible={selectedItemIndex !== null}>
                 <CrossIcon
                     className={styles.item_control_button_unselect}
-                    onClick={() => setSetectedItem(null)}
+                    onClick={() => setSetectedItemIndex(null)}
                 />
-                {itemControlButtons && itemControlButtons({ selectedItem, items }).map((el, key) => (
-                    <div
-                        key={key}
-                        className={styles.item_control_button}
-                    >
-                        <Button
-                            {...{
-                                ...el,
-                                onClick: () => {
-                                    if (selectedItem !== null && el.onClick)
-                                        el.onClick(selectedItem)
-                                }
-                            }}
+                {itemControlButtons && selectedItemIndex !== null && items[selectedItemIndex] &&
+                    itemControlButtons({ selectedItem: items[selectedItemIndex], items }).map((el, key) => (
+                        <div
+                            key={key}
+                            className={styles.item_control_button}
+                        >
+                            <Button
+                                {...{
+                                    ...el,
+                                    onClick: () => {
+                                        if (selectedItemIndex !== null && el.onClick)
+                                            el.onClick(selectedItemIndex)
+                                    }
+                                }}
 
-                        />
-                    </div>
-                ))}
+                            />
+                        </div>
+                    ))}
             </div>
             <div className={styles.item_list_container}>
                 {items?.length ?
@@ -188,7 +189,7 @@ const ItemList = ({
                                     key={itemKey}
                                     className={cn(
                                         styles.item,
-                                        { [styles.item_selected]: selectedItem === itemKey }
+                                        { [styles.item_selected]: selectedItemIndex === itemKey }
                                     )}
                                     onClick={() => onItemClick(itemKey)}
                                 >
@@ -222,7 +223,7 @@ const ItemList = ({
                             {...{
                                 ...el,
                                 onClick: () => {
-                                    setSetectedItem(null)
+                                    setSetectedItemIndex(null)
                                     el.onClick && el.onClick()
                                 }
                             }}
