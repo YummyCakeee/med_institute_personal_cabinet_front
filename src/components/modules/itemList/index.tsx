@@ -9,6 +9,7 @@ type ItemListHeader = {
     field: string,
     colSize?: string
     clickable?: boolean
+    textAlign?: "left" | "center" | "right"
 }
 
 type Item = {
@@ -196,7 +197,10 @@ const ItemList = ({
                                     {headers.map((header, headerKey) => (
                                         <div
                                             key={headerKey}
-                                            className={styles.item_field}
+                                            className={cn(
+                                                styles.item_field,
+                                                { [styles[`text_align_${header.textAlign}`]]: header.textAlign }
+                                            )}
                                             style={{ width: header?.colSize || defaultColSize }}
                                         >
                                             {getItemFieldValue(item, header.field)}

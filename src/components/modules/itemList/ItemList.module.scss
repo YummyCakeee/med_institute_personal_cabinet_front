@@ -55,6 +55,20 @@
     z-index: 1;
     backdrop-filter: blur(5px);
 
+    & .text_align {
+        &_left {
+            text-align: left;
+        }
+
+        &_center {
+            text-align: center;
+        }
+
+        &_right {
+            text-align: right;
+        }
+    }
+
     &:hover:not(.item_selected) {
         background-color: transparentize($mainBlueColor, 0.7);
         backdrop-filter: blur(10px);

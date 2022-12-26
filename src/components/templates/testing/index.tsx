@@ -44,9 +44,10 @@ const TestingTemplate = ({
                             colSize: "300px"
                         },
                         {
-                            title: "ID создателя",
-                            field: "creatorId",
-                            colSize: "300px"
+                            title: "Число тестов",
+                            field: "tests.length",
+                            colSize: "300px",
+                            textAlign: "center"
                         },
                     ]}
                     items={collections}
