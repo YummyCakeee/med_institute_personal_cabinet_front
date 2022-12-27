@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.1",
     "@types/draft-convert": "^2.1.4",
     "@types/draftjs-to-html": "^0.8.1",
     "@types/html-to-draftjs": "^1.4.0",
