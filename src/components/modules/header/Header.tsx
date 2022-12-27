@@ -15,10 +15,14 @@ import {
 import { LogoutIcon } from "components/elements/icons"
 import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "store"
+import { userLoggedOut } from "store/userSlice"
 
 const Header = () => {
 
     const router = useRouter()
+    const dispatch = useDispatch<AppDispatch>()
 
     const [sections] = useState([
         {
@@ -50,6 +54,7 @@ const Header = () => {
     const onLogoutClick = () => {
         axiosApi.post(`${ENDPOINT_ACCOUNT}/Logout`)
             .then(res => {
+                dispatch(userLoggedOut())
                 router.replace(ROUTE_REGISTRATION)
             })
             .catch(err => {
