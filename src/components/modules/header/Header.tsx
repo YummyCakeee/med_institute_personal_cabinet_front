@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
-import React, { useState } from "react"
+import React, { useMemo } from "react"
 import cn from "classnames"
 import styles from "./Header.module.scss"
 import {
@@ -15,41 +15,86 @@ import {
 import { LogoutIcon } from "components/elements/icons"
 import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch } from "store"
-import { userLoggedOut } from "store/userSlice"
+import { userLoggedOut, userSelector } from "store/userSlice"
+
+type SectionType = {
+    name: string,
+    path: string
+}
+
+type SectionCollectionType = {
+    [field: string]: SectionType
+}
+
+enum UserRoleType {
+    ADMINISTRATOR = "Administrator",
+    TEACHER = "Teacher",
+    STUDENT = "Student"
+}
 
 const Header = () => {
 
     const router = useRouter()
+    const user = useSelector(userSelector)
     const dispatch = useDispatch<AppDispatch>()
 
-    const [sections] = useState([
-        {
+    const sections = useMemo(() => ({
+        educationalPrograms: {
             name: "Программы обучения",
             path: ROUTE_EDUCATIONAL_PROGRAMS
         },
-        {
+        users: {
             name: "Пользователи",
             path: ROUTE_USERS
         },
-        {
+        courses: {
             name: "Курсы",
             path: ROUTE_COURSES
         },
-        {
+        testing: {
             name: "Тестирование",
             path: ROUTE_TESTING
         },
-        {
+        education: {
             name: "Обучение",
             path: ROUTE_EDUCATION
         },
-        {
+        profile: {
             name: "Мой профиль",
             path: ROUTE_PROFILE
         }
-    ])
+    }), [])
+
+    const userSections = useMemo(() => {
+        const updatedUserSections: SectionCollectionType = {}
+
+        if (user.roles.includes(UserRoleType.ADMINISTRATOR)) {
+            updatedUserSections.users = sections.users
+            updatedUserSections.courses = sections.courses
+            updatedUserSections.testing = sections.testing
+            updatedUserSections.educationalPrograms = sections.educationalPrograms
+            //  Добавить график сертификации
+        }
+
+        if (user.roles.includes(UserRoleType.TEACHER)) {
+            updatedUserSections.courses = sections.courses
+            updatedUserSections.testing = sections.testing
+            updatedUserSections.educationalPrograms = sections.educationalPrograms
+        }
+
+        updatedUserSections.education = sections.education
+        updatedUserSections.profile = sections.profile
+
+        const sectionsArray: SectionType[] = []
+        Object.values(updatedUserSections).forEach(el => {
+
+            sectionsArray.push(el)
+        })
+
+        return sectionsArray
+    }, [user.roles, sections, UserRoleType])
 
     const onLogoutClick = () => {
         axiosApi.post(`${ENDPOINT_ACCOUNT}/Logout`)
@@ -64,7 +109,7 @@ const Header = () => {
     return (
         <div className={styles.container}>
             <div className={styles.sections_list}>
-                {sections.map((el, key) => (
+                {userSections.map((el, key) => (
                     <Link
                         key={key}
                         href={el.path}
