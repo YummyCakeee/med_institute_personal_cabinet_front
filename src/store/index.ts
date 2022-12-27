@@ -1,5 +1,13 @@
-const a = {
+import { configureStore } from "@reduxjs/toolkit"
+import userSlice from "./userSlice"
 
-}
+const store = configureStore({
+    reducer: {
+        user: userSlice
+    },
+})
 
-export default a
+export type StateType = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
+
+export default store
