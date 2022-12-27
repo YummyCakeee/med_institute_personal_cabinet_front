@@ -47,7 +47,13 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         userLoggedOut(state) {
-            state = initialState
+            state.firstName = ""
+            state.secondName = ""
+            state.lastName = ""
+            state.email = ""
+            state.login = ""
+            state.roles = []
+            state.authorized = false
         }
     },
     extraReducers: builder => {
@@ -62,7 +68,13 @@ const userSlice = createSlice({
                 state.authorized = action.payload.authorized
             })
             .addCase(getUserInfo.rejected, (state, action) => {
-                state = initialState
+                state.firstName = ""
+                state.secondName = ""
+                state.lastName = ""
+                state.email = ""
+                state.login = ""
+                state.roles = []
+                state.authorized = false
             })
     }
 })
