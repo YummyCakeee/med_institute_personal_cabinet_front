@@ -56,13 +56,16 @@ const UserBlockForm = ({
             {({ isSubmitting, values, setValues }) => (
                 <Form>
                     {mode === "block" &&
-                        <Field
-                            name="lockoutEnd"
-                            component={Datetime}
-                            disabled={isSubmitting}
-                            value={new Date(values.lockoutEnd!)}
-                            onChange={(e: Moment | string) => setValues({ lockoutEnd: (e as Moment)?.format() || new Date().toISOString() })}
-                        />
+                        <>
+                            <div className={utilStyles.modal_window_text}>Заблокировать до:</div>
+                            <Field
+                                name="lockoutEnd"
+                                component={Datetime}
+                                disabled={isSubmitting}
+                                value={new Date(values.lockoutEnd!)}
+                                onChange={(e: Moment | string) => setValues({ lockoutEnd: (e as Moment)?.format() || new Date().toISOString() })}
+                            />
+                        </>
                     }
                     <div className={utilStyles.modal_window_buttons_list}>
                         <div className={utilStyles.modal_window_button}>
