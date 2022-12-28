@@ -10,7 +10,8 @@ import {
     ROUTE_PROFILE,
     ROUTE_REGISTRATION,
     ROUTE_TESTING,
-    ROUTE_USERS
+    ROUTE_USERS,
+    ROUTE_CERTIFICATION_SCHEDULE
 } from "constants/routes"
 import { LogoutIcon } from "components/elements/icons"
 import axiosApi from "utils/axios"
@@ -18,6 +19,7 @@ import { ENDPOINT_ACCOUNT } from "constants/endpoints"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch } from "store"
 import { userLoggedOut, userSelector } from "store/userSlice"
+import Image from "next/image"
 
 type SectionType = {
     name: string,
@@ -49,6 +51,10 @@ const Header = () => {
             name: "Пользователи",
             path: ROUTE_USERS
         },
+        certificationSchedule: {
+            name: "График сертификации",
+            path: ROUTE_CERTIFICATION_SCHEDULE
+        },
         courses: {
             name: "Курсы",
             path: ROUTE_COURSES
@@ -75,7 +81,7 @@ const Header = () => {
             updatedUserSections.courses = sections.courses
             updatedUserSections.testing = sections.testing
             updatedUserSections.educationalPrograms = sections.educationalPrograms
-            //  Добавить график сертификации
+            updatedUserSections.certificationSchedule = sections.certificationSchedule
         }
 
         if (user.roles.includes(UserRoleType.TEACHER)) {
@@ -106,8 +112,21 @@ const Header = () => {
                 console.log(err)
             })
     }
+
+    const onLogoClick = () => {
+        router.push(ROUTE_PROFILE)
+    }
+
     return (
         <div className={styles.container}>
+            <Image
+                src="/images/logo.png"
+                width={40}
+                height={40}
+                alt="Лого"
+                onClick={onLogoClick}
+                className={styles.logo}
+            />
             <div className={styles.sections_list}>
                 {userSections.map((el, key) => (
                     <Link
