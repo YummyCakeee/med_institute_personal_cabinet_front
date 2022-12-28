@@ -5,27 +5,60 @@ import InputField from "components/elements/formikComponents/inputField/InputFie
 import utilStyles from "styles/utils.module.scss"
 import { composeValidators, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator } from "utils/validators"
 import Image from "next/image"
+import axiosApi from "utils/axios"
+import { ENDPOINT_ACCOUNT } from "constants/endpoints"
+import { UserProfileType } from "components/templates/users/types"
+import { useSelector } from "react-redux"
+import { userSelector } from "store/userSlice"
+import Datetime from "components/elements/datetime"
+import { Moment } from "moment"
 
-const ProfileInfoForm = () => {
+type ProfileInfoFormProps = {
+    onSuccess?: (user: UserProfileType) => void,
+    onError?: (error: any) => void
+}
 
+const ProfileInfoForm = ({
+    onSuccess = () => { },
+    onError = () => { }
+}: ProfileInfoFormProps) => {
+
+    const user = useSelector(userSelector)
     const onSubmit = async (values: FormikValues) => {
+        const data: UserProfileType = {
+            userId: user.id,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            secondName: values.secondName,
+            //dateOfBirth: values.dateOfBirth,
+            userName: values.login
+        }
+        return axiosApi.post(`${ENDPOINT_ACCOUNT}/UpdatePersonalData`, data)
+            .then(res => {
+                const updatedUser = data
+                onSuccess(updatedUser)
+            })
+            .catch(err => {
+                onError(err)
+            })
     }
 
     return (
         <Formik
             initialValues={{
-                surname: "",
-                name: "",
-                patronymic: "",
-                password: ""
+                lastName: user.lastName,
+                firstName: user.firstName,
+                secondName: user.secondName,
+                login: user.login,
+                dateOfBirth: user.dateOfBirth
             }}
             onSubmit={onSubmit}
             enableReinitialize
         >
-            {({ isSubmitting, isValid }) => (
+            {({ isSubmitting, isValid, values, setValues }) => (
                 <Form>
                     <Field
-                        name="surname"
+                        name="lastName"
                         component={InputField}
                         placeholder="Фамилия"
                         label="Фамилия:"
@@ -38,7 +71,7 @@ const ProfileInfoForm = () => {
                             )}
                     />
                     <Field
-                        name="name"
+                        name="firstName"
                         component={InputField}
                         placeholder="Имя"
                         label="Имя:"
@@ -51,7 +84,7 @@ const ProfileInfoForm = () => {
                             )}
                     />
                     <Field
-                        name="patronymic"
+                        name="secondName"
                         component={InputField}
                         placeholder="Отчество"
                         label="Отчество:"
@@ -64,11 +97,19 @@ const ProfileInfoForm = () => {
                             )}
                     />
                     <Field
-                        name="password"
+                        name="dateOfBirth"
+                        component={Datetime}
+                        label="Дата рождения:"
+                        time={false}
+                        disabled={isSubmitting}
+                        value={values.dateOfBirth ? new Date(values.dateOfBirth) : ""}
+                        onChange={(e: Moment | string) => setValues({ ...values, dateOfBirth: (e as Moment)?.format() || new Date().toISOString() })}
+                    />
+                    <Field
+                        name="login"
                         component={InputField}
-                        placeholder="Пароль"
-                        label="Пароль:"
-                        type="password"
+                        placeholder="Логин"
+                        label="Логин:"
                         disabled={isSubmitting}
                         validate={(value: string) =>
                             composeValidators(value,
