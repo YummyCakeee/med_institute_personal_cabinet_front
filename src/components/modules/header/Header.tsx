@@ -100,7 +100,7 @@ const Header = () => {
         })
 
         return sectionsArray
-    }, [user.roles, sections, UserRoleType])
+    }, [user.roles, sections])
 
     const onLogoutClick = () => {
         axiosApi.post(`${ENDPOINT_ACCOUNT}/Logout`)
