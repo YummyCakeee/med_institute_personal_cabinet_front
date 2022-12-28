@@ -29,7 +29,7 @@ const Courses = ({
     useEffect(() => {
         if (!success && redirectPath || !user.authorized)
             router.replace(redirectPath || ROUTE_REGISTRATION)
-    }, [success, redirectPath, user])
+    }, [success, redirectPath, user, router])
 
     return (
         <>
