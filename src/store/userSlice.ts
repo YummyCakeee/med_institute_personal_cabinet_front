@@ -6,19 +6,23 @@ import axiosApi from "utils/axios"
 import { HYDRATE } from "next-redux-wrapper"
 
 export type StateUserType = {
+    id: string,
     lastName: string,
     firstName: string,
     secondName: string,
+    dateOfBirth?: string,
     login: string,
-    email: string,
-    roles: string[],
-    authorized: boolean,
+    email?: string,
+    roles?: string[],
+    authorized?: boolean,
 }
 
 const initialState: StateUserType = {
+    id: '',
     lastName: '',
     firstName: '',
     secondName: '',
+    dateOfBirth: '',
     login: '',
     email: '',
     roles: [],
@@ -29,11 +33,12 @@ export const getUserInfo = createAsyncThunk("user/getUserInfo", async () => {
     const response = await axiosApi.get(`${ENDPOINT_ACCOUNT}/CurrentUserInfo`)
 
     const data: UserProfileType = response.data
-
     const userInfo: StateUserType = {
+        id: data.userId || "",
         firstName: data.firstName || "",
         lastName: data.lastName || "",
         secondName: data.secondName || "",
+        dateOfBirth: data.dateOfBirth || "",
         login: data.user?.userName || "",
         email: data.user?.email || "",
         roles: data.user?.userRoles?.map(el => el.role.name!) || [],
@@ -48,16 +53,10 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         userLoggedOut(state) {
-            state.firstName = ""
-            state.secondName = ""
-            state.lastName = ""
-            state.email = ""
-            state.login = ""
-            state.roles = []
-            state.authorized = false
+            return initialState
         },
         userInfoChanged(state, action) {
-            state = {
+            return {
                 ...state,
                 ...action.payload
             }
@@ -66,26 +65,22 @@ const userSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getUserInfo.fulfilled, (state, action) => {
+                state.id = action.payload.id
                 state.firstName = action.payload.firstName
                 state.secondName = action.payload.secondName
                 state.lastName = action.payload.lastName
+                state.login = action.payload.login
+                state.dateOfBirth = action.payload.dateOfBirth
                 state.email = action.payload.email
                 state.login = action.payload.login
                 state.roles = action.payload.roles
                 state.authorized = action.payload.authorized
             })
             .addCase(getUserInfo.rejected, (state, action) => {
-                state.firstName = ""
-                state.secondName = ""
-                state.lastName = ""
-                state.email = ""
-                state.login = ""
-                state.roles = []
-                state.authorized = false
+                return initialState
             })
             .addCase(HYDRATE, (state, action: AnyAction) => {
-                console.log(action.payload)
-                state = {
+                return {
                     ...state,
                     ...action.payload.user,
                 };
