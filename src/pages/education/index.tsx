@@ -2,22 +2,35 @@ import EducationTemplate from "components/templates/education"
 import { UserThemeType } from "components/templates/education/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import { ENDPOINT_USER_THEMES } from "constants/endpoints"
-import { GetServerSideProps } from "next"
-import React from "react"
+import React, { useEffect } from "react"
 import axiosApi from "utils/axios"
+import { wrapper } from "store"
+import { NextPageContext } from 'next'
+import { ROUTE_REGISTRATION } from "constants/routes"
+import { useRouter } from "next/router"
+import { useSelector } from "react-redux"
+import { userSelector } from "store/userSlice"
 
 type EducationPageProps = {
     success: boolean,
     error: string,
-    userThemes: UserThemeType[]
+    userThemes: UserThemeType[],
+    redirectPath?: string
 }
 
 const Education = ({
     success,
     error,
-    userThemes
+    userThemes,
+    redirectPath
 }: EducationPageProps) => {
+    const router = useRouter()
+    const user = useSelector(userSelector)
 
+    useEffect(() => {
+        if (!success && redirectPath || !user.authorized)
+            router.replace(redirectPath || ROUTE_REGISTRATION)
+    }, [success, redirectPath, user])
 
     return (
         <>
@@ -34,12 +47,18 @@ const Education = ({
     )
 }
 
-
-export const getServerSideProps: GetServerSideProps<EducationPageProps> = async () => {
+Education.getInitialProps = wrapper.getInitialPageProps(store => async ({ pathname, req, res }: NextPageContext) => {
     const pageProps: EducationPageProps = {
         success: true,
         error: "",
         userThemes: []
+    }
+
+    const user = store.getState().user
+    if (!user.authorized) {
+        pageProps.success = false
+        pageProps.redirectPath = ROUTE_REGISTRATION
+        return pageProps
     }
 
     await axiosApi.get(ENDPOINT_USER_THEMES)
@@ -51,9 +70,7 @@ export const getServerSideProps: GetServerSideProps<EducationPageProps> = async 
             pageProps.error = err.code
         })
 
-    return {
-        props: pageProps
-    }
-}
+    return pageProps
+});
 
 export default Education
