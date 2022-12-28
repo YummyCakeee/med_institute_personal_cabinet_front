@@ -103,7 +103,6 @@ const UsersTemplate = () => {
                         {
                             title: (() => {
                                 const lockoutEnd = new Date(selectedItem.user.lockoutEnd)
-                                console.log(selectedItem.user.lockoutEnd)
                                 return lockoutEnd > new Date() ?
                                     "Разблокировать" : "Заблокировать"
                             })(),

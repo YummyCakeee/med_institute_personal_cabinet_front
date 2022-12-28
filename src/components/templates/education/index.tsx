@@ -14,7 +14,6 @@ const EducationTemplate = ({
     userThemes
 }: EducationTemplateProps) => {
 
-    console.log(userThemes)
     const router = useRouter()
 
     return (
