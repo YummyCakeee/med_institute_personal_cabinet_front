@@ -54,6 +54,7 @@ const UserForm = ({
         "Student",
         "Teacher"
     ]
+    console.log(user)
 
     return (
         <Formik
@@ -82,7 +83,7 @@ const UserForm = ({
             {({ isSubmitting, isValid }) => (
                 <Form>
                     <Field
-                        name="surname"
+                        name="lastName"
                         component={InputField}
                         placeholder="Фамилия"
                         validate={(value: string) =>
@@ -94,7 +95,7 @@ const UserForm = ({
                         disabled={isSubmitting}
                     />
                     <Field
-                        name="name"
+                        name="firstName"
                         component={InputField}
                         placeholder="Имя"
                         validate={(value: string) =>
@@ -106,7 +107,7 @@ const UserForm = ({
                         disabled={isSubmitting}
                     />
                     <Field
-                        name="patronymic"
+                        name="secondName"
                         component={InputField}
                         placeholder="Отчество"
                         validate={(value: string) =>
