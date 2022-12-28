@@ -7,3 +7,4 @@ export const ROUTE_TESTING = "/testing"
 export const ROUTE_EDUCATION = "/education"
 export const ROUTE_PROFILE = "/profile"
 export const ROUTE_COLLECTIONS = `${ROUTE_TESTING}/collections`
+export const ROUTE_CERTIFICATION_SCHEDULE = "/certificationSchedule"
