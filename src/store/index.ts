@@ -1,13 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit"
 import userSlice from "./userSlice"
+import { createWrapper } from "next-redux-wrapper";
 
-const store = configureStore({
+const makeStore = () => configureStore({
     reducer: {
         user: userSlice
     },
 })
 
-export type StateType = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type AppStore = ReturnType<typeof makeStore>;
+export type StateType = ReturnType<AppStore["getState"]>
+export type AppDispatch = AppStore["dispatch"]
 
-export default store
+export const wrapper = createWrapper<AppStore>(makeStore)
