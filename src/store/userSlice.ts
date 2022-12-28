@@ -1,8 +1,9 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { AnyAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { UserProfileType } from "components/templates/users/types"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
 import { StateType } from "store"
 import axiosApi from "utils/axios"
+import { HYDRATE } from "next-redux-wrapper"
 
 export type StateUserType = {
     lastName: string,
@@ -54,6 +55,12 @@ const userSlice = createSlice({
             state.login = ""
             state.roles = []
             state.authorized = false
+        },
+        userInfoChanged(state, action) {
+            state = {
+                ...state,
+                ...action.payload
+            }
         }
     },
     extraReducers: builder => {
@@ -76,10 +83,17 @@ const userSlice = createSlice({
                 state.roles = []
                 state.authorized = false
             })
+            .addCase(HYDRATE, (state, action: AnyAction) => {
+                console.log(action.payload)
+                state = {
+                    ...state,
+                    ...action.payload.user,
+                };
+            })
     }
 })
 
 export const userSelector = (state: StateType) => state.user
 
-export const { userLoggedOut } = userSlice.actions
+export const { userLoggedOut, userInfoChanged } = userSlice.actions
 export default userSlice.reducer
