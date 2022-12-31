@@ -28,11 +28,11 @@ const Course = () => {
                 })
                 .catch(err => {
                     setSuccess(false)
-                    setError(error)
+                    setError(err.code)
                 })
         }
 
-    }, [router.query])
+    }, [router.query, user.authorized,])
 
     return (
         <>

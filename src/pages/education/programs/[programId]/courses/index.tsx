@@ -40,7 +40,7 @@ const Program = () => {
                 })
         }
 
-    }, [router.query])
+    }, [router.query, user.authorized])
 
 
     return (

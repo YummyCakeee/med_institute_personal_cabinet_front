@@ -87,7 +87,7 @@ const TestBlockTemplate = () => {
                 </div>
                 <div className={styles.test_list}>
                     {tests.map((test, testKey) => (
-                        <section id={`${testKey}`}>
+                        <section id={`${testKey}`} key={testKey}>
                             <div key={testKey} className={styles.test}>
                                 <div className={styles.test_number}>{testKey + 1}</div>
                                 <div className={styles.test_question}>{test.question}</div>
