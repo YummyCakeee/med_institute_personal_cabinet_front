@@ -1,20 +1,25 @@
 import Layout from "components/layouts/Layout"
 import Head from "next/head"
 import React from "react"
-import { UserThemeType } from "./types"
+import styles from "./EducationTemplate.module.scss"
 import utilStyles from "styles/utils.module.scss"
 import { useRouter } from "next/router"
 import { ROUTE_EDUCATION } from "constants/routes"
+import { UserProgramType } from "../educationalPrograms/types"
 
 type EducationTemplateProps = {
-    userThemes: UserThemeType[]
+    userPrograms: UserProgramType[]
 }
 
 const EducationTemplate = ({
-    userThemes
+    userPrograms
 }: EducationTemplateProps) => {
 
     const router = useRouter()
+
+    const onProgramClick = (programId: string) => {
+        router.push(`${ROUTE_EDUCATION}/${programId}/courses`)
+    }
 
     return (
         <Layout>
@@ -22,7 +27,17 @@ const EducationTemplate = ({
                 <title>Обучение</title>
             </Head>
             <div className={utilStyles.section_title}>Выбор программы обучения</div>
-            <div onClick={() => router.push(`${ROUTE_EDUCATION}/${2}`)}>Программа 1</div>
+            <div className={styles.program_container}>
+                {userPrograms.map((el, key) => (
+                    <div
+                        key={key}
+                        className={styles.program}
+                        onClick={() => onProgramClick(el.programId)}
+                    >
+                        {key + 1}. <span>{el.program?.title}</span>
+                    </div>
+                ))}
+            </div>
         </Layout>
     )
 }

@@ -29,7 +29,7 @@ export type TestAnswerType = {
 }
 
 export type TestBlockType = {
-    testBlockId: string,
+    testBlockId?: string,
     percentSuccess: number,
     timeLimit: number,
     dateEnd: string,

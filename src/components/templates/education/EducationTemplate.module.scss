@@ -1,0 +1,24 @@
+@use "src/styles/utils.module.scss" as *;
+
+.program {
+
+    font-size: 22px;
+    margin: 10px 0;
+    color: #000;
+    cursor: pointer;
+
+    & span {
+        color: $mainDarkBlueColor;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+            color: $mainBlueColor;
+        }
+    }
+
+    &_container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+}

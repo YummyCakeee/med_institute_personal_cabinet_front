@@ -54,7 +54,6 @@ const UserForm = ({
         "Student",
         "Teacher"
     ]
-    console.log(user)
 
     return (
         <Formik

@@ -1,7 +1,7 @@
 import LoadingErrorTemplate from "components/templates/loadingError"
 import TestingTemplate from "components/templates/testing"
-import { CollectionType, TestBlockType } from "components/templates/testing/types"
-import { ENDPOINT_COLLECTIONS, ENDPOINT_TEST_BLOCKS } from "constants/endpoints"
+import { CollectionType } from "components/templates/testing/types"
+import { ENDPOINT_COLLECTIONS } from "constants/endpoints"
 import React from "react"
 import axiosApi from "utils/axios"
 

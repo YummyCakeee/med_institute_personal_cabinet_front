@@ -76,7 +76,7 @@ const Header = () => {
     const userSections = useMemo(() => {
         const updatedUserSections: SectionCollectionType = {}
 
-        if (user.roles.includes(UserRoleType.ADMINISTRATOR)) {
+        if (user.roles?.includes(UserRoleType.ADMINISTRATOR)) {
             updatedUserSections.users = sections.users
             updatedUserSections.courses = sections.courses
             updatedUserSections.testing = sections.testing
@@ -84,7 +84,7 @@ const Header = () => {
             updatedUserSections.certificationSchedule = sections.certificationSchedule
         }
 
-        if (user.roles.includes(UserRoleType.TEACHER)) {
+        if (user.roles?.includes(UserRoleType.TEACHER)) {
             updatedUserSections.courses = sections.courses
             updatedUserSections.testing = sections.testing
             updatedUserSections.educationalPrograms = sections.educationalPrograms
@@ -140,19 +140,21 @@ const Header = () => {
                     </Link>
                 ))}
             </div>
-            <div className={styles.logout_section}>
-                <div
-                    className={styles.logout_section_button}
-                    onClick={onLogoutClick}
-                >
-                    Выйти из аккаунта
-                    <LogoutIcon
-                        className={styles.logout_section_button_icon}
-                        width={15}
-                        height={15}
-                    />
+            {user.authorized &&
+                <div className={styles.logout_section}>
+                    <div
+                        className={styles.logout_section_button}
+                        onClick={onLogoutClick}
+                    >
+                        Выйти из аккаунта
+                        <LogoutIcon
+                            className={styles.logout_section_button_icon}
+                            width={15}
+                            height={15}
+                        />
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     )
 }

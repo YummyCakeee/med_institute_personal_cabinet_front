@@ -3,65 +3,61 @@ import { ProgramType } from "components/templates/educationalPrograms/types"
 import EducationalProgramCoursesTemplate from "components/templates/educationalPrograms/courses"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import { ENDPOINT_COURSES, ENDPOINT_EDUCATIONAL_PROGRAMS } from "constants/endpoints"
-import { GetServerSideProps } from "next"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import axiosApi from "utils/axios"
 import axios from "axios"
+import { useSelector } from "react-redux"
+import { userSelector } from "store/userSlice"
+import { useRouter } from "next/router"
+import UnauthorizedTemplate from "components/templates/unauthorized"
 
-type EducationalProgramCoursesPageProps = {
-    success: boolean,
-    error: string,
-    program: ProgramType | null,
-    courses: CourseType[]
-}
+const EducationalProgramCourses = () => {
 
-const EducationalProgramCourses = ({
-    success,
-    error,
-    program,
-    courses
-}: EducationalProgramCoursesPageProps) => {
+    const [program, setProgram] = useState<ProgramType>()
+    const [courses, setCourses] = useState<CourseType[]>([])
+    const [success, setSuccess] = useState<boolean>(true)
+    const [error, setError] = useState<string>("")
+    const user = useSelector(userSelector)
+    const router = useRouter()
+
+    useEffect(() => {
+        if (user.authorized) {
+            axios.all([
+                axiosApi.get(`${ENDPOINT_EDUCATIONAL_PROGRAMS}/${router.query.id}`),
+                axiosApi.get(ENDPOINT_COURSES)
+            ]).then(axios.spread(({ data: program }, { data: courses }) => {
+                setSuccess(true)
+                setProgram(program)
+                setCourses(courses)
+            })).catch(err => {
+                setSuccess(false)
+                setError(err.code)
+            })
+        }
+    }, [user, router.query])
 
     return (
         <>
-            {success && program ?
-                <EducationalProgramCoursesTemplate
-                    {...{
-                        program,
-                        courses
-                    }}
-                /> :
-                <LoadingErrorTemplate
-                    error={error}
-                />
+            {user.authorized ?
+                <>
+                    {success && program && courses ?
+                        <EducationalProgramCoursesTemplate
+                            {...{
+                                program,
+                                courses
+                            }}
+                        />
+                        :
+                        <LoadingErrorTemplate
+                            error={error}
+                        />
+                    }
+                </>
+                :
+                <UnauthorizedTemplate />
             }
         </>
     )
-}
-
-export const getServerSideProps: GetServerSideProps<EducationalProgramCoursesPageProps> = async ({ params }) => {
-
-    const pageProps: EducationalProgramCoursesPageProps = {
-        success: true,
-        error: "",
-        program: null,
-        courses: []
-    }
-
-    await axios.all([
-        axiosApi.get(`${ENDPOINT_EDUCATIONAL_PROGRAMS}/${params?.id}`),
-        axiosApi.get(ENDPOINT_COURSES)
-    ]).then(axios.spread(({ data: program }, { data: courses }) => {
-        pageProps.program = program
-        pageProps.courses = courses
-    })).catch(err => {
-        pageProps.error = err.code
-        pageProps.success = false
-    })
-
-    return {
-        props: pageProps
-    }
 }
 
 export default EducationalProgramCourses

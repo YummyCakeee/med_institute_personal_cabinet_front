@@ -1,27 +1,61 @@
-import React from "react"
-import { GetServerSideProps } from "next"
+import React, { useEffect, useState } from "react"
 import { ThemeType } from "components/templates/courses/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import axiosApi from "utils/axios"
-import { ENDPOINT_COLLECTIONS, ENDPOINT_TEST_BLOCKS, ENDPOINT_THEMES } from "constants/endpoints"
+import { ENDPOINT_COLLECTIONS, ENDPOINT_TEST_BLOCK_COLLECTIONS, ENDPOINT_THEMES } from "constants/endpoints"
 import ThemeTemplate from "components/templates/courses/theme"
-import { CollectionType, TestBlockType } from "components/templates/testing/types"
+import { CollectionType, TestBlockCollectionsType } from "components/templates/testing/types"
 import axios from "axios"
+import { useRouter } from "next/router"
+import { useSelector } from "react-redux"
+import { userSelector } from "store/userSlice"
 
-type ThemePageProps = {
-    success: boolean,
-    error: string,
-    theme?: ThemeType,
-    collections?: CollectionType[]
-}
+const Theme = () => {
 
-const Theme = ({
-    success,
-    error,
-    theme,
-    collections
-}: ThemePageProps) => {
+    const router = useRouter()
+    const user = useSelector(userSelector)
+    const [success, setSuccess] = useState<boolean>(true)
+    const [error, setError] = useState<string>("")
+    const [theme, setThemes] = useState<ThemeType>()
+    const [collections, setCollections] = useState<CollectionType[]>()
 
+    useEffect(() => {
+        const fetchData = async () => {
+            const { themeId } = router.query
+            if (user.authorized && themeId) {
+                let theme: ThemeType | undefined
+                await axios.all([
+                    axiosApi.get(`${ENDPOINT_THEMES}/${themeId}`),
+                    axiosApi.get(ENDPOINT_COLLECTIONS)
+                ])
+                    .then(axios.spread(({ data: themeData }, { data: collectionsData }) => {
+                        theme = themeData
+                        setThemes(theme)
+                        setCollections(collectionsData)
+                    }))
+                    .catch(err => {
+                        setSuccess(false)
+                        setError(err.code)
+                    })
+                if (theme?.testBlockId) {
+                    await axiosApi.get(`${ENDPOINT_TEST_BLOCK_COLLECTIONS}`)
+                        .then(res => {
+                            (res.data as TestBlockCollectionsType[]).forEach(el => {
+                                if (el.testBlockId === theme!.testBlockId)
+                                    theme?.testBlock?.testBlockCollections?.push(el)
+                            })
+                        })
+                        .catch(err => {
+                            setSuccess(false)
+                            setError(err.code)
+                        })
+                }
+            }
+        }
+
+        fetchData()
+
+    }, [user, router.query])
 
     return (
         <>
@@ -38,43 +72,6 @@ const Theme = ({
             }
         </>
     )
-}
-
-export const getServerSideProps: GetServerSideProps<ThemePageProps> = async ({ params }) => {
-    const pageProps: ThemePageProps = {
-        success: true,
-        error: ""
-    }
-
-    await axios.all([
-        axiosApi.get(`${ENDPOINT_THEMES}/${params?.themeId}`),
-        axiosApi.get(ENDPOINT_COLLECTIONS)
-    ])
-        .then(axios.spread(({ data: theme }, { data: collections }) => {
-            pageProps.theme = theme
-            pageProps.collections = collections
-        }))
-        .catch(err => {
-            pageProps.success = false
-            pageProps.error = err.code
-        })
-
-    if (pageProps.theme?.testBlockId !== null) {
-        await axiosApi.get(`${ENDPOINT_TEST_BLOCKS}/${pageProps.theme?.testBlockId}`)
-            .then(res => {
-                if (pageProps.theme)
-                    pageProps.theme.testBlock = res.data
-            })
-            .catch(err => {
-                pageProps.success = false
-                pageProps.error = err.code
-                console.log(err)
-            })
-    }
-
-    return {
-        props: pageProps
-    }
 }
 
 export default Theme

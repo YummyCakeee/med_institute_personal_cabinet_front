@@ -25,13 +25,13 @@ const ThemeForm = ({
     onError = () => { }
 }: ThemeFormProps) => {
     const onSubmit = async (values: FormikValues) => {
-        const data = {
-            courseId: course.courseId,
-            title: values.title,
-            html: "<div></div>",
-            sortOrder: 0
-        }
         if (mode === "add") {
+            const data = {
+                courseId: course.courseId,
+                title: values.title,
+                html: "<div></div>",
+                sortOrder: 0
+            }
             return axiosApi.post(getCourseThemesEndpoint(course.courseId!), data)
                 .then(res => {
                     const theme: ThemeType = res.data
@@ -43,14 +43,15 @@ const ThemeForm = ({
                 })
         }
         if (!theme) return
-        data.sortOrder = theme?.sortOrder
-        data.html = theme.html
+        const data = {
+            title: values.title,
+            html: theme.html
+        }
         return axiosApi.put(`${ENDPOINT_COURSES}/Themes/${theme.themeId}`, data)
             .then(res => {
                 const updatedTheme: ThemeType = {
                     ...theme,
-                    ...data,
-                    courseId: theme.courseId,
+                    ...data
                 }
                 onSuccess(updatedTheme)
             })

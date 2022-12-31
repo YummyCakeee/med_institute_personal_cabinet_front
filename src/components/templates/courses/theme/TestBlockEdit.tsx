@@ -1,7 +1,7 @@
 import Button from "components/elements/button/Button"
 import Input from "components/elements/input/Input"
 import { CollectionType, TestBlockCollectionsType, TestBlockType } from "components/templates/testing/types"
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import styles from "./Theme.module.scss"
 import 'moment/locale/ru';
 import ItemList from "components/modules/itemList"
@@ -14,7 +14,7 @@ import Datetime from "components/elements/datetime"
 import { Moment } from "moment"
 
 type TestBlockEditProps = {
-    testBlock?: TestBlockType,
+    testBlock: TestBlockType,
     setTestBlock: React.Dispatch<React.SetStateAction<TestBlockType | undefined>>,
     collections: CollectionType[]
 }
@@ -27,24 +27,8 @@ const TestBlockEdit = ({
 
     const { setTestBlockModalWindowState } = useModalWindowContext()
 
-    const [testBlockCollections, setTestBlockCollections] = useState<(TestBlockCollectionsType & { collectionName: string })[]>([])
-
-    const onUnbindBlockClick = () => {
-        setTestBlock(undefined)
-    }
-
-    const onBindBlockClick = () => {
-        setTestBlock({
-            testBlockId: "",
-            dateEnd: new Date().toISOString(),
-            isFileTestBlock: false,
-            percentSuccess: 100,
-            timeLimit: 1000
-        })
-    }
-
     const onAddCollectionClick = (index: number) => {
-        if (testBlockCollections.find(el => el.collectionId === collections[index].collectionId)) {
+        if (testBlock.testBlockCollections?.find(el => el.collectionId === collections[index].collectionId)) {
             Store.addNotification({
                 container: "top-right",
                 type: "warning",
@@ -59,13 +43,18 @@ const TestBlockEdit = ({
         }
 
         const onAddCollectionConfirm = (questionsAmount: number) => {
-            const newTestBlockCollection: TestBlockCollectionsType & { collectionName: string } = {
+            const newTestBlockCollection: TestBlockCollectionsType = {
                 collectionId: collections[index].collectionId!,
                 testBlockId: "",
                 questionsAmount: questionsAmount,
-                collectionName: collections[index].collectionName
+                collection: collections[index]
             }
-            setTestBlockCollections(prev => [...prev, newTestBlockCollection])
+            setTestBlock(
+                {
+                    ...testBlock,
+                    testBlockCollections: [...(testBlock?.testBlockCollections || []), newTestBlockCollection]
+                }
+            )
             setTestBlockModalWindowState(undefined)
         }
 
@@ -81,24 +70,27 @@ const TestBlockEdit = ({
     }
 
     const onRemoveCollectionClick = (index: number) => {
-        setTestBlockCollections(prev => prev.filter(
-            (el, elIndex) => elIndex !== index))
+        setTestBlock(
+            {
+                ...testBlock,
+                testBlockCollections: testBlock.testBlockCollections?.filter(
+                    (el, elIndex) => elIndex !== index)
+            }
+        )
     }
 
     const onPercentSuccessChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (testBlock)
-            setTestBlock({
-                ...testBlock,
-                percentSuccess: maxMinConstraint(parseInt(e.target.value || "0"), 0, 100)
-            })
+        setTestBlock({
+            ...testBlock,
+            percentSuccess: maxMinConstraint(parseInt(e.target.value || "0"), 0, 100)
+        })
     }
 
     const onTimeLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (testBlock)
-            setTestBlock({
-                ...testBlock,
-                timeLimit: Math.max(parseInt(e.target.value || "0"), 0),
-            })
+        setTestBlock({
+            ...testBlock,
+            timeLimit: Math.max(parseInt(e.target.value || "0"), 0),
+        })
     }
 
 
@@ -111,112 +103,93 @@ const TestBlockEdit = ({
     }
 
     const onTextBlockTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (testBlock)
-            setTestBlock({
-                ...testBlock,
-                isFileTestBlock: !testBlock.isFileTestBlock
-            })
+        setTestBlock({
+            ...testBlock,
+            isFileTestBlock: !testBlock.isFileTestBlock
+        })
     }
 
     return (
         <div className={styles.test_block_container}>
-            {!testBlock ?
-                <div className={styles.test_block_button_container}>
-                    <Button
-                        title="Привязать блок"
-                        stretchable
-                        onClick={onBindBlockClick}
+            <div className={styles.test_block}>
+                <div className={utilStyles.text_medium}>Блок тестирования</div>
+                <Input
+                    label="Процент для зачёта"
+                    placeholder="0"
+                    type="number"
+                    max={100}
+                    min={0}
+                    value={testBlock.percentSuccess}
+                    onChange={onPercentSuccessChange}
+                    inputClassName={styles.test_block_input}
+                />
+                <Input
+                    label="Ограничение времени"
+                    placeholder="0"
+                    type="number"
+                    min={0}
+                    value={testBlock.timeLimit}
+                    onChange={onTimeLimitChange}
+                    inputClassName={styles.test_block_input}
+                />
+                <div className={styles.test_block_date}>
+                    <label className={styles.test_block_label}>Дата окончания</label>
+                    <Datetime
+                        value={new Date(testBlock.dateEnd)}
+                        onChange={onDateChange}
                     />
-                </div> :
-                <>
-                    <div className={styles.test_block}>
-                        <div className={utilStyles.text_medium}>Блок тестирования</div>
-                        <Input
-                            label="Процент для зачёта"
-                            placeholder="0"
-                            type="number"
-                            max={100}
-                            min={0}
-                            value={testBlock.percentSuccess}
-                            onChange={onPercentSuccessChange}
-                            inputClassName={styles.test_block_input}
-                        />
-                        <Input
-                            label="Ограничение времени"
-                            placeholder="0"
-                            type="number"
-                            min={0}
-                            value={testBlock.timeLimit}
-                            onChange={onTimeLimitChange}
-                            inputClassName={styles.test_block_input}
-                        />
-                        <div className={styles.test_block_date}>
-                            <label className={styles.test_block_label}>Дата окончания</label>
-                            <Datetime
-                                value={new Date(testBlock.dateEnd)}
-                                onChange={onDateChange}
-                            />
-                        </div>
-                        <div>
-                            <div className={utilStyles.text_medium}>Коллекции блока</div>
-                            <ItemList
-                                headers={[
-                                    {
-                                        title: "Название",
-                                        field: "collectionName"
-                                    },
-                                    {
-                                        title: "Количество вопросов",
-                                        field: "questionsAmount"
-                                    }
-                                ]}
-                                itemControlButtons={() => [
-                                    {
-                                        title: "Удалить",
-                                        size: "small",
-                                        onClick: onRemoveCollectionClick
-                                    }
-                                ]}
-                                items={testBlockCollections}
-                            />
-                        </div>
-                        <div>
-                            <Checkbox
-                                label="Блок с ответом в виде файла"
-                                checked={testBlock.isFileTestBlock}
-                                onChange={onTextBlockTypeChange}
-                            />
-                        </div>
-                    </div>
-                    <div className={styles.all_collections}>
-                        <div className={utilStyles.text_medium}>Все коллекции</div>
-                        <ItemList
-                            headers={[
-                                {
-                                    title: "Название",
-                                    field: "collectionName"
-                                }
-                            ]}
-                            items={collections}
-                            itemControlButtons={() => [
-                                {
-                                    title: "Добавить",
-                                    size: "small",
-                                    onClick: onAddCollectionClick
-                                }
-                            ]}
-                        />
-                    </div>
-                    <div className={styles.test_block_button_container}>
-                        <Button
-                            title="Отвязать блок тестирования"
-                            stretchable
-                            onClick={onUnbindBlockClick}
-                        />
-                    </div>
-                </>
-            }
-
+                </div>
+                <div>
+                    <div className={utilStyles.text_medium}>Коллекции блока</div>
+                    <ItemList
+                        headers={[
+                            {
+                                title: "Название",
+                                field: "collection.collectionName"
+                            },
+                            {
+                                title: "Количество вопросов",
+                                field: "questionsAmount",
+                                textAlign: "center"
+                            }
+                        ]}
+                        itemControlButtons={() => [
+                            {
+                                title: "Удалить",
+                                size: "small",
+                                onClick: onRemoveCollectionClick
+                            }
+                        ]}
+                        items={testBlock.testBlockCollections!}
+                    />
+                </div>
+                <div>
+                    <Checkbox
+                        label="Блок с ответом в виде файла"
+                        checked={testBlock.isFileTestBlock}
+                        onChange={onTextBlockTypeChange}
+                    />
+                </div>
+            </div>
+            <div className={styles.all_collections}>
+                <div className={utilStyles.text_medium}>Все коллекции</div>
+                <ItemList
+                    headers={[
+                        {
+                            title: "Название",
+                            field: "collectionName"
+                        }
+                    ]}
+                    items={collections}
+                    itemControlButtons={() => [
+                        {
+                            title: "Добавить",
+                            size: "small",
+                            onClick: onAddCollectionClick
+                        }
+                    ]}
+                />
+            </div>
         </div>
     )
 }

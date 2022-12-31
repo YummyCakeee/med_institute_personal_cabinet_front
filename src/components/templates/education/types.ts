@@ -10,3 +10,8 @@ export type UserThemeType = {
     createDate: string,
     theme: ThemeType
 }
+
+export type AllResultForUser = {
+    userId: string,
+    result: number[]
+}

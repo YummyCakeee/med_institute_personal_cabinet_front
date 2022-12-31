@@ -9,6 +9,11 @@ export type CourseType = {
     themes?: ThemeType[]
 }
 
+export type CourseAvailableType = {
+    courseId: string,
+    available: boolean
+}
+
 export type ThemeType = {
     themeId: string,
     title: string,
