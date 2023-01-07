@@ -44,7 +44,7 @@ const Collection = () => {
                     setError(err.code)
                 })
         }
-    }, [user.authorized, router])
+    }, [user.authorized, router.query])
 
     return (
         <>
