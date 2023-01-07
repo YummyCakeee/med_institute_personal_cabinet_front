@@ -1,55 +1,56 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import UserTemplate from "components/templates/users/UserTemplate"
 import axiosApi from "utils/axios"
 import { ENDPOINT_USERS } from "constants/endpoints"
-import { GetServerSideProps } from "next"
 import { UserProfileType } from "components/templates/users/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
+import { useSelector } from "react-redux"
+import { userSelector } from "store/userSlice"
+import UnauthorizedTemplate from "components/templates/unauthorized"
+import { useRouter } from "next/router"
 
-type UserPageProps = {
-    success: boolean,
-    error: string,
-    user: UserProfileType | null
-}
+const Users = () => {
 
-const Users = ({
-    success,
-    error,
-    user
-}: UserPageProps) => {
+    const user = useSelector(userSelector)
+    const router = useRouter()
+    const [userProfile, setUserProfile] = useState<UserProfileType>()
+    const [success, setSuccess] = useState<boolean>(true)
+    const [error, setError] = useState<string>("")
+
+    useEffect(() => {
+        const { id } = router.query
+        if (user.authorized) {
+            axiosApi.get(`${ENDPOINT_USERS}/${id}`)
+                .then(res => {
+                    setSuccess(true)
+                    setUserProfile(res.data)
+                })
+                .catch(err => {
+                    setSuccess(false)
+                    setError(err.code)
+                })
+        }
+    }, [user.authorized])
+
     return (
         <>
-            {success && user ?
-                <UserTemplate
-                    {...{ user }}
-                /> :
-                <LoadingErrorTemplate
-                    error={error}
-                />
+            {user.authorized ?
+                <>
+                    {success && userProfile ?
+                        <UserTemplate
+                            user={userProfile}
+                        />
+                        :
+                        <LoadingErrorTemplate
+                            error={error}
+                        />
+                    }
+                </>
+                :
+                <UnauthorizedTemplate />
             }
         </>
     )
-}
-
-export const getServerSideProps: GetServerSideProps<UserPageProps> = async ({ params }) => {
-
-    const pageProps: UserPageProps = {
-        success: true,
-        error: "",
-        user: null
-    }
-
-    await axiosApi.get(`${ENDPOINT_USERS}/${params?.id}`)
-        .then(res => {
-            pageProps.user = res.data
-        })
-        .catch(err => {
-            pageProps.success = false
-            pageProps.error = err.code
-        })
-    return {
-        props: pageProps
-    }
 }
 
 export default Users

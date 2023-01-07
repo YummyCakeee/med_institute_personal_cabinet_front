@@ -12,7 +12,7 @@ const UnauthorizedTemplate = () => {
     const router = useRouter()
 
     return (
-        <Layout>
+        <>
             <Head>
                 <title>Ошибка</title>
             </Head>
@@ -26,7 +26,7 @@ const UnauthorizedTemplate = () => {
                     size="small"
                 />
             </div>
-        </Layout>
+        </>
     )
 }
 

@@ -1,53 +1,55 @@
+import educationalPrograms from 'components/templates/educationalPrograms'
 import EducationalProgramsTemplate from 'components/templates/educationalPrograms'
-import { ProgramType } from 'components/templates/educationalPrograms/types'
+import { ProgramType, UserProgramType } from 'components/templates/educationalPrograms/types'
 import LoadingErrorTemplate from 'components/templates/loadingError'
-import { ENDPOINT_EDUCATIONAL_PROGRAMS } from 'constants/endpoints'
+import UnauthorizedTemplate from 'components/templates/unauthorized'
+import { ENDPOINT_EDUCATION, ENDPOINT_EDUCATIONAL_PROGRAMS } from 'constants/endpoints'
+import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { userSelector } from 'store/userSlice'
 import axiosApi from 'utils/axios'
 
-type EducationalProgramsPageProps = {
-  success: boolean,
-  error: string,
-  educationalPrograms: ProgramType[]
-}
+const EducationalPrograms = () => {
 
-const EducationalPrograms = ({
-  success,
-  error,
-  educationalPrograms
-}: EducationalProgramsPageProps) => {
+  const user = useSelector(userSelector)
+  const [educationalPrograms, setEducationalPrograms] = useState<ProgramType[]>([])
+  const [success, setSuccess] = useState<boolean>(true)
+  const [error, setError] = useState<string>("")
+
+  useEffect(() => {
+    if (user.authorized) {
+      axiosApi.get(ENDPOINT_EDUCATIONAL_PROGRAMS)
+        .then(res => {
+          setSuccess(true)
+          setEducationalPrograms(res.data)
+        })
+        .catch(err => {
+          setSuccess(false)
+          setError(err.code)
+        })
+    }
+  }, [user.authorized])
+
+
   return (
     <>
-      {success ?
-        <EducationalProgramsTemplate
-          educationalPrograms={educationalPrograms}
-        /> :
-        <LoadingErrorTemplate
-          error={error}
-        />
+      {user.authorized ?
+        <>
+          {success ?
+            <EducationalProgramsTemplate
+              educationalPrograms={educationalPrograms}
+            />
+            :
+            <LoadingErrorTemplate
+              error={error}
+            />
+          }
+        </>
+        :
+        <UnauthorizedTemplate />
       }
     </>
   )
-}
-
-export async function getServerSideProps() {
-  const pageProps: EducationalProgramsPageProps = {
-    success: true,
-    error: "",
-    educationalPrograms: []
-  }
-
-  await axiosApi.get(ENDPOINT_EDUCATIONAL_PROGRAMS)
-    .then(res => {
-      pageProps.educationalPrograms = res.data
-    })
-    .catch(err => {
-      pageProps.error = err.code
-      pageProps.success = false
-    })
-
-  return {
-    props: pageProps
-  }
 }
 
 export default EducationalPrograms
