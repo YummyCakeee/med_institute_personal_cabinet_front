@@ -1,6 +1,7 @@
 import axios from "axios"
 import { CourseType, ThemeType } from "components/templates/courses/types"
 import CourseTemplate from "components/templates/education/program/course"
+import { ThemeInfoType } from "components/templates/education/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { ENDPOINT_PROGRAMS, ENDPOINT_EDUCATION, ENDPOINT_COURSES } from "constants/endpoints"
@@ -17,7 +18,7 @@ const Course = () => {
     const [success, setSuccess] = useState<boolean>(true)
     const [error, setError] = useState<string>("")
     const [course, setCourse] = useState<CourseType>()
-    const [themes, setThemes] = useState<ThemeType[]>()
+    const [themeInfos, setThemeInfos] = useState<ThemeInfoType[]>()
 
     useEffect(() => {
         if (user.authorized) {
@@ -26,9 +27,9 @@ const Course = () => {
                 axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes`),
                 axiosApi.get(`${ENDPOINT_COURSES}/${courseId}`)
             ])
-                .then(axios.spread(({ data: themes }, { data: course }) => {
+                .then(axios.spread(({ data: themeInfos }, { data: course }) => {
                     setSuccess(true)
-                    setThemes(themes)
+                    setThemeInfos(themeInfos)
                     setCourse(course)
                 }))
                 .catch(err => {
@@ -45,10 +46,10 @@ const Course = () => {
                 <>
                     {success ?
                         <>
-                            {themes && course &&
+                            {themeInfos && course &&
                                 <CourseTemplate
                                     course={course}
-                                    themes={themes}
+                                    themeInfos={themeInfos}
                                 />
                             }
                         </>
