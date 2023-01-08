@@ -25,7 +25,11 @@ const ThemeTemplate = ({
             <Head>
                 <title>{`Тема "${userTheme.theme.title}"`}</title>
             </Head>
-            <div className={utilStyles.section_title} >Тема</div>
+            <div className={utilStyles.title} >{`Тема "${userTheme.theme.title}"`}</div>
+            <div className={utilStyles.section}>
+                <div className={utilStyles.section_title}>Информация</div>
+                {userTheme.theme.html}
+            </div>
             <div onClick={() => router.push(`${ROUTE_EDUCATION}/${2}/courses/${1}/themes/${3}/testBlock`)}>Тест</div>
 
         </Layout >
