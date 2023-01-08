@@ -1,5 +1,4 @@
 import Button from "components/elements/button/Button"
-import Layout from "components/layouts/Layout"
 import { ROUTE_REGISTRATION } from "constants/routes"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -12,7 +11,7 @@ const UnauthorizedTemplate = () => {
     const router = useRouter()
 
     return (
-        <Layout>
+        <>
             <Head>
                 <title>Ошибка</title>
             </Head>
@@ -26,7 +25,7 @@ const UnauthorizedTemplate = () => {
                     size="small"
                 />
             </div>
-        </Layout>
+        </>
     )
 }
 
