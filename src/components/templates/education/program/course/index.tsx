@@ -5,25 +5,28 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import React from "react"
 import utilStyles from "styles/utils.module.scss"
+import { ThemeInfoType } from "../../types"
 import styles from "./CourseTemplate.module.scss"
 
 type CourseTemplateProps = {
     course: CourseType,
-    themes: ThemeType[]
+    themeInfos: ThemeInfoType[]
 }
 
 const CourseTemplate = ({
     course,
-    themes
+    themeInfos
 }: CourseTemplateProps) => {
 
     const router = useRouter()
-
 
     const onThemeClick = (themeId: string) => {
         const { programId, courseId } = router.query
         router.push(`${ROUTE_EDUCATION}/${programId}/courses/${courseId}/themes/${themeId}`)
     }
+
+    console.log(themeInfos)
+
     return (
         <Layout>
             <Head>
@@ -32,13 +35,13 @@ const CourseTemplate = ({
             <div className={utilStyles.title}>{`Темы курса "${course.title}"`}</div>
             <div className={utilStyles.section_title}>Темы курса</div>
             <div className={styles.theme_container}>
-                {themes.map((theme, themeKey) => (
+                {themeInfos.map((themeInfo, themeInfoKey) => (
                     <div
-                        key={themeKey}
+                        key={themeInfoKey}
                         className={styles.theme}
-                        onClick={() => onThemeClick(theme.themeId)}
+                        onClick={() => onThemeClick(themeInfo.userTheme.themeId)}
                     >
-                        {themeKey + 1}. <span>{theme.title}</span>
+                        {themeInfoKey + 1}. <span>{themeInfo.userTheme.theme.title}</span>
                     </div>
                 ))}
             </div>
