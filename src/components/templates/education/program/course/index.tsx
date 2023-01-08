@@ -25,8 +25,6 @@ const CourseTemplate = ({
         router.push(`${ROUTE_EDUCATION}/${programId}/courses/${courseId}/themes/${themeId}`)
     }
 
-    console.log(themeInfos)
-
     return (
         <Layout>
             <Head>
