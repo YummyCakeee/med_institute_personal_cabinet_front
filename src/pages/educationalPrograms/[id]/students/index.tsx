@@ -3,24 +3,38 @@ import EducationalProgramStudentsTemplate from "components/templates/educational
 import { ProgramType } from "components/templates/educationalPrograms/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import { UserProfileType } from "components/templates/users/types"
-import { ENDPOINT_COURSES, ENDPOINT_EDUCATIONAL_PROGRAMS, ENDPOINT_USERS } from "constants/endpoints"
-import { GetServerSideProps } from "next"
-import React from "react"
+import { ENDPOINT_EDUCATIONAL_PROGRAMS, ENDPOINT_USERS } from "constants/endpoints"
+import { useRouter } from "next/router"
+import React, { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
 
-type EducationalProgramStudentsPageProps = {
-    success: boolean,
-    error: string,
-    program: ProgramType | null,
-    users: UserProfileType[]
-}
+const EducationalProgramStudents = () => {
 
-const EducationalProgramStudents = ({
-    success,
-    error,
-    program,
-    users
-}: EducationalProgramStudentsPageProps) => {
+    const router = useRouter()
+    const user = useSelector(userSelector)
+    const [users, setUsers] = useState<UserProfileType[]>([])
+    const [program, setProgram] = useState<ProgramType>()
+    const [success, setSuccess] = useState<boolean>(true)
+    const [error, setError] = useState<string>("")
+
+    useEffect(() => {
+        const { id } = router.query
+        if (user.authorized) {
+            axios.all([
+                axiosApi.get(ENDPOINT_USERS),
+                axiosApi.get(`${ENDPOINT_EDUCATIONAL_PROGRAMS}/${id}`)
+            ]).then(axios.spread(({ data: users }, { data: program },) => {
+                setSuccess(true)
+                setUsers(users)
+                setProgram(program)
+            })).catch(err => {
+                setSuccess(false)
+                setError(err.code)
+            })
+        }
+    }, [user.authorized, router.query])
 
     return (
         <>
@@ -37,31 +51,6 @@ const EducationalProgramStudents = ({
             }
         </>
     )
-}
-
-export const getServerSideProps: GetServerSideProps<EducationalProgramStudentsPageProps> = async ({ params }) => {
-
-    const pageProps: EducationalProgramStudentsPageProps = {
-        success: true,
-        error: "",
-        program: null,
-        users: []
-    }
-
-    await axios.all([
-        axiosApi.get(ENDPOINT_USERS),
-        axiosApi.get(`${ENDPOINT_EDUCATIONAL_PROGRAMS}/${params?.id}`)
-    ]).then(axios.spread(({ data: users }, { data: program },) => {
-        pageProps.users = users
-        pageProps.program = program
-    })).catch(err => {
-        pageProps.success = false
-        pageProps.error = err.code
-    })
-
-    return {
-        props: pageProps
-    }
 }
 
 export default EducationalProgramStudents

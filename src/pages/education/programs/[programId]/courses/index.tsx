@@ -69,8 +69,4 @@ const Program = () => {
     )
 }
 
-Program.getInitialProps = wrapper.getInitialPageProps(store => async ({ }: NextPageContext) => {
-
-})
-
 export default Program

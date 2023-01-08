@@ -1,56 +1,54 @@
 import LoadingErrorTemplate from "components/templates/loadingError"
 import TestingTemplate from "components/templates/testing"
 import { CollectionType } from "components/templates/testing/types"
+import UnauthorizedTemplate from "components/templates/unauthorized"
 import { ENDPOINT_COLLECTIONS } from "constants/endpoints"
-import React from "react"
+import React, { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
 
-type TestingPageProps = {
-    success: boolean,
-    error: string,
-    collections: CollectionType[],
-}
+const Testing = () => {
 
-const Testing = ({
-    success,
-    error,
-    collections,
-}: TestingPageProps) => {
+    const user = useSelector(userSelector)
+    const [collections, setCollections] = useState<CollectionType[]>([])
+    const [success, setSuccess] = useState<boolean>(true)
+    const [error, setError] = useState<string>("")
+
+    useEffect(() => {
+        if (user.authorized) {
+            axiosApi.get(ENDPOINT_COLLECTIONS)
+                .then(res => {
+                    setSuccess(true)
+                    setCollections(res.data)
+                })
+                .catch(err => {
+                    setSuccess(false)
+                    setError(err.code)
+                })
+        }
+    }, [user.authorized])
 
     return (
         <>
-            {success ?
-                <TestingTemplate
-                    collections={collections}
-                />
-                : <LoadingErrorTemplate
-                    error={error}
-                />
+            {user.authorized ?
+                <>
+                    {success ?
+                        <TestingTemplate
+                            collections={collections}
+                        />
+                        :
+                        <LoadingErrorTemplate
+                            error={error}
+                        />
+                    }
+                </>
+                :
+                <UnauthorizedTemplate />
             }
         </>
     )
 }
 
-export const getServerSideProps = async () => {
-    const pageProps: TestingPageProps = {
-        success: true,
-        error: "",
-        collections: [],
-    }
-
-    await axiosApi.get(ENDPOINT_COLLECTIONS)
-        .then(res => {
-            const data: any[] = res.data
-            pageProps.collections = data
-        })
-        .catch(err => {
-            pageProps.success = false
-            pageProps.error = err.code
-        })
-
-    return {
-        props: pageProps
-    }
-}
 
 export default Testing

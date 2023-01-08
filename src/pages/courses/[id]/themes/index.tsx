@@ -32,7 +32,7 @@ const Course = () => {
                 })
         }
 
-    }, [router.query, user.authorized,])
+    }, [user.authorized, router.query])
 
     return (
         <>
