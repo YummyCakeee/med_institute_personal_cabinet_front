@@ -15,3 +15,8 @@ export type AllResultForUser = {
     userId: string,
     result: number[]
 }
+
+export type ThemeInfoType = {
+    userTheme: UserThemeType,
+    available: boolean
+}
