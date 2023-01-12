@@ -6,6 +6,7 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    margin: 10px 0;
 }
 
 .input {
@@ -16,7 +17,7 @@
 
     &_label {
         font-size: 20px;
-        margin: 0 0 20px 10px;
+        margin-right: 10px;
     }
 }
 
