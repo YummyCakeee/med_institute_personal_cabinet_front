@@ -42,7 +42,7 @@ const ProgramTemplate = ({
                 return -1
             return 1
         }) || []
-    }, [program, coursesInfo])
+    }, [coursesInfo])
 
     return (
         <Layout>
