@@ -1,7 +1,5 @@
 import ProgramTemplate from "components/templates/education/program"
 import React, { useState, useEffect } from "react"
-import { wrapper } from "store"
-import { NextPageContext } from "next"
 import { useRouter } from "next/router"
 import { userSelector } from "store/userSlice"
 import { useSelector } from "react-redux"
@@ -10,7 +8,7 @@ import LoadingErrorTemplate from "components/templates/loadingError"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import axiosApi from "utils/axios"
 import { ENDPOINT_EDUCATION, ENDPOINT_PROGRAMS } from "constants/endpoints"
-import { CourseAvailableType } from "components/templates/courses/types"
+import { CourseInfoType } from "components/templates/courses/types"
 import axios from "axios"
 
 const Program = () => {
@@ -20,7 +18,7 @@ const Program = () => {
     const [success, setSuccess] = useState<boolean>(true)
     const [error, setError] = useState<string>("")
     const [program, setProgram] = useState<ProgramType>()
-    const [coursesAvailable, setCoursesAvailable] = useState<CourseAvailableType[]>([])
+    const [coursesInfo, setCoursesInfo] = useState<CourseInfoType[]>([])
 
     useEffect(() => {
         if (user.authorized) {
@@ -32,7 +30,7 @@ const Program = () => {
                 .then(axios.spread(({ data: program }, { data: courses }) => {
                     setSuccess(true)
                     setProgram(program)
-                    setCoursesAvailable(courses)
+                    setCoursesInfo(courses)
                 }))
                 .catch(err => {
                     setSuccess(false)
@@ -49,10 +47,10 @@ const Program = () => {
                 <>
                     {success ?
                         <>
-                            {program && coursesAvailable &&
+                            {program && coursesInfo &&
                                 <ProgramTemplate
                                     program={program}
-                                    coursesAvailable={coursesAvailable}
+                                    coursesInfo={coursesInfo}
                                 />
                             }
                         </>
