@@ -3,7 +3,6 @@ import CollectionTemplate from "components/templates/testing/collection/index"
 import { CollectionType } from "components/templates/testing/types"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { ENDPOINT_COLLECTIONS } from "constants/endpoints"
-import { GetServerSideProps } from "next"
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
@@ -32,7 +31,6 @@ const Collection = () => {
                             answers: testBody.Answers?.map((el: any) => ({ text: el.Text, correct: el.Correct })) || [],
                         }
                     })
-
                     setCollection({
                         ...res.data,
                         tests
