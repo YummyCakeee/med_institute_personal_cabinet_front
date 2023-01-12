@@ -13,7 +13,7 @@ const UnauthorizedTemplate = () => {
     return (
         <>
             <Head>
-                <title>Ошибка</title>
+                <title>Необходима авторизация</title>
             </Head>
             <div className={styles.container}>
                 <div className={utilStyles.text_large}>
