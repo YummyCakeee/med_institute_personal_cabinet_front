@@ -1,3 +1,5 @@
+import { EduFileType } from "../education/types"
+import { ProgramCourseType } from "../educationalPrograms/types"
 import { TestBlockType } from "../testing/types"
 
 export type CourseType = {
@@ -6,11 +8,12 @@ export type CourseType = {
     description: string,
     createDate?: string,
     creatorId?: string,
-    themes?: ThemeType[]
+    themes?: ThemeType[],
+    programCourses?: ProgramCourseType[]
 }
 
-export type CourseAvailableType = {
-    courseId: string,
+export type CourseInfoType = {
+    course: CourseType,
     available: boolean
 }
 
@@ -19,7 +22,7 @@ export type ThemeType = {
     title: string,
     courseId: string
     html: string,
-    themeFiles?: string
+    themeFiles?: EduFileType[]
     testBlockId?: string,
     sortOrder: number,
     createDate?: string,
