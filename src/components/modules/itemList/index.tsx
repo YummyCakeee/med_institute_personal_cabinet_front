@@ -29,6 +29,7 @@ type ItemListProps = {
     headers: ItemListHeader[],
     items: Item[],
     className?: string,
+    itemListClassName?: string,
     itemControlButtons?: ({ selectedItem, items }: { selectedItem: Item, items: Item[] }) => ItemControlButton[],
     customFieldsRendering?: CustomFieldRenderingType[],
     controlButtonsBottom?: ButtonProps[],
@@ -42,6 +43,7 @@ const ItemList = ({
     headers,
     items,
     className,
+    itemListClassName,
     itemControlButtons,
     customFieldsRendering,
     controlButtonsBottom,
@@ -184,7 +186,10 @@ const ItemList = ({
                                 </div>
                             ))}
                         </div>
-                        <div className={styles.item_list}>
+                        <div className={cn(
+                            styles.item_list,
+                            itemListClassName
+                        )}>
                             {items.map((item, itemKey) => (
                                 <div
                                     key={itemKey}
