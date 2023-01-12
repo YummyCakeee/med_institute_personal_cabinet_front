@@ -10,8 +10,7 @@ import {
     ROUTE_PROFILE,
     ROUTE_REGISTRATION,
     ROUTE_TESTING,
-    ROUTE_USERS,
-    ROUTE_CERTIFICATION_SCHEDULE
+    ROUTE_USERS
 } from "constants/routes"
 import { LogoutIcon } from "components/elements/icons"
 import axiosApi from "utils/axios"
@@ -51,10 +50,6 @@ const Header = () => {
             name: "Пользователи",
             path: ROUTE_USERS
         },
-        certificationSchedule: {
-            name: "График сертификации",
-            path: ROUTE_CERTIFICATION_SCHEDULE
-        },
         courses: {
             name: "Курсы",
             path: ROUTE_COURSES
@@ -81,7 +76,6 @@ const Header = () => {
             updatedUserSections.courses = sections.courses
             updatedUserSections.testing = sections.testing
             updatedUserSections.educationalPrograms = sections.educationalPrograms
-            updatedUserSections.certificationSchedule = sections.certificationSchedule
         }
 
         if (user.roles?.includes(UserRoleType.TEACHER)) {
