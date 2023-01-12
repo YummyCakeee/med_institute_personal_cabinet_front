@@ -7,7 +7,7 @@ export type CollectionType = {
 }
 
 export enum TestTypeId {
-    ONE_ANSWER, MULTIPLE_ANSWERS, FILE_ANSWER
+    ONE_ANSWER = "One", MULTIPLE_ANSWERS = "Many", FILE_ANSWER = "Exercise"
 }
 
 export type TestType = {

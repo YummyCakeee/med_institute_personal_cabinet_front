@@ -50,8 +50,8 @@ const TestForm = ({
         let data: TestType = {
             collectionId: collectionId,
             testBody: JSON.stringify(testBody),
-            testTypeId: values.fileAnswer ? 2 :
-                values.answers.filter((el: TestAnswerType) => el.correct).length > 1 ? 1 : 0
+            testTypeId: values.fileAnswer ? TestTypeId.FILE_ANSWER :
+                values.answers.filter((el: TestAnswerType) => el.correct).length > 1 ? TestTypeId.MULTIPLE_ANSWERS : TestTypeId.ONE_ANSWER
         }
 
         if (mode === "add" && collectionId !== undefined) {
