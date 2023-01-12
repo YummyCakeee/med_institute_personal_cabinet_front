@@ -1,5 +1,6 @@
+import axios from "axios"
 import ThemeTemplate from "components/templates/education/program/course/theme"
-import { AllResultForUser, UserThemeType } from "components/templates/education/types"
+import { SolvedTestType, UserThemeType } from "components/templates/education/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { ENDPOINT_EDUCATION } from "constants/endpoints"
@@ -16,11 +17,11 @@ const Course = () => {
     const [success, setSuccess] = useState<boolean>(true)
     const [error, setError] = useState<string>("")
     const [userTheme, setUserTheme] = useState<UserThemeType>()
-    const [testResults, setTestResults] = useState<AllResultForUser>()
-
+    const [solvedTests, setSolvedTests] = useState<SolvedTestType[]>()
+    const [activeTest, setActiveTest] = useState<SolvedTestType>()
     useEffect(() => {
         const fetchData = async () => {
-            if (user.authorized) {
+            if (user.authorized && router.isReady) {
                 const { programId, courseId, themeId } = router.query
                 const requestUrl = `${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes/${themeId}`
                 let theme: UserThemeType | undefined
@@ -36,11 +37,17 @@ const Course = () => {
                         return
                     })
                 if (theme?.theme.testBlockId !== undefined) {
-                    await axiosApi.get(`${requestUrl}/TestBlock`, { params: { userThemeId: theme.userThemeId } })
-                        .then(res => {
+                    await axios.all([
+                        axiosApi.get(`${requestUrl}/TestBlock`),
+                        axiosApi.get(`${requestUrl}/TestBlock/Active`)
+                    ])
+                        .then(axios.spread(({ data: solvedTests }, { status: activeTestStatus, data: activeTest }) => {
                             setSuccess(true)
-                            setTestResults(res.data)
-                        })
+                            setSolvedTests(solvedTests)
+                            if (activeTestStatus === 200) {
+                                setActiveTest(activeTest)
+                            }
+                        }))
                         .catch(err => {
                             setSuccess(false)
                             setError(err.code)
@@ -57,11 +64,16 @@ const Course = () => {
         <>
             {user.authorized ?
                 <>
-                    {success && userTheme ?
-                        <ThemeTemplate
-                            userTheme={userTheme}
-                            testResults={testResults}
-                        />
+                    {success ?
+                        <>
+                            {userTheme &&
+                                <ThemeTemplate
+                                    userTheme={userTheme}
+                                    solvedTests={solvedTests}
+                                    activeTest={activeTest}
+                                />
+                            }
+                        </>
                         :
                         <LoadingErrorTemplate
                             error={error}
