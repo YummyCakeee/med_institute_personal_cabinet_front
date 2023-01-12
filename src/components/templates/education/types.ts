@@ -1,4 +1,5 @@
 import { ThemeType } from "../courses/types"
+import { TestTypeId } from "../testing/types"
 
 export type UserThemeType = {
     userThemeId: string,
@@ -11,9 +12,39 @@ export type UserThemeType = {
     theme: ThemeType
 }
 
-export type AllResultForUser = {
-    userId: string,
-    result: number[]
+export type SolvedTestType = {
+    userQuestions: UserQuestionType[],
+    userExercises: UserExerciseType[],
+    startTestTime: string,
+    endTestTime: string,
+    finishedTestTime: string,
+    resultPercent: number
+}
+
+export type UserQuestionType = {
+    questionText: string,
+    answers: UserAnswerType[],
+    testType: TestTypeId
+}
+
+export type UserAnswerType = {
+    text: string,
+    correct: boolean,
+    selected: boolean
+}
+
+export type UserExerciseType = {
+    file: EduFileType,
+    exerciseText: string,
+    rating: number,
+    userComments: string[],
+    teacherComments: string[]
+}
+
+export type EduFileType = {
+    fileName: string,
+    fileLink: string,
+    fileDescription: string
 }
 
 export type ThemeInfoType = {
