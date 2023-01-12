@@ -1,5 +1,5 @@
 import Layout from "components/layouts/Layout"
-import { CourseAvailableType } from "components/templates/courses/types"
+import { CourseInfoType } from "components/templates/courses/types"
 import { ProgramType } from "components/templates/educationalPrograms/types"
 import { ROUTE_EDUCATION } from "constants/routes"
 import Head from "next/head"
@@ -11,37 +11,38 @@ import cn from "classnames"
 
 type ProgramTemplateProps = {
     program: ProgramType,
-    coursesAvailable: CourseAvailableType[]
+    coursesInfo: CourseInfoType[]
 }
 
 
 const ProgramTemplate = ({
     program,
-    coursesAvailable
+    coursesInfo
 }: ProgramTemplateProps) => {
 
     const router = useRouter()
 
     const onCourseClick = (courseId: string) => {
-        router.push(`${ROUTE_EDUCATION}/${router.query.programId}/courses/${courseId}/themes`)
+        if (coursesInfo.find(el => el.course.courseId === courseId)?.available)
+            router.push(`${ROUTE_EDUCATION}/${router.query.programId}/courses/${courseId}/themes`)
     }
 
     const courses = useMemo(() => {
-        return program.programCourses?.map(programCourse => (
-            {
-                courseId: programCourse.courseId,
-                title: programCourse.course?.title,
-                available: !!coursesAvailable.find(courseAvailable => courseAvailable.courseId === programCourse.courseId),
-                dependencies: programCourse.dependencies?.courseIds.map((dependencyId: string) =>
-                    program.programCourses?.find(el => el.courseId === dependencyId)?.course)
-                    .map(course => ({ title: course?.title, courseId: course?.courseId }))
+        return coursesInfo.map(courseInfo => {
+            const programCourse = courseInfo.course.programCourses?.find(el => el.courseId === courseInfo.course.courseId)!
+            const dependencies = coursesInfo.filter(el =>
+                programCourse.dependencies.courseIds.includes(el.course.courseId!)
+            )
+            return {
+                ...courseInfo,
+                dependencies: dependencies
             }
-        )).sort((a, b) => {
-            if (a.dependencies.map(el => el.courseId).includes(b.courseId))
-                return 1
-            return -1
+        }).sort((a, b) => {
+            if (a.dependencies.map(el => el.course.courseId).includes(b.course.courseId))
+                return -1
+            return 1
         }) || []
-    }, [program, coursesAvailable])
+    }, [program, coursesInfo])
 
     return (
         <Layout>
@@ -58,10 +59,10 @@ const ProgramTemplate = ({
                             styles.course,
                             { [styles.course_unavailable]: !course.available }
                         )}
-                        onClick={() => onCourseClick(course.courseId)}
+                        onClick={() => onCourseClick(course.course.courseId!)}
                     >
                         <div className={styles.course_name}>
-                            {courseKey + 1}. <span>{course.title}</span>
+                            {courseKey + 1}. <span>{course.course.title}</span>
                         </div>
                         {course.dependencies.length > 0 &&
                             <div className={styles.course_dependencies}>
@@ -74,7 +75,7 @@ const ProgramTemplate = ({
                                             key={dependencyKey}
                                             className={styles.course_dependency}
                                         >
-                                            {`"${dependency.title}"`}
+                                            {`"${dependency.course.title}"`}
                                         </div>
                                     ))}
                                 </div>
