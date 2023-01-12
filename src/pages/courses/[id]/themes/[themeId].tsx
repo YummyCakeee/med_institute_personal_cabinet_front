@@ -9,6 +9,7 @@ import axios from "axios"
 import { useRouter } from "next/router"
 import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
+import UnauthorizedTemplate from "components/templates/unauthorized"
 
 const Theme = () => {
 
@@ -59,16 +60,22 @@ const Theme = () => {
 
     return (
         <>
-            {success && theme && collections ?
-                <ThemeTemplate
-                    {...{
-                        theme,
-                        collections
-                    }}
-                /> :
-                <LoadingErrorTemplate
-                    error={error}
-                />
+            {user.authorized ?
+                <>
+                    {success && theme && collections ?
+                        <ThemeTemplate
+                            {...{
+                                theme,
+                                collections
+                            }}
+                        /> :
+                        <LoadingErrorTemplate
+                            error={error}
+                        />
+                    }
+                </>
+                :
+                <UnauthorizedTemplate />
             }
         </>
     )
