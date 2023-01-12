@@ -58,7 +58,7 @@ const Course = () => {
 
         fetchData()
 
-    }, [user, router.query])
+    }, [user, router.query, router.isReady])
 
     return (
         <>
