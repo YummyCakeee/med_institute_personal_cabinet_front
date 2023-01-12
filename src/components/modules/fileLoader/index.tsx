@@ -1,8 +1,11 @@
 import { CrossIcon, FileIcon } from "components/elements/icons"
 import { useModalWindowContext } from "context/modalWindowContext"
-import React, { useState } from "react"
+import React from "react"
 import styles from "./FileLoader.module.scss"
 import cn from "classnames"
+import Button from "components/elements/button/Button"
+import axiosApi from "utils/axios"
+import { ENDPOINT_FILES } from "constants/endpoints"
 
 type FileLoaderProps = {
     files: File[],
@@ -25,6 +28,7 @@ const FileLoader = ({
             newFiles.push(e.target.files[i])
         }
         setFiles(prev => [...prev, ...newFiles])
+        e.target.value = ""
     }
 
     const onFileDelete = (index: number) => {
@@ -39,6 +43,29 @@ const FileLoader = ({
             backgroundOverlap: true,
             closable: true
         })
+    }
+
+    const onFilesLoadClick = () => {
+        if (!files.length) return
+        const fd = new FormData()
+        files.forEach(file => {
+            console.log(file)
+            fd.append("files", file)
+        })
+
+        const params = {
+            folder: "."
+        }
+
+        return
+
+        axiosApi.post(`${ENDPOINT_FILES}/Upload`, fd, { params })
+            .then(res => {
+
+            })
+            .catch(err => {
+
+            })
     }
 
     return (
@@ -75,6 +102,10 @@ const FileLoader = ({
                     />
                     Добавить файлы
                 </label>
+                <Button
+                    title="Загрузить"
+                    onClick={onFilesLoadClick}
+                />
             </div>
         </div>
     )
