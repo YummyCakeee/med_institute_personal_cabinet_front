@@ -3,7 +3,7 @@ import ItemList from "components/modules/itemList"
 import { useModalWindowContext } from "context/modalWindowContext"
 import Head from "next/head"
 import { useEffect, useState } from "react"
-import { CollectionType, TestAnswerType, TestType } from "../types"
+import { CollectionType, TestAnswerType, TestType, TestTypeId } from "../types"
 import { Store } from "react-notifications-component"
 import axiosApi from "utils/axios"
 import { ENDPOINT_TESTS } from "constants/endpoints"
@@ -140,6 +140,8 @@ const CollectionTemplate = ({ collection }: CollectionTemplateProps) => {
         })
     }
 
+    console.log(tests)
+
     return (
         <Layout>
             <Head>
@@ -166,9 +168,9 @@ const CollectionTemplate = ({ collection }: CollectionTemplateProps) => {
                 customFieldsRendering={[
                     {
                         render: (value) =>
-                        (value === 0 ?
+                        (value === TestTypeId.ONE_ANSWER ?
                             "С одним правильным вариантом" :
-                            value === 1 ?
+                            value === TestTypeId.MULTIPLE_ANSWERS ?
                                 "С несколькими правильными ответами" :
                                 "С ответом в виде файла"
                         ),
