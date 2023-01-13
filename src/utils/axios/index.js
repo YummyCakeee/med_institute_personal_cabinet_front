@@ -13,7 +13,7 @@ export const createAxiosInstance = () => {
     }
     const instance = axios.create({
         baseURL,
-        headers,
+        //headers,
         withCredentials: true
     })
 
