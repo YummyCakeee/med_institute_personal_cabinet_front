@@ -55,7 +55,7 @@ const FileLoader = () => {
 
     useEffect(() => {
         fetchFolderData()
-    }, [currentFolderPath])
+    }, [currentFolderPath, fetchFolderData])
 
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
@@ -119,7 +119,7 @@ const FileLoader = () => {
         return () => {
             document.removeEventListener("mousedown", handleClick);
         };
-    }, [editingItemRef, editingItem, folderStructureInfo]);
+    }, [editingItemRef, editingItem, folderStructureInfo, currentFolderPath]);
 
     const onFolderDoubleClick = (folderName: string) => {
         setCurrentFolderPath(currentFolderPath + '/' + folderName)

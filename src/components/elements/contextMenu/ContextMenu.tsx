@@ -33,7 +33,7 @@ const ContextMenu = ({
         return () => {
             document.removeEventListener("mousedown", handleClick);
         };
-    }, [menuRef]);
+    }, [menuRef, onClose]);
 
     const onItemClick = (index: number) => {
         items[index].onClick()
