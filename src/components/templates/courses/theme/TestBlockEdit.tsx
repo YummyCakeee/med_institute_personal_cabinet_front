@@ -1,7 +1,6 @@
-import Button from "components/elements/button/Button"
 import Input from "components/elements/input/Input"
 import { CollectionType, TestBlockCollectionsType, TestBlockType } from "components/templates/testing/types"
-import React, { useMemo, useState } from "react"
+import React from "react"
 import styles from "./Theme.module.scss"
 import 'moment/locale/ru';
 import ItemList from "components/modules/itemList"
@@ -12,6 +11,7 @@ import { Store } from "react-notifications-component"
 import { useModalWindowContext } from "context/modalWindowContext"
 import Datetime from "components/elements/datetime"
 import { Moment } from "moment"
+import cn from "classnames"
 
 type TestBlockEditProps = {
     testBlock: TestBlockType,
@@ -111,8 +111,8 @@ const TestBlockEdit = ({
 
     return (
         <div className={styles.test_block_container}>
-            <div className={styles.test_block}>
-                <div className={utilStyles.text_medium}>Блок тестирования</div>
+            <div className={utilStyles.text_medium}>Основная информация о блоке тестирования</div>
+            <div className={styles.test_block_main_info}>
                 <Input
                     label="Процент для зачёта"
                     placeholder="0"
@@ -132,15 +132,22 @@ const TestBlockEdit = ({
                     onChange={onTimeLimitChange}
                     inputClassName={styles.test_block_input}
                 />
-                <div className={styles.test_block_date}>
-                    <label className={styles.test_block_label}>Дата окончания</label>
-                    <Datetime
-                        value={new Date(testBlock.dateEnd)}
-                        onChange={onDateChange}
-                    />
-                </div>
-                <div>
-                    <div className={utilStyles.text_medium}>Коллекции блока</div>
+                <Datetime
+                    value={new Date(testBlock.dateEnd)}
+                    onChange={onDateChange}
+                    label="Дата окончания"
+                />
+            </div>
+            <div className={styles.collections_container}>
+                <div className={styles.test_block_collections}>
+                    <div
+                        className={cn(
+                            utilStyles.text_medium,
+                            utilStyles.text_bold
+                        )}
+                    >
+                        Коллекции блока
+                    </div>
                     <ItemList
                         headers={[
                             {
@@ -161,34 +168,43 @@ const TestBlockEdit = ({
                             }
                         ]}
                         items={testBlock.testBlockCollections!}
+                        className={styles.collection}
+                    />
+                </div>
+                <div className={styles.all_collections}>
+                    <div
+                        className={cn(
+                            utilStyles.text_medium,
+                            utilStyles.text_bold
+                        )}
+                    >
+                        Все коллекции
+                    </div>
+                    <ItemList
+                        headers={[
+                            {
+                                title: "Название",
+                                field: "collectionName"
+                            }
+                        ]}
+                        items={collections}
+                        itemControlButtons={() => [
+                            {
+                                title: "Добавить",
+                                size: "small",
+                                onClick: onAddCollectionClick
+                            }
+                        ]}
+                        className={styles.collection}
                     />
                 </div>
                 <div>
                     <Checkbox
-                        label="Блок с ответом в виде файла"
+                        label="Брать из коллекций только упражнения с ответом в виде файла"
                         checked={testBlock.isFileTestBlock}
                         onChange={onTextBlockTypeChange}
                     />
                 </div>
-            </div>
-            <div className={styles.all_collections}>
-                <div className={utilStyles.text_medium}>Все коллекции</div>
-                <ItemList
-                    headers={[
-                        {
-                            title: "Название",
-                            field: "collectionName"
-                        }
-                    ]}
-                    items={collections}
-                    itemControlButtons={() => [
-                        {
-                            title: "Добавить",
-                            size: "small",
-                            onClick: onAddCollectionClick
-                        }
-                    ]}
-                />
             </div>
         </div>
     )
