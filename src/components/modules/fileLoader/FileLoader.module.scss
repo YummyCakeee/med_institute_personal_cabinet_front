@@ -1,81 +1,108 @@
 @use "src/styles/utils.module.scss" as *;
 
 .container {
-    background-color: #fff;
+    width: 800px;
+    height: 300px;
+    border: 1px solid $mainBlueColor;
     border-radius: 10px;
-    width: 700px;
-    border: transparentize($mainBlueColor, 0.5) solid 1px;
-    box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.295);
+    background-color: #ffffff66;
+    box-shadow: 0 10px 20px #00000023;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
 }
 
-.file {
+.navigation_section {
+    background-color: #5b55812c;
+    width: 70%;
+    height: inherit;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    height: 150px;
-    width: 100px;
-    margin: 10px;
-    background-color: #d3d3d3;
-    padding: 10px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    position: relative;
-    cursor: default;
 
-    &_icon {
-        width: 100%;
-        height: 100%;
-    }
-
-    &_name {
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    &_delete_icon {
-        fill: $mainRedColor;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        height: 10px;
-        width: 10px;
+    &_item {
+        margin: 3px;
         cursor: pointer;
-    }
-
-    &_list {
+        transition: all 0.3s ease-in-out;
         display: flex;
         flex-direction: row;
         align-items: center;
-        height: 200px;
-        overflow-x: auto;
+        fill: #000;
+        transition: all 0.3s ease-in-out;
+        width: fit-content;
 
-        &_empty {
-            width: 100%;
+        &_selected {
+            color: transparentize($mainBlueColor, 0.2);
+            fill: transparentize($mainBlueColor, 0.2);
+        }
+
+        & .item {
+
+            &_icon {
+                width: 15px;
+                height: 15px;
+                fill: inherit
+            }
+
+            &_name {
+                font-size: 16px;
+                user-select: none;
+                margin-left: 10px;
+            }
+        }
+
+        &:hover {
             color: $mainBlueColor;
-            font-size: 20px;
-            text-align: center;
+            fill: $mainBlueColor;
         }
     }
 
-    &_select {
-        border: 2px solid $mainBlueColor;
-        border-radius: 12px;
-        color: $mainBlueColor;
-        display: inline-block;
-        font-size: 20px;
-        padding: 0px 10px;
+    & .path_navigation {
+        width: 100%;
         height: 30px;
-        cursor: pointer;
-        margin: 10px;
+        padding: 5px;
+        background-color: #ffffff96;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        & .go_back_arrow {
+            transform: rotateZ(90deg);
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+            fill: #000;
+            transition: all 0.3s ease-in-out;
+
+            &:hover {
+                fill: $mainBlueColor;
+            }
+        }
+
+        & .current_path {
+            margin-left: 10px;
+        }
+    }
+
+    & .structure_navigation {
+        padding: 10px;
+        flex: 1;
+    }
+
+    & .controls {
+        width: 100%;
+        height: 50px;
+        padding: 5px;
+        background-color: #ffffff96;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
 }
 
-.control_section {
-    border-top: 1px solid $mainBlueColor;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+.file_section {
+    width: 30%;
+    padding: 30px 10px 20px 10px;
+    color: #000;
+    font-size: 18px;
+
 }
