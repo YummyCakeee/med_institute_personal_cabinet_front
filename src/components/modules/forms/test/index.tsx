@@ -50,8 +50,11 @@ const TestForm = ({
         let data: TestType = {
             collectionId: collectionId,
             testBody: JSON.stringify(testBody),
-            testTypeId: values.fileAnswer ? TestTypeId.FILE_ANSWER :
-                values.answers.filter((el: TestAnswerType) => el.correct).length > 1 ? TestTypeId.MULTIPLE_ANSWERS : TestTypeId.ONE_ANSWER
+            testTypeId: values.fileAnswer ?
+                TestTypeId.FILE_ANSWER :
+                values.manyAnswers ?
+                    TestTypeId.MULTIPLE_ANSWERS :
+                    TestTypeId.ONE_ANSWER
         }
 
         if (mode === "add" && collectionId !== undefined) {
@@ -84,12 +87,14 @@ const TestForm = ({
                 {
                     questionText: "",
                     answers: [],
-                    fileAnswer: true
+                    fileAnswer: false,
+                    manyAnswers: false
                 } :
                 {
                     questionText: test?.questionText || "",
                     answers: test?.answers || [],
-                    fileAnswer: test?.testTypeId === TestTypeId.FILE_ANSWER ? true : false
+                    fileAnswer: test?.testTypeId === TestTypeId.FILE_ANSWER,
+                    manyAnswers: test?.testTypeId === TestTypeId.MULTIPLE_ANSWERS
                 }
             }
             onSubmit={onSubmit}
@@ -113,47 +118,57 @@ const TestForm = ({
                         type="checkbox"
                     />
                     {!values.fileAnswer &&
-                        <FieldArray
-                            name="answers"
-                            render={arrayHelpers => (
-                                <div
-                                    className={styles.answers_container}
+                        <>
+                            <Field
+                                name="manyAnswers"
+                                label="Пометить как вопрос с несколькими ответами"
+                                component={CheckboxField}
+                                type="checkbox"
+                            />
+                            <FieldArray
+                                name="answers"
+                                render={arrayHelpers => (
+                                    <div
+                                        className={styles.answers_container}
 
-                                >
-                                    <div className={styles.answers_list}>
-                                        {values.answers.map((el: TestAnswerType, index: number) => (
-                                            <div
-                                                className={styles.answer}
-                                                key={index}
-                                            >
-                                                <Field
-                                                    name={`answers[${index}].text`}
-                                                    component={InputField}
-                                                    validate={notEmptyValidator}
-                                                    placeholder="Тест ответа"
-                                                />
-                                                <Field
-                                                    name={`answers[${index}].correct`}
-                                                    component={CheckboxField}
-                                                    checked={el.correct}
-                                                    label="Верно"
-                                                />
-                                                <CrossIcon
-                                                    className={styles.answer_remove}
-                                                    onClick={() => arrayHelpers.remove(index)}
-                                                />
-                                            </div>
-                                        ))}
+                                    >
+                                        <div className={styles.answers_list}>
+                                            {values.answers.map((el: TestAnswerType, index: number) => (
+                                                <div
+                                                    className={styles.answer}
+                                                    key={index}
+                                                >
+                                                    <Field
+                                                        name={`answers[${index}].text`}
+                                                        component={InputField}
+                                                        size="small"
+                                                        validate={notEmptyValidator}
+                                                        placeholder="Тест ответа"
+                                                    />
+                                                    <Field
+                                                        name={`answers[${index}].correct`}
+                                                        component={CheckboxField}
+                                                        checked={el.correct}
+                                                        label="Верно"
+                                                    />
+                                                    <CrossIcon
+                                                        className={styles.answer_remove}
+                                                        onClick={() => arrayHelpers.remove(index)}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div>
+                                            <PlusIcon
+                                                className={styles.answer_add}
+                                                onClick={() => arrayHelpers.push({ text: "", correct: false })}
+                                            />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <PlusIcon
-                                            className={styles.answer_add}
-                                            onClick={() => arrayHelpers.push({ text: "", correct: false })}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-                        />}
+                                )}
+                            />
+                        </>
+                    }
                     <div className={utilStyles.form_button_container}>
                         <Button
                             title="Сохранить"
