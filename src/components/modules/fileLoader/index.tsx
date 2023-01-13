@@ -1,6 +1,6 @@
 import { ArrowIcon, FileIcon, FolderIcon } from "components/elements/icons"
 import { ENDPOINT_FILES } from "constants/endpoints"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import axiosApi from "utils/axios"
 import styles from "./FileLoader.module.scss"
 import { CopyCommandType, CreateCommandType, DeleteCommandType, FileSystemObjectInfoType, FolderStructureInfoType, GetFolderStructureQueryType, MoveCommandType, RenameCommandType } from "./types"
@@ -39,7 +39,7 @@ const FileLoader = () => {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const editingItemRef = useRef<HTMLInputElement>(null)
 
-    const fetchFolderData = async () => {
+    const fetchFolderData = useCallback(async () => {
         const data: GetFolderStructureQueryType = {
             currentFolderPath,
         }
@@ -49,9 +49,9 @@ const FileLoader = () => {
                 setSelectedFileIndex(-1)
             })
             .catch(err => {
-                console.log(err)
+                addNotification({ type: "danger", title: "Не удалось загрузить файлы", message: err.code })
             })
-    }
+    }, [currentFolderPath])
 
     useEffect(() => {
         fetchFolderData()
