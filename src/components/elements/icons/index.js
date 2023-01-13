@@ -190,3 +190,25 @@ export const FileIcon = ({
         .286-.214.5-.5.5h-21c-.286 0-.5-.214-.5-.5v-27c0-.286.214-.5.5-.5z"/>
     </svg>
 )
+
+export const FolderIcon = ({
+    width = 20,
+    height = 20,
+    color = "#000",
+    className = "",
+    onClick = () => { }
+}) => (
+    <svg
+        xmlns={xmlns}
+        version={version}
+        viewBox="0 0 32 32"
+        width={width}
+        height={height}
+        fill={color}
+        className={className}
+        onClick={onClick}
+    >
+        <path d="M28,28H4a3,3,0,0,1-3-3V7A3,3,0,0,1,4,4h8a1,1,0,0,1,.77.36L15.8,8H28a3,3,0,0,1,3,3V25A3,3,0,0,1,28,
+        28ZM4,6A1,1,0,0,0,3,7V25a1,1,0,0,0,1,1H28a1,1,0,0,0,1-1V11a1,1,0,0,0-1-1H15.33a1,1,0,0,1-.76-.36L11.53,6Z"/>
+    </svg>
+)
