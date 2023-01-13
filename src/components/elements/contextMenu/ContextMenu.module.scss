@@ -1,0 +1,40 @@
+.container {
+    width: fit-content;
+    min-width: 150px;
+    min-height: fit-content;
+    max-height: 400px;
+    border-radius: 10px;
+    border: 1px solid #00000052;
+    backdrop-filter: blur(3px);
+    background-color: #52505036;
+    position: absolute;
+    animation: open_animation 0.3s ease-in-out;
+    box-shadow: 0 10px 20px #0000002c;
+}
+
+.item {
+    padding: 3px 0;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border-bottom: 1px solid #00000052;
+    transition: all 0.2s ease-in-out;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        color: #e7e7e7;
+    }
+}
+
+@keyframes open_animation {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
