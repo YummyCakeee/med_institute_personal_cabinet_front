@@ -8,15 +8,15 @@ import styles from "./Theme.module.scss"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, ContentState, convertToRaw } from "draft-js"
 import Button from "components/elements/button/Button"
-import FileLoader from "components/modules/fileLoader"
 import TestBlockEdit from "./TestBlockEdit"
-import { CollectionType, TestBlockCollectionsType, TestBlockType } from "components/templates/testing/types"
+import { CollectionType, TestBlockType } from "components/templates/testing/types"
 import htmlToDraft from 'html-to-draftjs'
 import draftToHtml from 'draftjs-to-html';
 import axiosApi from "utils/axios"
 import { ENDPOINT_COURSES, ENDPOINT_TEST_BLOCK_COLLECTIONS } from "constants/endpoints"
 import axios from "axios"
 import addNotification from "utils/notifications"
+import FileLoader from "components/modules/fileLoader"
 
 const Editor = dynamic(
     () => import('react-draft-wysiwyg').then(mod => mod.Editor),
@@ -236,12 +236,7 @@ const ThemeTemplate = ({
             </div>
             <div className={utilStyles.section}>
                 <div className={utilStyles.section_title}>{`Информационные материалы – файлы с описанием (необязательно)`}</div>
-                <FileLoader
-                    {...{
-                        files,
-                        setFiles
-                    }}
-                />
+                <FileLoader />
             </div>
             <div className={utilStyles.section}>
                 <div className={utilStyles.section_title}>{`Тестирование (необязательно)`}</div>
@@ -272,9 +267,11 @@ const ThemeTemplate = ({
                 }
             </div>
             <Button
-                title="Сохранить"
+                title="Сохранить всё"
                 size="small"
+                stretchable={true}
                 onClick={onSaveClick}
+                className={styles.save_button}
             />
         </Layout>
     )
