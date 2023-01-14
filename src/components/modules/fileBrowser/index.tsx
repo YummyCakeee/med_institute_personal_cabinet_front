@@ -57,7 +57,7 @@ const FileBrowser = ({
             .catch(err => {
                 addNotification({ type: "danger", title: "Не удалось загрузить файлы", message: err.code })
             })
-    }, [currentFolderPath])
+    }, [currentFolderPath, onFileSelected])
 
     useEffect(() => {
         fetchFolderData()
@@ -77,7 +77,7 @@ const FileBrowser = ({
         return () => {
             document.removeEventListener("mousedown", handleClick);
         };
-    }, [selectedFileRef, structureNavigationRef, editingItemRef]);
+    }, [selectedFileRef, structureNavigationRef, editingItemRef, onFileSelected]);
 
 
     useEffect(() => {
