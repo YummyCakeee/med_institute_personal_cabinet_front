@@ -16,7 +16,11 @@ import axiosApi from "utils/axios"
 import { ENDPOINT_COURSES, ENDPOINT_TEST_BLOCK_COLLECTIONS } from "constants/endpoints"
 import axios from "axios"
 import addNotification from "utils/notifications"
-import FileLoader from "components/modules/fileLoader"
+import FileBrowser from "components/modules/fileBrowser"
+import ItemList from "components/modules/itemList"
+import { EduFileType } from "components/templates/education/types"
+import cn from "classnames"
+import { useModalWindowContext } from "context/modalWindowContext"
 
 const Editor = dynamic(
     () => import('react-draft-wysiwyg').then(mod => mod.Editor),
@@ -33,9 +37,14 @@ const ThemeTemplate = ({
     collections
 }: ThemeTemplateProps) => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty())
-    const [files, setFiles] = useState<File[]>([])
+    const [themeFiles, setThemeFiles] = useState<EduFileType[]>([])
     const [initialTestBlock, setInitialTestBlock] = useState<TestBlockType>()
     const [testBlock, setTestBlock] = useState<TestBlockType>()
+    const [selectedFile, setSelectedFile] = useState<string>()
+    const {
+        setThemeFileModalWindowState,
+        setConfirmActionModalWindowState
+    } = useModalWindowContext()
 
     const onEditorStateChange = (editorState: any) => {
         setEditorState(editorState)
@@ -74,13 +83,67 @@ const ThemeTemplate = ({
                 testBlockCollections: theme.testBlock.testBlockCollections || []
             })
         }
+        setThemeFiles(theme.themeFiles || [])
     }, [theme])
+
+    const onFileSelected = (path: string | undefined) => {
+        setSelectedFile(path)
+    }
+
+    const onAddFileToTheme = () => {
+        if (!selectedFile) return
+        const file: EduFileType = {
+            fileName: "",
+            fileDescription: "",
+            fileLink: "/uploads/" + selectedFile.slice(1)
+        }
+        setThemeFileModalWindowState({
+            mode: "add",
+            file,
+            closable: true,
+            backgroundOverlap: true,
+            onConfirm: (newFile) => {
+                setThemeFiles([...themeFiles, newFile])
+                setThemeFileModalWindowState(undefined)
+            }
+        })
+    }
+
+    const onEditThemeFile = (index: number) => {
+        setThemeFileModalWindowState({
+            mode: "edit",
+            file: themeFiles[index],
+            closable: true,
+            backgroundOverlap: true,
+            onConfirm: (newFile) => {
+                setThemeFiles(themeFiles.map((el, key) => {
+                    if (key !== index) return el
+                    return newFile
+                }))
+                setThemeFileModalWindowState(undefined)
+            }
+        })
+    }
+
+    const onDeleteThemeFile = (index: number) => {
+        setConfirmActionModalWindowState({
+            text: `Удалить файл ${themeFiles[index].fileName} из темы?`,
+            onConfirm: () => {
+                setThemeFiles(themeFiles.filter((el, key) => key !== index))
+                setConfirmActionModalWindowState(undefined)
+            },
+            onDismiss: () => setConfirmActionModalWindowState(undefined),
+            closable: true,
+            backgroundOverlap: true
+        })
+    }
 
     const saveMainData = async () => {
         const html = draftToHtml(convertToRaw(editorState.getCurrentContent()))
         const data = {
             title: theme.title,
-            html
+            html,
+            themeFiles
         }
         await axiosApi.put(`${ENDPOINT_COURSES}/Themes/${theme.themeId}`, data)
             .then(res => {
@@ -236,7 +299,54 @@ const ThemeTemplate = ({
             </div>
             <div className={utilStyles.section}>
                 <div className={utilStyles.section_title}>{`Информационные материалы – файлы с описанием (необязательно)`}</div>
-                <FileLoader />
+                <div className={styles.theme_files_container}>
+                    <div className={styles.file_browser_container}>
+                        <FileBrowser
+                            onFileSelected={onFileSelected}
+                        />
+                        <div className={cn(
+                            styles.add_file_button_container,
+                            { [styles.hidden]: !selectedFile }
+                        )}>
+                            <Button
+                                title="Добавить файл в тему"
+                                onClick={onAddFileToTheme}
+                            />
+                        </div>
+                    </div>
+                    <ItemList
+                        headers={[
+                            {
+                                title: "Название",
+                                field: "fileName",
+                                colSize: "200px"
+                            },
+                            {
+                                title: "Описание",
+                                field: "fileDescription",
+                                colSize: "300px"
+                            },
+                            {
+                                title: "Путь",
+                                field: "fileLink",
+                                colSize: "300px"
+                            }
+                        ]}
+                        items={themeFiles}
+                        itemControlButtons={() => [
+                            {
+                                title: "Изменить",
+                                size: "small",
+                                onClick: onEditThemeFile
+                            },
+                            {
+                                title: "Удалить",
+                                size: "small",
+                                onClick: onDeleteThemeFile
+                            }
+                        ]}
+                    />
+                </div>
             </div>
             <div className={utilStyles.section}>
                 <div className={utilStyles.section_title}>{`Тестирование (необязательно)`}</div>
