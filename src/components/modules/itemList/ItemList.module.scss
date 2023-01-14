@@ -9,6 +9,8 @@
     box-sizing: border-box;
     border: transparentize($mainBlueColor, 0.5) solid 1px;
     box-shadow: 0px 10px 20px #0000003f;
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
@@ -197,9 +199,11 @@
         background-color: #fff;
         padding: 5px 0;
         overflow-y: auto;
+        flex: 1;
 
         &_container {
             position: relative;
+            flex: 1;
         }
 
 
