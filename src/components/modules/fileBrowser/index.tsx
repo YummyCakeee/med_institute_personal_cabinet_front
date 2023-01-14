@@ -2,10 +2,9 @@ import { ArrowIcon, FileIcon, FolderIcon } from "components/elements/icons"
 import { ENDPOINT_FILES } from "constants/endpoints"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import axiosApi from "utils/axios"
-import styles from "./FileLoader.module.scss"
+import styles from "./FileBrowser.module.scss"
 import { CopyCommandType, CreateCommandType, DeleteCommandType, FileSystemObjectInfoType, FolderStructureInfoType, GetFolderStructureQueryType, MoveCommandType, RenameCommandType } from "./types"
 import cn from "classnames"
-import Button from "components/elements/button/Button"
 import ContextMenu, { ContextMenuProps } from "components/elements/contextMenu/ContextMenu"
 import addNotification from "utils/notifications"
 import { useModalWindowContext } from "context/modalWindowContext"
@@ -24,7 +23,13 @@ type EditingItemType = {
     isFile: boolean
 }
 
-const FileLoader = () => {
+type FileBrowserProps = {
+    onFileSelected?: (path: string | undefined) => void
+}
+
+const FileBrowser = ({
+    onFileSelected
+}: FileBrowserProps) => {
 
     const [currentFolderPath, setCurrentFolderPath] = useState<string>(".")
     const [folderStructureInfo, setFolderStructureInfo] = useState<FolderStructureInfoType>()
@@ -47,6 +52,7 @@ const FileLoader = () => {
             .then(res => {
                 setFolderStructureInfo(res.data)
                 setSelectedFileIndex(-1)
+                onFileSelected && onFileSelected(undefined)
             })
             .catch(err => {
                 addNotification({ type: "danger", title: "Не удалось загрузить файлы", message: err.code })
@@ -63,6 +69,7 @@ const FileLoader = () => {
                 !selectedFileRef.current.contains(e.target as Node) &&
                 structureNavigationRef.current.contains(e.target as Node)) {
                 setSelectedFileIndex(-1)
+                onFileSelected && onFileSelected(undefined)
             }
         }
 
@@ -127,6 +134,8 @@ const FileLoader = () => {
 
     const onFileSelect = (index: number) => {
         setSelectedFileIndex(index)
+        onFileSelected && onFileSelected(currentFolderPath +
+            folderStructureInfo!.files[index].name)
     }
 
     const onGoBackArrowClick = () => {
@@ -203,7 +212,7 @@ const FileLoader = () => {
                 {
                     title: "Удалить",
                     onClick: () => {
-                        const text = "Вы действительно хотите удалить" +
+                        const text = "Вы действительно хотите удалить " +
                             (isFile ? `файл ${folderStructureInfo!.files[index].name}` :
                                 `папку ${folderStructureInfo!.folders[index].name}`)
 
@@ -232,7 +241,7 @@ const FileLoader = () => {
         }
 
         const params = {
-            folder: "."
+            folder: currentFolderPath
         }
 
         await axiosApi.post(`${ENDPOINT_FILES}/Upload`, fd, { params })
@@ -449,12 +458,6 @@ const FileLoader = () => {
                         </div>
                     ))}
                 </div>
-                <div className={styles.controls}>
-                    <Button
-                        title="Загрузить"
-                        size="small"
-                    />
-                </div>
             </div>
             <div className={styles.file_section}>
                 {
@@ -470,4 +473,4 @@ const FileLoader = () => {
     )
 }
 
-export default FileLoader
+export default FileBrowser
