@@ -11,8 +11,27 @@
     &_wrapper {
         width: 70%;
     }
+}
 
-    &_toolbar {}
+.theme_files_container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: flex-start;
+
+    & .file_browser_container {
+        margin-right: 40px;
+
+        & .add_file_button_container {
+            margin-top: 40px;
+            transition: all 0.3s ease-in-out;
+            opacity: 1;
+
+            &.hidden {
+                opacity: 0;
+            }
+        }
+    }
 }
 
 .test_block {
