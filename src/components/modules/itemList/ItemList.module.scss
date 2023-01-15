@@ -93,7 +93,9 @@
 
 
     &_control {
+        position: absolute;
         max-height: 0px;
+        width: 100%;
         overflow: hidden;
         transition: all 0.3s ease-in-out;
         display: flex;
@@ -103,7 +105,9 @@
         padding: 0;
         opacity: 0;
         border-bottom: black solid 1px;
-        background-color: $mainLighterGreyColor;
+        background-color: transparentize($mainLighterGreyColor, 0.1);
+        backdrop-filter: blur(3px);
+        z-index: 2;
 
         &[data-visible="true"] {
             max-height: 100px;
@@ -200,10 +204,16 @@
         padding: 5px 0;
         overflow-y: auto;
         flex: 1;
+        transition: all 0.3s ease-in-out;
+
+        &[data-shifted="true"] {
+            transform: translateY(50px);
+        }
 
         &_container {
             position: relative;
             flex: 1;
+            overflow: hidden;
         }
 
 
