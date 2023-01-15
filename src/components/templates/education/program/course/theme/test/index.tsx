@@ -1,7 +1,7 @@
 import Layout from "components/layouts/Layout"
 import Head from "next/head"
 import React, { useEffect, useRef, useState } from "react"
-import styles from "./testBlock.module.scss"
+import styles from "./Test.module.scss"
 import cn from "classnames"
 import { SolvedTestType, UserQuestionType } from "components/templates/education/types"
 import { Field, FieldArray, Form, Formik, FormikValues } from "formik"
@@ -64,6 +64,9 @@ const TestTemplate = ({
     }
 
     const onAnswerSubmit = (values: FormikValues) => {
+        if (leftTime <= 0) {
+            return addNotification({ type: "danger", title: "Ошибка", message: "Время истекло" })
+        }
         let question = initialTest?.userQuestions.find(el => el.questionText === values.questionText)
         if (!question) return
         let data: UserQuestionType = {
@@ -112,7 +115,6 @@ const TestTemplate = ({
         const { programId, courseId, themeId } = router.query
         axiosApi.put(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes/${themeId}/TestBlock/Finish`)
             .then(res => {
-                console.log(res)
                 setConfirmActionModalWindowState(undefined)
                 router.replace(`${ROUTE_EDUCATION}/${programId}/courses/${courseId}/themes/${themeId}`)
             })
@@ -122,8 +124,13 @@ const TestTemplate = ({
     }
 
     const onTestFinishClick = () => {
+        const questionsAmount = initialTest!.userQuestions.length
+        const questionsAnswered = initialTest!.userQuestions.reduce((acc, cur) => (
+            cur.answers.find(el => el.selected) ? acc + 1 : acc
+        ), 0)
         setConfirmActionModalWindowState({
-            text: "Вы уверены, что хотите завершить тест?",
+            text: "Вы уверены, что хотите завершить тест?\n" +
+                `Отвечено вопросов: ${questionsAnswered} из ${questionsAmount}`,
             onConfirm: finishTest,
             onDismiss: () => setConfirmActionModalWindowState(undefined),
             closable: true,
