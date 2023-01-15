@@ -99,7 +99,7 @@ const ThemeTemplate = ({
                                 className={styles.theme_file}
                                 key={key}
                             >
-                                <a href={`${hostName}${el.fileLink}`} target="_blank" download={true}>{el.fileName}</a>
+                                <a href={`${hostName}${el.fileLink}`} target="_blank" rel="noreferrer" download={true}>{el.fileName}</a>
                                 <div>
                                     {el.fileDescription}
                                 </div>
