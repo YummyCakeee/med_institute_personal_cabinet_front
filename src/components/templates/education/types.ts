@@ -24,7 +24,8 @@ export type SolvedTestType = {
 export type UserQuestionType = {
     questionText: string,
     answers: UserAnswerType[],
-    testType: TestTypeId
+    testType: TestTypeId,
+    score?: number
 }
 
 export type UserAnswerType = {
@@ -37,8 +38,8 @@ export type UserExerciseType = {
     file: EduFileType,
     exerciseText: string,
     rating: number,
-    userComments: string[],
-    teacherComments: string[]
+    userComments?: string[],
+    teacherComments?: string[]
 }
 
 export type EduFileType = {
