@@ -1,7 +1,7 @@
 @use "src/styles/utils.module.scss" as *;
 
 .container {
-    width: 100%;
+    width: fit-content;
     position: relative;
     display: flex;
     flex-direction: row;
