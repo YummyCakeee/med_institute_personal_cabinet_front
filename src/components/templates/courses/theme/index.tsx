@@ -1,6 +1,6 @@
 import Layout from "components/layouts/Layout"
 import Head from "next/head"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import utilStyles from "styles/utils.module.scss"
 import dynamic from "next/dynamic"
 import { ThemeType } from "../types"
@@ -86,16 +86,16 @@ const ThemeTemplate = ({
         setThemeFiles(theme.themeFiles || [])
     }, [theme])
 
-    const onFileSelected = (path: string | undefined) => {
+    const onFileSelected = useCallback((path: string | undefined) => {
         setSelectedFile(path)
-    }
+    }, [setSelectedFile])
 
     const onAddFileToTheme = () => {
         if (!selectedFile) return
         const file: EduFileType = {
             fileName: "",
             fileDescription: "",
-            fileLink: "/uploads/" + selectedFile.slice(1)
+            fileLink: "/uploads/" + selectedFile.slice(2)
         }
         setThemeFileModalWindowState({
             mode: "add",
@@ -143,7 +143,7 @@ const ThemeTemplate = ({
         const data = {
             title: theme.title,
             html,
-            themeFiles
+            themeFiles,
         }
         await axiosApi.put(`${ENDPOINT_COURSES}/Themes/${theme.themeId}`, data)
             .then(res => {
@@ -205,9 +205,9 @@ const ThemeTemplate = ({
             percentSuccess: testBlock.percentSuccess,
             dateEnd: testBlock.dateEnd
         }
-        await axiosApi.put(`${ENDPOINT_COURSES}/Themes/${theme.themeId}/TestBlock/${testBlock.testBlockId}`, data)
+        await axiosApi.put(`${ENDPOINT_COURSES}/Themes/${theme.themeId}/TestBlock`, data)
             .catch(err => {
-                return
+                console.log(err)
             })
 
         const testBlockCollections = testBlock.testBlockCollections || []
