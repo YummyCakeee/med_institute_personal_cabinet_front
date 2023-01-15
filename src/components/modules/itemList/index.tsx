@@ -146,31 +146,31 @@ const ItemList = ({
                     </div>
                 ))}
             </div>
-            <div className={styles.item_control} data-visible={selectedItemIndex !== null}>
-                <CrossIcon
-                    className={styles.item_control_button_unselect}
-                    onClick={() => setSetectedItemIndex(null)}
-                />
-                {itemControlButtons && selectedItemIndex !== null && items[selectedItemIndex] &&
-                    itemControlButtons({ selectedItem: items[selectedItemIndex], items }).map((el, key) => (
-                        <div
-                            key={key}
-                            className={styles.item_control_button}
-                        >
-                            <Button
-                                {...{
-                                    ...el,
-                                    onClick: () => {
-                                        if (selectedItemIndex !== null && el.onClick)
-                                            el.onClick(selectedItemIndex)
-                                    }
-                                }}
-
-                            />
-                        </div>
-                    ))}
-            </div>
             <div className={styles.item_list_container}>
+                <div className={styles.item_control} data-visible={selectedItemIndex !== null}>
+                    <CrossIcon
+                        className={styles.item_control_button_unselect}
+                        onClick={() => setSetectedItemIndex(null)}
+                    />
+                    {itemControlButtons && selectedItemIndex !== null && items[selectedItemIndex] &&
+                        itemControlButtons({ selectedItem: items[selectedItemIndex], items }).map((el, key) => (
+                            <div
+                                key={key}
+                                className={styles.item_control_button}
+                            >
+                                <Button
+                                    {...{
+                                        ...el,
+                                        onClick: () => {
+                                            if (selectedItemIndex !== null && el.onClick)
+                                                el.onClick(selectedItemIndex)
+                                        }
+                                    }}
+
+                                />
+                            </div>
+                        ))}
+                </div>
                 {items?.length ?
                     <>
                         <div className={styles.item_list_background_columns}>
@@ -186,10 +186,13 @@ const ItemList = ({
                                 </div>
                             ))}
                         </div>
-                        <div className={cn(
-                            styles.item_list,
-                            itemListClassName
-                        )}>
+                        <div
+                            className={cn(
+                                styles.item_list,
+                                itemListClassName
+                            )}
+                            data-shifted={selectedItemIndex === 0}
+                        >
                             {items.map((item, itemKey) => (
                                 <div
                                     key={itemKey}
