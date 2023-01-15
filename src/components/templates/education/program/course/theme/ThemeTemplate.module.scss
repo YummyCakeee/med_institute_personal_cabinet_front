@@ -1,4 +1,23 @@
+@use "src/styles/utils.module.scss" as *;
+
 .test {
+
+    &_time {
+        font-size: 18px;
+
+        & span {
+            color: $mainDarkBlueColor
+        }
+    }
+
+    &_date_end {
+        font-size: 18px;
+
+        & span {
+            color: $mainDarkBlueColor
+        }
+    }
+
     &_attempts_list {
         max-height: 300px;
     }
@@ -16,6 +35,19 @@
                 margin: 0 5px;
                 width: 200px;
             }
+        }
+    }
+}
+
+.theme {
+    &_files {}
+
+    &_file {
+        font-size: 18px;
+        margin-bottom: 20px;
+
+        & a {
+            color: $mainDarkBlueColor
         }
     }
 }
