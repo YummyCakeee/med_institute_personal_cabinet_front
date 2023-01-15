@@ -3,18 +3,25 @@ import { FieldProps } from "formik"
 import cn from "classnames"
 import styles from "./TextAreaField.module.scss"
 
-type TextAreaFieldProps = FieldProps & React.TextareaHTMLAttributes<HTMLTextAreaElement>
+type TextAreaFieldProps = FieldProps & React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+    size?: "small" | "medium" | "large",
+}
 
 const TextAreaField = ({
     field,
     form: { touched, errors },
+    size = "medium",
     ...props
 }: TextAreaFieldProps) => {
 
     return (
         <div className={styles.container}>
             <textarea
-                className={styles.text_area_container}
+                className={cn(
+                    styles.text_area_container,
+                    { [styles.disabled]: props.disabled },
+                    styles[size]
+                )}
                 {...{
                     ...field,
                     ...props,
