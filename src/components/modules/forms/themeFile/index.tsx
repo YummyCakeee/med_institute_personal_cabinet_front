@@ -5,6 +5,7 @@ import React from "react"
 import { notEmptyValidator } from "utils/validators"
 import utilStyles from "styles/utils.module.scss"
 import { EduFileType } from "components/templates/education/types"
+import TextAreaField from "components/elements/formikComponents/textAreaField/TextAreaField"
 
 interface ThemeFileFormProps {
     mode: "add" | "edit",
@@ -48,7 +49,7 @@ const ThemeFileForm = ({
                     />
                     <Field
                         name="fileDescription"
-                        component={InputField}
+                        component={TextAreaField}
                         placeholder="Описание"
                         validate={notEmptyValidator}
                         disabled={isSubmitting}
