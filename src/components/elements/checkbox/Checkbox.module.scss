@@ -13,11 +13,13 @@
     &_container {
         height: 20px;
         width: 20px;
+        min-width: 20px;
+        min-height: 20px;
     }
 
     &_label {
         font-size: 20px;
-        margin-right: 10px;
+        margin-left: 10px;
     }
 }
 
