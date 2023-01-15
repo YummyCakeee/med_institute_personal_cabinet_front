@@ -12,6 +12,7 @@ import { useModalWindowContext } from "context/modalWindowContext"
 import Datetime from "components/elements/datetime"
 import { Moment } from "moment"
 import cn from "classnames"
+import addNotification from "utils/notifications";
 
 type TestBlockEditProps = {
     testBlock: TestBlockType,
@@ -29,16 +30,7 @@ const TestBlockEdit = ({
 
     const onAddCollectionClick = (index: number) => {
         if (testBlock.testBlockCollections?.find(el => el.collectionId === collections[index].collectionId)) {
-            Store.addNotification({
-                container: "top-right",
-                type: "warning",
-                title: "Внимание",
-                message: "Вы уже добавили эту коллекцию в блок",
-                dismiss: {
-                    onScreen: true,
-                    duration: 5000
-                }
-            })
+            addNotification({ type: "warning", title: "Внимание", message: "Вы уже добавили эту коллекцию в блок" })
             return
         }
 
@@ -102,7 +94,7 @@ const TestBlockEdit = ({
             })
     }
 
-    const onTextBlockTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onTestBlockTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTestBlock({
             ...testBlock,
             isFileTestBlock: !testBlock.isFileTestBlock
@@ -202,7 +194,7 @@ const TestBlockEdit = ({
                     <Checkbox
                         label="Брать из коллекций только упражнения с ответом в виде файла"
                         checked={testBlock.isFileTestBlock}
-                        onChange={onTextBlockTypeChange}
+                        onChange={onTestBlockTypeChange}
                     />
                 </div>
             </div>
