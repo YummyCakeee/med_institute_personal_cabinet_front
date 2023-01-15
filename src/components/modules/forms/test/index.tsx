@@ -32,6 +32,9 @@ const TestForm = ({
 }: TestFormProps) => {
 
     const onSubmit = async (values: FormikValues) => {
+        if (values.answers.filter((el: TestAnswerType) => el.correct).length > 1) {
+            values.manyAnswers = TestTypeId.MULTIPLE_ANSWERS
+        }
         let testBody = {
             ...(values.fileAnswer ?
                 {
@@ -119,12 +122,16 @@ const TestForm = ({
                     />
                     {!values.fileAnswer &&
                         <>
-                            <Field
-                                name="manyAnswers"
-                                label="Пометить как вопрос с несколькими ответами"
-                                component={CheckboxField}
-                                type="checkbox"
-                            />
+                            {values.answers.filter(el => el.correct).length == 1 &&
+                                <div className={styles.many_answers_checkbox_container}>
+                                    <Field
+                                        name="manyAnswers"
+                                        label="Пометить как вопрос с несколькими верными ответами"
+                                        component={CheckboxField}
+                                        type="checkbox"
+                                    />
+                                </div>
+                            }
                             <FieldArray
                                 name="answers"
                                 render={arrayHelpers => (
@@ -132,7 +139,7 @@ const TestForm = ({
                                         className={styles.answers_container}
 
                                     >
-                                        <div className={styles.answers_list}>
+                                        <div className={styles.answer_list}>
                                             {values.answers.map((el: TestAnswerType, index: number) => (
                                                 <div
                                                     className={styles.answer}
@@ -141,16 +148,18 @@ const TestForm = ({
                                                     <Field
                                                         name={`answers[${index}].text`}
                                                         component={InputField}
-                                                        size="small"
+                                                        size="medium"
                                                         validate={notEmptyValidator}
                                                         placeholder="Тест ответа"
                                                     />
-                                                    <Field
-                                                        name={`answers[${index}].correct`}
-                                                        component={CheckboxField}
-                                                        checked={el.correct}
-                                                        label="Верно"
-                                                    />
+                                                    <div className={styles.answer_checkbox_correct}>
+                                                        <Field
+                                                            name={`answers[${index}].correct`}
+                                                            component={CheckboxField}
+                                                            checked={el.correct}
+                                                            label="Верно"
+                                                        />
+                                                    </div>
                                                     <CrossIcon
                                                         className={styles.answer_remove}
                                                         onClick={() => arrayHelpers.remove(index)}
