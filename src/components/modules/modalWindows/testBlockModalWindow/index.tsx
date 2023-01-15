@@ -29,11 +29,11 @@ const TestBlockModalWindow = ({
     return (
         <ModalWindow
             {...{
-                title: "Добавление вопросов из коллекции",
+                title: "Добавление вопросов и упражнений из коллекции",
                 ...props
             }}
         >
-            <div className={utilStyles.modal_window_text}>Укажите количество вопросов</div>
+            <div className={utilStyles.modal_window_text}>Укажите количество вопросов и упражнений</div>
             <Input
                 inputClassName={styles.questions_amount_input}
                 type="number"
