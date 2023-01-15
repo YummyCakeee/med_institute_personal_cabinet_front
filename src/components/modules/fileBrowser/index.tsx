@@ -79,7 +79,6 @@ const FileBrowser = ({
         };
     }, [selectedFileRef, structureNavigationRef, editingItemRef, onFileSelected]);
 
-
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
             if (editingItemRef.current && !editingItemRef.current.contains(e.target as Node)) {
@@ -134,7 +133,7 @@ const FileBrowser = ({
 
     const onFileSelect = (index: number) => {
         setSelectedFileIndex(index)
-        onFileSelected && onFileSelected(currentFolderPath +
+        onFileSelected && onFileSelected(currentFolderPath + "/" +
             folderStructureInfo!.files[index].name)
     }
 
