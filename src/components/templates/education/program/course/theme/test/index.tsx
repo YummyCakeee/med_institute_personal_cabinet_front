@@ -15,13 +15,13 @@ import { useModalWindowContext } from "context/modalWindowContext"
 import { ROUTE_EDUCATION } from "constants/routes"
 import addNotification from "utils/notifications"
 
-type TestBlockTemplateProps = {
+type TestTemplateProps = {
     test: SolvedTestType
 }
 
-const TestBlockTemplate = ({
+const TestTemplate = ({
     test
-}: TestBlockTemplateProps) => {
+}: TestTemplateProps) => {
 
     const [leftTime, setLeftTime] = useState<number>(0)
     const timeoutRef = useRef<NodeJS.Timeout>()
@@ -62,10 +62,6 @@ const TestBlockTemplate = ({
     const onTestListMiniItemClick = (index: number) => {
         scrollToSection(index.toString())
     }
-
-    useEffect(() => {
-        console.log(initialTest)
-    }, [initialTest])
 
     const onAnswerSubmit = (values: FormikValues) => {
         let question = initialTest?.userQuestions.find(el => el.questionText === values.questionText)
@@ -116,6 +112,8 @@ const TestBlockTemplate = ({
         const { programId, courseId, themeId } = router.query
         axiosApi.put(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes/${themeId}/TestBlock/Finish`)
             .then(res => {
+                console.log(res)
+                setConfirmActionModalWindowState(undefined)
                 router.replace(`${ROUTE_EDUCATION}/${programId}/courses/${courseId}/themes/${themeId}`)
             })
             .catch(err => {
@@ -246,4 +244,4 @@ const TestBlockTemplate = ({
     )
 }
 
-export default TestBlockTemplate
+export default TestTemplate
