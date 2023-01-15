@@ -1,7 +1,7 @@
 import { CrossIcon, FileIcon } from "components/elements/icons"
 import { useModalWindowContext } from "context/modalWindowContext"
-import React from "react"
-import styles from "./FileLoaderSimple.module.scss"
+import React, { useRef } from "react"
+import styles from "./FileLoader.module.scss"
 import cn from "classnames"
 import Button from "components/elements/button/Button"
 import axiosApi from "utils/axios"
@@ -10,16 +10,21 @@ import { ENDPOINT_FILES } from "constants/endpoints"
 type FileLoaderProps = {
     files: File[],
     setFiles: React.Dispatch<React.SetStateAction<File[]>>,
+    multiple?: boolean,
+    accept?: string,
     className?: string
 }
 
-const FileLoaderSimple = ({
+const FileLoader = ({
     files,
     setFiles,
+    multiple,
+    accept,
     className
 }: FileLoaderProps) => {
 
     const { setConfirmActionModalWindowState } = useModalWindowContext()
+    const inputRef = useRef<HTMLInputElement>(null)
 
 
     const onFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +33,9 @@ const FileLoaderSimple = ({
         for (let i = 0; i < e.target.files.length || 0; i++) {
             newFiles.push(e.target.files[i])
         }
-        setFiles(prev => [...prev, ...newFiles])
+        if (multiple)
+            setFiles(prev => [...prev, ...newFiles])
+        else setFiles(newFiles)
         e.target.value = ""
     }
 
@@ -46,27 +53,8 @@ const FileLoaderSimple = ({
         })
     }
 
-    const onFilesLoadClick = () => {
-        if (!files.length) return
-        const fd = new FormData()
-        files.forEach(file => {
-            console.log(file)
-            fd.append("files", file)
-        })
-
-        const params = {
-            folder: "."
-        }
-
-        return
-
-        axiosApi.post(`${ENDPOINT_FILES}/Upload`, fd, { params })
-            .then(res => {
-
-            })
-            .catch(err => {
-
-            })
+    const onFilesAttachClick = () => {
+        if (inputRef.current) inputRef.current.click()
     }
 
     return (
@@ -94,18 +82,18 @@ const FileLoaderSimple = ({
                 }
             </div>
             <div className={styles.control_section}>
-                <label className={styles.file_select}>
-                    <input
-                        type="file"
-                        accept=".txt, .doc, .docx"
-                        onChange={onFileSelect}
-                        multiple
-                    />
-                    Добавить файлы
-                </label>
+                <input
+                    type="file"
+                    accept={accept}
+                    onChange={onFileSelect}
+                    multiple={multiple}
+                    style={{ display: "none" }}
+                    ref={inputRef}
+                />
                 <Button
-                    title="Загрузить"
-                    onClick={onFilesLoadClick}
+                    title={`Прикрепить файл${multiple ? "ы" : ""}`}
+                    onClick={onFilesAttachClick}
+                    stretchable={true}
                 />
             </div>
         </div>
@@ -113,4 +101,4 @@ const FileLoaderSimple = ({
 
 }
 
-export default FileLoaderSimple
+export default FileLoader
