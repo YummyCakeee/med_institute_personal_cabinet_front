@@ -1,4 +1,4 @@
-import TestBlockTemplate from "components/templates/education/program/course/theme/testBlock"
+import TestTemplate from "components/templates/education/program/course/theme/test"
 import { SolvedTestType } from "components/templates/education/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import UnauthorizedTemplate from "components/templates/unauthorized"
@@ -9,7 +9,7 @@ import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
 
-const TestBlock = () => {
+const Test = () => {
 
     const user = useSelector(userSelector)
     const router = useRouter()
@@ -20,29 +20,16 @@ const TestBlock = () => {
     useEffect(() => {
         if (user.authorized) {
             const { programId, courseId, themeId } = router.query
-            const requestUrl = `${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes/${themeId}/TestBlock`
-            if (router.query.attempt === "new") {
-                axiosApi.post(requestUrl)
-                    .then(res => {
-                        setSuccess(true)
-                        setTest(res.data)
-                    })
-                    .catch(err => {
-                        setSuccess(false)
-                        setError(err.code)
-                    })
-            }
-            else {
-                axiosApi.get(`${requestUrl}/Active`)
-                    .then(res => {
-                        setSuccess(true)
-                        setTest(res.data)
-                    })
-                    .catch(err => {
-                        setSuccess(false)
-                        setError(err.code)
-                    })
-            }
+            const requestUrl = `${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes/${themeId}/TestBlock/Active`
+            axiosApi.get(requestUrl)
+                .then(res => {
+                    setSuccess(true)
+                    setTest(res.data)
+                })
+                .catch(err => {
+                    setSuccess(false)
+                    setError(err.code)
+                })
         }
     }, [user.authorized, router.query])
 
@@ -52,7 +39,7 @@ const TestBlock = () => {
             {user.authorized ?
                 <>
                     {success && test ?
-                        <TestBlockTemplate
+                        <TestTemplate
                             test={test}
                         /> :
                         <LoadingErrorTemplate
@@ -67,4 +54,4 @@ const TestBlock = () => {
     )
 }
 
-export default TestBlock
+export default Test
