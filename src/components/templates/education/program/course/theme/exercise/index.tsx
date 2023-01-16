@@ -1,4 +1,4 @@
-import { SolvedTestType, UserExerciseType } from "components/templates/education/types"
+import { ExerciseCommentType, SolvedTestType, UserExerciseType } from "components/templates/education/types"
 import { useModalWindowContext } from "context/modalWindowContext"
 import { useRouter } from "next/router"
 import React, { useEffect, useRef, useState } from "react"
@@ -16,6 +16,7 @@ import { notEmptyValidator } from "utils/validators"
 import addNotification from "utils/notifications"
 import axiosApi from "utils/axios"
 import { ENDPOINT_EDUCATION } from "constants/endpoints"
+import ExerciseComments from "components/modules/exerciseComments"
 
 type ExerciseTemplateProps = {
     test: SolvedTestType
@@ -31,6 +32,7 @@ const ExerciseTemplate = ({
     const [files, setFiles] = useState<File[]>([])
     const router = useRouter()
     const [currentExerciceIndex, setCurrentExerciceIndex] = useState(-1)
+
     const {
         setConfirmActionModalWindowState
     } = useModalWindowContext()
@@ -103,10 +105,36 @@ const ExerciseTemplate = ({
             })
     }
 
-    const onCommentSend = async (
-        values: FormikValues,
-        helpers: FormikHelpers<{ comment: string }>) => {
-
+    const onCommentSend = async (comment: string, exerciseIndex: number) => {
+        if (!initialTest) return
+        const { programId, courseId, themeId } = router.query
+        const currentExercice = initialTest.userExercises[exerciseIndex]
+        const newComment: ExerciseCommentType = {
+            text: comment
+        }
+        const data: UserExerciseType = {
+            exerciseText: currentExercice.exerciseText,
+            rating: currentExercice.rating,
+            teacherComments: currentExercice.teacherComments,
+            userComments: [newComment],
+        }
+        return axiosApi.put(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes/${themeId}/TestBlock/Exercise`, data)
+            .then(res => {
+                setInitialTest({
+                    ...initialTest,
+                    userExercises: initialTest.userExercises.map((el, key) => {
+                        if (key !== exerciseIndex) return el
+                        return {
+                            ...el,
+                            userComments: [...(el.userComments || []), { text: newComment.text, dateTime: new Date().toISOString() }]
+                        }
+                    })
+                })
+            })
+            .catch(err => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось отправить комментарий:\n${err.code}` })
+                return Promise.reject()
+            })
     }
 
     const onGiveExerciseAnswerClick = (index: number) => {
@@ -204,58 +232,13 @@ const ExerciseTemplate = ({
                                 </div>
                             }
                         </div>
-                        <div className={styles.comments_section}>
-                            <div className={styles.comments_title}>Коммментарии к упражнению</div>
-                            <div>Комментарии преподавателя</div>
-                            <div className={styles.comments}>
-                                {userExercise.teacherComments?.map((comment, commentKey) => (
-                                    <div
-                                        className={styles.comment}
-                                        key={commentKey}
-                                    >
-                                        {comment}
-                                    </div>
-                                ))}
-                            </div>
-                            <div>Комментарии учащегося</div>
-                            <div className={styles.comments}>
-                                {userExercise.userComments?.map((comment, commentKey) => (
-                                    <div
-                                        className={styles.comment}
-                                        key={commentKey}
-                                    >
-                                        {comment}
-                                    </div>
-                                ))}
-                            </div>
-                            <div>
-                                <div>Добавить комментарий</div>
-                                <Formik
-                                    initialValues={{
-                                        comment: ""
-                                    }}
-                                    onSubmit={onCommentSend}
-                                >
-                                    {({ isSubmitting, isValid }) => (
-                                        <Form>
-                                            <Field
-                                                name="comment"
-                                                component={TextAreaField}
-                                                validate={notEmptyValidator}
-                                                disabled={isSubmitting}
-                                                placeholder="Ваш комментарий"
-                                            />
-                                            <Button
-                                                title="Отправить"
-                                                size="small"
-                                                type="submit"
-                                                disabled={isSubmitting || !isValid}
-                                            />
-                                        </Form>
-                                    )}
-                                </Formik>
-                            </div>
-                        </div>
+                        <ExerciseComments
+                            {...{
+                                mode: "student",
+                                ...userExercise,
+                                onCommentSend: (comment) => onCommentSend(comment, userExerciseKey)
+                            }}
+                        />
                     </div>
                 ))}
             </div>
