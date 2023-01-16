@@ -35,11 +35,16 @@ export type UserAnswerType = {
 }
 
 export type UserExerciseType = {
-    file: EduFileType,
+    file?: EduFileType,
     exerciseText: string,
     rating: number,
-    userComments?: string[],
-    teacherComments?: string[]
+    userComments?: ExerciseCommentType[],
+    teacherComments?: ExerciseCommentType[]
+}
+
+export type ExerciseCommentType = {
+    text: string,
+    dateTime?: string
 }
 
 export type EduFileType = {
