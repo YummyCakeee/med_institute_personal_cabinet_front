@@ -36,7 +36,8 @@ type ItemListProps = {
     onHeaderClick?: (index: number) => void,
     pageNavigation?: boolean,
     pagesCount?: number,
-    onPageClick?: (pageNumber: number) => void
+    onPageClick?: (pageNumber: number) => void,
+    deselectItemOnItemControlClick?: boolean
 }
 
 const ItemList = ({
@@ -51,6 +52,7 @@ const ItemList = ({
     pageNavigation,
     pagesCount = 1,
     onPageClick = () => { },
+    deselectItemOnItemControlClick = false
 }: ItemListProps) => {
 
     const [selectedItemIndex, setSetectedItemIndex] = useState<number | null>(null)
@@ -125,6 +127,13 @@ const ItemList = ({
         return field?.toString()
     }
 
+    const onItemControlButtonClick = (button: ItemControlButton) => {
+        if (selectedItemIndex !== null && button.onClick)
+            button.onClick(selectedItemIndex)
+        if (deselectItemOnItemControlClick)
+            setSetectedItemIndex(null)
+    }
+
     return (
         <div className={cn(styles.container, className)}>
             <div
@@ -161,10 +170,7 @@ const ItemList = ({
                                 <Button
                                     {...{
                                         ...el,
-                                        onClick: () => {
-                                            if (selectedItemIndex !== null && el.onClick)
-                                                el.onClick(selectedItemIndex)
-                                        }
+                                        onClick: () => onItemControlButtonClick(el)
                                     }}
 
                                 />
