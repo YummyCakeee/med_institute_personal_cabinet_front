@@ -1,5 +1,15 @@
 @use "src/styles/utils.module.scss" as *;
 
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.test_result_section {
+    margin: 0 auto;
+    animation: open_result_section_animation 0.2s ease-in-out;
+}
+
 .test {
 
     &_time {
@@ -49,5 +59,17 @@
         & a {
             color: $mainDarkBlueColor
         }
+    }
+}
+
+@keyframes open_result_section_animation {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
     }
 }

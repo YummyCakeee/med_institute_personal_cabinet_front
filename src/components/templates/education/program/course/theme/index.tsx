@@ -1,6 +1,7 @@
 import Button from "components/elements/button/Button"
 import Layout from "components/layouts/Layout"
 import ItemList from "components/modules/itemList"
+import UserTestResultsInfo from "components/modules/userTestResultsInfo"
 import { SolvedTestType, UserThemeType } from "components/templates/education/types"
 import { TestBlockType } from "components/templates/testing/types"
 import { ENDPOINT_EDUCATION } from "constants/endpoints"
@@ -31,6 +32,7 @@ const ThemeTemplate = ({
     const router = useRouter()
     const timeoutRef = useRef<NodeJS.Timeout>()
     const [activeAttemptLeftTime, setActiveAttemptLeftTime] = useState<number>(0)
+    const [selectedSolvedTestIndex, setSelectedSolvedTestIndex] = useState<number>()
     const hostName = (!process.env.NODE_ENV || process.env.NODE_ENV === "development") ?
         "http://localhost:5000" :
         "http://1085037-cq23779.tmweb.ru"
@@ -79,65 +81,96 @@ const ThemeTemplate = ({
         router.push(route + (testBlock!.isFileTestBlock ? "exercise" : "test"))
     }
 
+    const onTestInfoClick = (index: number) => {
+        setSelectedSolvedTestIndex(index)
+    }
+
+    const onCloseTestInfoClick = () => {
+        setSelectedSolvedTestIndex(undefined)
+    }
+
     return (
         <Layout>
             <Head>
                 <title>{`Тема "${userTheme.theme.title}"`}</title>
             </Head>
             <div className={utilStyles.title} >{`Тема "${userTheme.theme.title}"`}</div>
-            <div className={utilStyles.section}>
-                <div className={utilStyles.section_title}>Общая информация по теме</div>
-                <div dangerouslySetInnerHTML={html} />
-            </div>
-            {userTheme.theme.themeFiles &&
-                userTheme.theme.themeFiles.length > 0 &&
-                <div className={utilStyles.section}>
-                    <div className={utilStyles.section_title}>Материалы темы</div>
-                    <div className={styles.theme_files}>
-                        {userTheme.theme.themeFiles.map((el, key) => (
-                            <div
-                                className={styles.theme_file}
-                                key={key}
-                            >
-                                <a href={`${hostName}${el.fileLink}`} target="_blank" rel="noreferrer" download={true}>{el.fileName}</a>
-                                <div>
-                                    {el.fileDescription}
-                                </div>
+            <div className={styles.container}>
+                <div className={styles.theme_main_section}>
+                    <div className={utilStyles.section}>
+                        <div className={utilStyles.section_title}>Общая информация по теме</div>
+                        <div dangerouslySetInnerHTML={html} />
+                    </div>
+                    {userTheme.theme.themeFiles &&
+                        userTheme.theme.themeFiles.length > 0 &&
+                        <div className={utilStyles.section}>
+                            <div className={utilStyles.section_title}>Материалы темы</div>
+                            <div className={styles.theme_files}>
+                                {userTheme.theme.themeFiles.map((el, key) => (
+                                    <div
+                                        className={styles.theme_file}
+                                        key={key}
+                                    >
+                                        <a href={`${hostName}${el.fileLink}`} target="_blank" rel="noreferrer" download={true}>{el.fileName}</a>
+                                        <div>
+                                            {el.fileDescription}
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                </div>
-            }
-            {testBlock &&
-                <div className={utilStyles.section}>
-                    <div className={utilStyles.section_title}>Тестирование</div>
-                    <div className={styles.test_time}>
-                        Время на прохождение: <span>{testBlock.timeLimit} минут</span>
-                    </div>
-                    <div className={styles.test_date_end}>
-                        Дата окончания: <span>{new Date(testBlock.dateEnd).toLocaleString()}</span>
-                    </div>
-                    {solvedTests && solvedTests.length > 0 &&
-                        <PreviousAttempts
-                            solvedTests={solvedTests}
-                        />
+                        </div>
                     }
-                    <CurrentAttempt
-                        {...{
-                            activeTest,
-                            activeAttemptLeftTime,
-                            onTestResumeClick,
-                            onTestStartClick,
-                            isFileTestBlock: testBlock.isFileTestBlock
-                        }}
-                    />
+                    {testBlock &&
+                        <div className={utilStyles.section}>
+                            <div className={utilStyles.section_title}>Тестирование</div>
+                            <div className={styles.test_time}>
+                                Время на прохождение: <span>{testBlock.timeLimit} минут</span>
+                            </div>
+                            <div className={styles.test_date_end}>
+                                Дата окончания: <span>{new Date(testBlock.dateEnd).toLocaleString()}</span>
+                            </div>
+                            {solvedTests && solvedTests.length > 0 &&
+                                <PreviousAttempts
+                                    {...{
+                                        solvedTests,
+                                        onTestInfoClick
+                                    }}
+                                />
+                            }
+                            <CurrentAttempt
+                                {...{
+                                    activeTest,
+                                    activeAttemptLeftTime,
+                                    onTestResumeClick,
+                                    onTestStartClick,
+                                    isFileTestBlock: testBlock.isFileTestBlock
+                                }}
+                            />
+                        </div>
+                    }
                 </div>
-            }
+                {solvedTests && selectedSolvedTestIndex !== undefined &&
+                    <div className={styles.test_result_section}>
+                        <UserTestResultsInfo
+                            solvedTest={solvedTests[selectedSolvedTestIndex]}
+                            onClose={onCloseTestInfoClick}
+                        />
+                    </div>
+                }
+            </div>
         </Layout >
     )
 }
 
-const PreviousAttempts = ({ solvedTests }: { solvedTests: SolvedTestType[] }) => {
+type PreviousAttemptsProps = {
+    solvedTests: SolvedTestType[],
+    onTestInfoClick: (index: number) => void
+}
+
+const PreviousAttempts = ({
+    solvedTests,
+    onTestInfoClick
+}: PreviousAttemptsProps) => {
 
     return (
         <div className={utilStyles.section}>
@@ -182,10 +215,12 @@ const PreviousAttempts = ({ solvedTests }: { solvedTests: SolvedTestType[] }) =>
                     itemControlButtons={() => [
                         {
                             title: "Подробнее",
-                            size: "small"
+                            size: "small",
+                            onClick: onTestInfoClick
                         }
                     ]}
                     itemListClassName={styles.test_attempts_list}
+                    deselectItemOnItemControlClick
                 />
             </div>
         </div>
