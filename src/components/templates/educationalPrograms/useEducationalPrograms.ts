@@ -138,6 +138,11 @@ const useEducationalPrograms = () => {
         router.push(`${ROUTE_EDUCATIONAL_PROGRAMS}/${id}/students`)
     }
 
+    const onEducationalProgramReportClick = (index: number) => {
+        const id = programs[index].programId
+        router.push(`${ROUTE_EDUCATIONAL_PROGRAMS}/${id}/report`)
+    }
+
     return {
         programs,
         setPrograms,
@@ -145,7 +150,8 @@ const useEducationalPrograms = () => {
         onEducationalProgramEditClick,
         onEducationalProgramDeleteClick,
         onEducationalProgramCoursesClick,
-        onEducationalProgramStudentsClick
+        onEducationalProgramStudentsClick,
+        onEducationalProgramReportClick
     }
 
 }
