@@ -76,10 +76,10 @@ const ItemList = ({
             return `${(containerWidth - customWidthSum) / (childNodesCount - customWidthHeadersCount)}px`
         }
         return `${100 / headers.length}%`
-    }, [headers, headersRef])
+    }, [headers, headersRef, className])
 
     const onItemClick = (index: number) => {
-        if (selectedItemIndex !== index) setSetectedItemIndex(index)
+        if (selectedItemIndex !== index && itemControlButtons) setSetectedItemIndex(index)
         else setSetectedItemIndex(null)
     }
 
@@ -148,7 +148,7 @@ const ItemList = ({
                             { [styles.header_item_clickable]: el.clickable }
                         )}
                         style={{ width: el.colSize || defaultColSize }}
-                        onClick={() => onHeaderClick(key)}
+                        onClick={() => el.clickable && onHeaderClick(key)}
                         data-width={el.colSize}
                     >
                         {el.title}
@@ -204,7 +204,8 @@ const ItemList = ({
                                     key={itemKey}
                                     className={cn(
                                         styles.item,
-                                        { [styles.item_selected]: selectedItemIndex === itemKey }
+                                        { [styles.item_selected]: selectedItemIndex === itemKey },
+                                        { [styles.item_non_selectable]: !itemControlButtons }
                                     )}
                                     onClick={() => onItemClick(itemKey)}
                                 >
