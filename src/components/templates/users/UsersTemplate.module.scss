@@ -1,3 +1,5 @@
+@use "src/styles/utils.module.scss" as *;
+
 .container {
     width: 100%;
     display: flex;
@@ -27,6 +29,10 @@
 
         &_section {
             margin-bottom: 30px;
+
+            & span {
+                color: $mainDarkBlueColor;
+            }
         }
     }
 }
