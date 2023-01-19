@@ -6,7 +6,7 @@ import utilStyles from "styles/utils.module.scss"
 import { composeValidators, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator } from "utils/validators"
 import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
-import { Store } from "react-notifications-component"
+import addNotification from "utils/notifications"
 
 type RegistrationFormProps = {
     onSuccess: () => void
@@ -33,12 +33,7 @@ const RegistrationForm = ({
                 }
             })
             .catch(err => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Ошибка",
-                    message: "Не удалось зарегистрироваться"
-                })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось зарегистрироваться:\n${err.code}` })
                 console.log(err)
             })
     }
@@ -82,8 +77,8 @@ const RegistrationForm = ({
                     />
                     <div className={utilStyles.form_button_container}>
                         <Button
-                            title="Войти"
-                            size="small"
+                            title="Зарегистрироваться"
+                            stretchable
                             type="submit"
                             disabled={isSubmitting || !isValid}
                         />
