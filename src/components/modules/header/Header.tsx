@@ -41,7 +41,7 @@ const Header = () => {
     const user = useSelector(userSelector)
     const dispatch = useDispatch<AppDispatch>()
 
-    const sections = useMemo(() => ({
+    const sections = {
         educationalPrograms: {
             name: "Программы обучения",
             path: ROUTE_EDUCATIONAL_PROGRAMS
@@ -66,7 +66,7 @@ const Header = () => {
             name: "Мой профиль",
             path: ROUTE_PROFILE
         }
-    }), [])
+    }
 
     const userSections = useMemo(() => {
         const updatedUserSections: SectionCollectionType = {}
