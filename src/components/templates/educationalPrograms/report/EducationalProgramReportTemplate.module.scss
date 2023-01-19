@@ -1,0 +1,25 @@
+@use "src/styles/utils.module.scss" as *;
+
+.main_info {
+    width: fit-content;
+
+    &_item {
+        font-size: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 10px 0;
+
+        & span {
+            color: $mainDarkBlueColor;
+        }
+
+        & div:first-child {
+            margin-right: 30px;
+        }
+    }
+}
+
+.user_list {
+    width: 600px !important;
+}
