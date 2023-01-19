@@ -132,13 +132,18 @@ const useCourses = () => {
         })
     }
 
+    const onCourseReportClick = (index: number) => {
+        router.push(`${ROUTE_COURSES}/${courses[index].courseId}/report`)
+    }
+
     return {
         courses,
         setCourses,
         onCourseSetupClick,
         onCourseDeleteClick,
         onCourseEditClick,
-        onCourseAddClick
+        onCourseAddClick,
+        onCourseReportClick
     }
 
 }

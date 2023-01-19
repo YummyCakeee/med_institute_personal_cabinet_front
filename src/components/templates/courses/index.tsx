@@ -5,6 +5,7 @@ import ItemList from "components/modules/itemList"
 import styles from "./CoursesTemplate.module.scss"
 import useCourses from "./useCourses"
 import { CourseType } from "./types"
+import utilStyles from "styles/utils.module.scss"
 
 type CoursesTemplateProps = {
     courses: CourseType[]
@@ -17,7 +18,8 @@ const CoursesTemplate = ({ courses: initialCourses }: CoursesTemplateProps) => {
         onCourseAddClick,
         onCourseDeleteClick,
         onCourseSetupClick,
-        onCourseEditClick
+        onCourseEditClick,
+        onCourseReportClick
     } = useCourses()
 
     useEffect(() => {
@@ -29,45 +31,54 @@ const CoursesTemplate = ({ courses: initialCourses }: CoursesTemplateProps) => {
             <Head>
                 <title>Курсы</title>
             </Head>
-            <ItemList
-                className={styles.courses_list}
-                headers={[
-                    {
-                        title: "Название",
-                        field: "title"
-                    },
-                    {
-                        title: "Описание",
-                        field: "description"
-                    }
-                ]}
-                items={courses}
-                itemControlButtons={() => [
-                    {
-                        title: "Редактировать",
-                        onClick: onCourseEditClick,
-                        size: "small",
-                        stretchable: true,
-                    },
-                    {
-                        title: "Удалить",
-                        onClick: onCourseDeleteClick,
-                        size: "small"
-                    },
-                    {
-                        title: "Настройка тем курса",
-                        onClick: onCourseSetupClick,
-                        stretchable: true
-                    }
-                ]}
-                controlButtonsBottom={[
-                    {
-                        title: "Добавить",
-                        onClick: onCourseAddClick,
-                        size: "small"
-                    }
-                ]}
-            />
+            <div className={utilStyles.title}>Курсы</div>
+            <div className={utilStyles.section}>
+                <div className={utilStyles.section_title}>Список всех курсов</div>
+                <ItemList
+                    className={styles.courses_list}
+                    headers={[
+                        {
+                            title: "Название",
+                            field: "title"
+                        },
+                        {
+                            title: "Описание",
+                            field: "description"
+                        }
+                    ]}
+                    items={courses}
+                    itemControlButtons={() => [
+                        {
+                            title: "Редактировать",
+                            onClick: onCourseEditClick,
+                            size: "small",
+                            stretchable: true,
+                        },
+                        {
+                            title: "Удалить",
+                            onClick: onCourseDeleteClick,
+                            size: "small"
+                        },
+                        {
+                            title: "Настройка тем курса",
+                            onClick: onCourseSetupClick,
+                            stretchable: true
+                        },
+                        {
+                            title: "Отчёт",
+                            size: "small",
+                            onClick: onCourseReportClick
+                        }
+                    ]}
+                    controlButtonsBottom={[
+                        {
+                            title: "Добавить",
+                            onClick: onCourseAddClick,
+                            size: "small"
+                        }
+                    ]}
+                />
+            </div>
         </Layout>
     )
 }
