@@ -1,0 +1,23 @@
+@use "src/styles/utils.module.scss" as *;
+
+.student_main_info {
+    width: fit-content;
+
+    &_item {
+        font-size: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        margin: 10px 0;
+
+        & div:first-child {
+            width: 100px;
+            margin-right: 20px;
+        }
+
+        & div:last-child {
+            color: $mainDarkBlueColor;
+
+        }
+    }
+}
