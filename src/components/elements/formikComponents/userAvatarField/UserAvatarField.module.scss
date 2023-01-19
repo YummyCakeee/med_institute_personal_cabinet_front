@@ -1,0 +1,31 @@
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+
+    &_overlap {
+        position: absolute;
+        width: inherit;
+        height: inherit;
+        border-radius: inherit;
+        transition: all 0.3s ease-in-out;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #0000005b;
+        color: #fff;
+        opacity: 0;
+        cursor: pointer;
+        backdrop-filter: blur(0px);
+
+        &:hover {
+            opacity: 1;
+            backdrop-filter: blur(3px);
+        }
+    }
+}
