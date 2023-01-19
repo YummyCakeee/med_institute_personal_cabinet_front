@@ -84,7 +84,7 @@ const UserTemplate = ({
                     </div>
                     <Image
                         className={styles.personal_info_photo}
-                        src={"https://get.pxhere.com/photo/person-people-portrait-facial-expression-hairstyle-smile-emotion-portrait-photography-134689.jpg"}
+                        src={user.profilePicture || "/images/user.png"}
                         alt="Фото профиля пользователя"
                         width={150}
                         height={200}
