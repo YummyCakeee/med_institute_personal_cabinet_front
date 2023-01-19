@@ -1,0 +1,17 @@
+.lists_container {
+    display: flex;
+    flex-direction: row;
+}
+
+.user_list {
+    width: 800px
+}
+
+.theme_list_section {
+    margin-left: 200px;
+}
+
+.list_title {
+    font-size: 20px;
+    font-weight: 500;
+}
