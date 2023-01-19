@@ -47,3 +47,16 @@ export type UserProgramType = {
     createDate?: string,
     program?: ProgramType
 }
+
+export type CountStudentsModelType = {
+    totalCount: number,
+    countPassed: number,
+    countCurrent: number,
+    countNotStarted: number
+}
+
+export type ReportModelType = {
+    id: number,
+    name: string,
+    status: number
+}
