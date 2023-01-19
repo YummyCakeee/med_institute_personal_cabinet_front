@@ -1,3 +1,4 @@
+import { LoadingStatusType } from "components/elements/LoadingStatusWrapper/LoadingStatusWrapper"
 import { ENDPOINT_USERS } from "constants/endpoints"
 import { ROUTE_USERS } from "constants/routes"
 import { useModalWindowContext } from "context/modalWindowContext"
@@ -5,6 +6,7 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { Store } from "react-notifications-component"
 import axiosApi from "utils/axios"
+import addNotification from "utils/notifications"
 import { UserProfileType } from "./types"
 
 export enum UserField {
@@ -21,10 +23,12 @@ const useUsers = () => {
 
     const router = useRouter()
     const [sortingFieldName, setSortingFieldName] = useState<FilterSortField | undefined>(FilterSortField.LAST_NAME)
+    const [sortOrder, setsortOrder] = useState<"Asc" | "Desc">("Asc")
     const [filteringFieldName, setFilteringFieldName] = useState<FilterSortField | undefined>(undefined)
     const [filteringFieldValue, setFilteringFieldValue] = useState<string>("")
     const [totalUsersCount, setTotalUsersCount] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(1)
+    const [usersLoadingStatus, setUsersLoadingStatus] = useState<LoadingStatusType>(LoadingStatusType.LOADING)
     const usersPerPage = 10
 
     const [users, setUsers] = useState<UserProfileType[]>([])
@@ -73,38 +77,47 @@ const useUsers = () => {
     } = useModalWindowContext()
 
     useEffect(() => {
+        setUsersLoadingStatus(LoadingStatusType.LOADING)
         const params = {
             filterField: filteringFieldName
         }
         axiosApi.get(`${ENDPOINT_USERS}/Count`, { params })
             .then(res => {
                 setTotalUsersCount(res.data)
+                setUsersLoadingStatus(LoadingStatusType.LOADED)
             })
             .catch(err => {
-                console.log(err)
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось получить число всех пользователей:\n${err.code}` })
+                setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
             })
 
     }, [filteringFieldName])
 
     useEffect(() => {
         const getUsers = () => {
+            setUsersLoadingStatus(LoadingStatusType.LOADING)
             const params = {
                 limit: usersPerPage,
                 offset: (currentPage - 1) * usersPerPage,
                 ...(filteringFieldName && { filterField: filteringFieldName }),
                 ...(filteringFieldName && { filterString: filteringFieldValue }),
-                ...(sortingFieldName && { sortFieldEnum: sortingFieldName })
+                ...(sortingFieldName && {
+                    sortFieldEnum: sortingFieldName,
+                    sortOrder
+                }),
             }
             axiosApi.get(ENDPOINT_USERS, { params })
                 .then(res => {
                     setUsers(res.data)
+                    setUsersLoadingStatus(LoadingStatusType.LOADED)
                 })
                 .catch(err => {
-                    console.log(err)
+                    addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить список пользователей:\n${err.code}` })
+                    setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
                 })
         }
         getUsers()
-    }, [sortingFieldName, filteringFieldName, filteringFieldValue, currentPage, usersPerPage])
+    }, [sortingFieldName, sortOrder, filteringFieldName, filteringFieldValue, currentPage, usersPerPage])
 
     const onFieldFilterSelect = (option: string) => {
         const field = headers.find(el => el.title === option)?.field
@@ -139,9 +152,11 @@ const useUsers = () => {
     const onHeaderClick = (index: number) => {
         const newSortingFieldName = headers[index].filterSortFieldName
         if (newSortingFieldName === sortingFieldName)
-            setSortingFieldName(undefined)
-        else
+            setsortOrder(sortOrder === "Asc" ? "Desc" : "Asc")
+        else {
             setSortingFieldName(newSortingFieldName)
+            setsortOrder("Asc")
+        }
     }
 
     const onUserDetailsClick = (index: number) => {
@@ -230,9 +245,11 @@ const useUsers = () => {
     return {
         headers,
         sortingFieldName,
+        sortOrder,
         users,
         totalUsersCount,
         usersPerPage,
+        usersLoadingStatus,
         onUserDetailsClick,
         onUserEditClick,
         onUserDeleteClick,
@@ -240,7 +257,8 @@ const useUsers = () => {
         onUserAddClick,
         onHeaderClick,
         onFieldFilterSelect,
-        onFieldFilterValueChanged
+        onFieldFilterValueChanged,
+        setCurrentPage
     }
 }
 
