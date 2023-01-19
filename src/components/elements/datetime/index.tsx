@@ -6,10 +6,11 @@ import styles from "./Datetime.module.scss"
 import 'moment/locale/ru';
 
 type DatetimeProps = {
-    value: string | Date | Moment | undefined,
-    onChange: (value: string | Moment) => void,
+    value: Date | Moment | undefined,
+    onChange: (value: string) => void,
     time?: boolean,
-    label?: string
+    label?: string,
+    allowEmpty?: boolean
 }
 
 const Datetime = ({
@@ -17,6 +18,7 @@ const Datetime = ({
     onChange,
     time,
     label,
+    allowEmpty = false,
     ...props
 }: DatetimeProps) => {
 
@@ -24,6 +26,16 @@ const Datetime = ({
         return (
             <input {...props} className={styles.dateTime} />
         )
+    }
+
+    const onDateChange = (value: string | Moment) => {
+        const date = value.toString()
+        try {
+            new Date(date)
+            if (date.length || allowEmpty)
+                onChange(date)
+        }
+        catch { }
     }
 
     return <div className={styles.container}>
@@ -37,7 +49,7 @@ const Datetime = ({
                 dateFormat: "DD.MM.YYYY",
                 timeFormat: time ? "HH:mm" : "",
                 value,
-                onChange,
+                onChange: onDateChange,
                 renderInput,
                 ...props
             }}
