@@ -36,10 +36,14 @@ const Users = () => {
         <>
             {user.authorized ?
                 <>
-                    {success && userProfile ?
-                        <UserTemplate
-                            user={userProfile}
-                        />
+                    {success ?
+                        <>
+                            {userProfile &&
+                                <UserTemplate
+                                    user={userProfile}
+                                />
+                            }
+                        </>
                         :
                         <LoadingErrorTemplate
                             error={error}
