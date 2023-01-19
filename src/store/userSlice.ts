@@ -13,6 +13,7 @@ export type StateUserType = {
     dateOfBirth?: string,
     login: string,
     email?: string,
+    profilePicture?: string,
     roles?: string[],
     authorized?: boolean,
 }
@@ -25,6 +26,7 @@ const initialState: StateUserType = {
     dateOfBirth: '',
     login: '',
     email: '',
+    profilePicture: '',
     roles: [],
     authorized: false
 }
@@ -41,6 +43,7 @@ export const getUserInfo = createAsyncThunk("user/getUserInfo", async () => {
         dateOfBirth: data.dateOfBirth || "",
         login: data.user?.userName || "",
         email: data.user?.email || "",
+        profilePicture: data.profilePicture || "",
         roles: data.user?.userRoles?.map(el => el.role.name!) || [],
         authorized: true
     }
@@ -65,16 +68,10 @@ const userSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getUserInfo.fulfilled, (state, action) => {
-                state.id = action.payload.id
-                state.firstName = action.payload.firstName
-                state.secondName = action.payload.secondName
-                state.lastName = action.payload.lastName
-                state.login = action.payload.login
-                state.dateOfBirth = action.payload.dateOfBirth
-                state.email = action.payload.email
-                state.login = action.payload.login
-                state.roles = action.payload.roles
-                state.authorized = action.payload.authorized
+                return {
+                    ...state,
+                    ...action.payload
+                }
             })
             .addCase(getUserInfo.rejected, (state, action) => {
                 return initialState
