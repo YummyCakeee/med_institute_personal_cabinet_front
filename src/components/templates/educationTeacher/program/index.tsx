@@ -32,7 +32,7 @@ const ProgramTemplate = ({
 
     const onCourseThemesClick = (index: number) => {
         const programId = program.programId
-        const courseId = courses[index].courseId
+        const courseId = programCourses[index].courseId
         router.push(`${ROUTE_EDUCATION_TEACHER}/${programId}/courses/${courseId}/themes`)
     }
 
