@@ -7,6 +7,7 @@ import { composeValidators, maxLengthValueValidator, minLengthValueValidator, no
 import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
 import { Store } from "react-notifications-component"
+import addNotification from "utils/notifications"
 
 type AutorizationFormProps = {
     onSuccess: () => void
@@ -34,13 +35,7 @@ const AuthorizationForm = ({
                 }
             })
             .catch(err => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Ошибка",
-                    message: "Не удалось войти в аккаунт"
-                })
-                console.log(err)
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось войти в аккаунт ${err.code}`})
             })
     }
 

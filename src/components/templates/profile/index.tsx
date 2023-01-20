@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux"
 import { AppDispatch } from "store"
 import { StateUserType, userInfoChanged } from "store/userSlice"
 import ProfilePasswordForm from "components/modules/forms/profilePassword"
+import addNotification from "utils/notifications"
 
 const ProfileTemplate = () => {
 
@@ -28,55 +29,21 @@ const ProfileTemplate = () => {
 
         dispatch(userInfoChanged(stateUser))
 
-        Store.addNotification({
-            container: "top-right",
-            type: "success",
-            title: "Информация о пользователе обновлена",
-            dismiss: {
-                duration: 5000,
-                onScreen: true
-            }
-        })
+        addNotification({ type: "success", title: "Успех", message: "Информация о пользователе обновлена" })
     }
 
     const onErrorUserInfoChange = (error: any) => {
-        Store.addNotification({
-            container: "top-right",
-            type: "danger",
-            title: "Не удалось обновить информацию о пользователе",
-            message: error.code,
-            dismiss: {
-                duration: 5000,
-                onScreen: true
-            }
-        })
+        addNotification({ type: "danger", title: "Ошибка", message: `Не удалось обновить информацию о пользователе: ${error.code}` })
     }
 
     const onSuccesPasswordChange = () => {
 
-        Store.addNotification({
-            container: "top-right",
-            type: "success",
-            title: "Пароль изменён",
-            dismiss: {
-                duration: 5000,
-                onScreen: true
-            }
-        })
+        addNotification({ type: "success", title: "Успех", message: "Пароль изменён" })
     }
 
     const onErrorPasswordChange = (error: any) => {
         console.log(error)
-        Store.addNotification({
-            container: "top-right",
-            type: "danger",
-            title: "Не удалось изменить пароль",
-            message: error.code,
-            dismiss: {
-                duration: 5000,
-                onScreen: true
-            }
-        })
+        addNotification({ type: "danger", title: "Ошибка", message: `Не удалось изменить пароль: \n${error.code}` })
     }
 
     return (
