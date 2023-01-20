@@ -7,6 +7,7 @@ import { CollectionType, TestAnswerType, TestType, TestTypeId } from "../types"
 import { Store } from "react-notifications-component"
 import axiosApi from "utils/axios"
 import { ENDPOINT_TESTS } from "constants/endpoints"
+import styles from "./CollectionTemplate.module.scss"
 
 type CollectionTemplateProps = {
     collection: CollectionType
@@ -204,6 +205,7 @@ const CollectionTemplate = ({ collection }: CollectionTemplateProps) => {
                         onClick: onTestAddClick
                     }
                 ]}
+                className={styles.collection_list}
             />
         </Layout>
     )
