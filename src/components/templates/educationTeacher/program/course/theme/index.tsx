@@ -1,7 +1,10 @@
 import LoadingStatusWrapper, { LoadingStatusType } from "components/elements/LoadingStatusWrapper/LoadingStatusWrapper"
 import Layout from "components/layouts/Layout"
 import ItemList from "components/modules/itemList"
+import UserExerciseResultInfo from "components/modules/userExerciseResultInfo"
+import UserTestResultsInfo from "components/modules/userTestResultsInfo"
 import { ThemeType } from "components/templates/courses/types"
+import { SolvedTestType } from "components/templates/education/types"
 import { UserProfileType } from "components/templates/users/types"
 import { ENDPOINT_EDUCATION } from "constants/endpoints"
 import Head from "next/head"
@@ -29,9 +32,12 @@ const ThemeTemplate = ({
     const router = useRouter()
     const [studentAttemptsStatus, setStudentAttemptsStatus] = useState<LoadingStatusType>(LoadingStatusType.LOADED)
     const [studentAttempts, setStudentAttempts] = useState<AttemptType[]>([])
+    const [attempt, setAttempt] = useState<SolvedTestType>()
+    const [selectedStudentIndex, setSelectedStudentIndex] = useState<number>()
 
     const onStudentAttemptsClick = async (index: number) => {
         setStudentAttemptsStatus(LoadingStatusType.LOADING)
+        setSelectedStudentIndex(index)
         const themeId = theme.themeId
         const studentId = themeStudents[index].userId
         axiosApi.get(`${ENDPOINT_EDUCATION}/Themes/${themeId}/Student/${studentId}`)
@@ -46,7 +52,17 @@ const ThemeTemplate = ({
     }
 
     const onAttemptInfoClick = (index: number) => {
-
+        if (selectedStudentIndex === undefined) return
+        const studentId = themeStudents[selectedStudentIndex].userId
+        const themeId = theme.themeId
+        const attemptDate = studentAttempts[index].date
+        axiosApi.get(`${ENDPOINT_EDUCATION}/Themes/${themeId}/Student/${studentId}/Attemp/${attemptDate}`)
+            .then(res => {
+                setAttempt(res.data)
+            })
+            .catch(err => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось получить информацию о попытке:\n${err.code}` })
+            })
     }
 
     return (
@@ -114,6 +130,29 @@ const ThemeTemplate = ({
                         />
                     </LoadingStatusWrapper>
                 </div>
+            </div>
+            <div className={styles.section}>
+                <div className={styles.section_title}>Информация о попытке</div>
+                {attempt &&
+                    <>
+                        {attempt.userExercises && attempt.userExercises.length > 0 &&
+                            <UserExerciseResultInfo
+                                {...{
+                                    mode: "teacher",
+                                    solvedTest: attempt
+                                }}
+                            />
+                        }
+                        {attempt.userQuestions && attempt.userQuestions.length > 0 &&
+                            <UserTestResultsInfo
+                                {...{
+                                    mode: "teacher",
+                                    solvedTest: attempt
+                                }}
+                            />
+                        }
+                    </>
+                }
             </div>
         </Layout >
     )

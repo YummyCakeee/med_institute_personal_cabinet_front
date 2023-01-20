@@ -10,7 +10,7 @@ import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
 import { UserProfileType } from "components/templates/users/types"
-import { ENDPOINT_EDUCATION, ENDPOINT_THEMES } from "constants/endpoints"
+import { ENDPOINT_EDUCATION, ENDPOINT_USERS } from "constants/endpoints"
 
 const TestAttempt = () => {
 
@@ -18,20 +18,20 @@ const TestAttempt = () => {
     const user = useSelector(userSelector)
     const [success, setSuccess] = useState<boolean>(true)
     const [error, setError] = useState<string>("")
-    const [theme, setTheme] = useState<ThemeType>()
-    const [themeStudents, setThemeStudents] = useState<UserProfileType[]>()
+    const [student, setStudent] = useState<UserProfileType>()
+    const [attempt, setAttempt] = useState<SolvedTestType>()
 
     useEffect(() => {
         if (user.authorized && router.isReady) {
-            const { themeId } = router.query
+            const { themeId, studentId } = router.query
             axios.all([
-                axiosApi.get(`${ENDPOINT_THEMES}/${themeId}`),
-                axiosApi.get(`${ENDPOINT_EDUCATION}/Themes/${themeId}/Students`)
+                axiosApi.get(`${ENDPOINT_USERS}/${studentId}`),
+                axiosApi.get(`${ENDPOINT_EDUCATION}/Themes/${themeId}/Students/${studentId}/Attemp/`)
             ])
-                .then(axios.spread(({ data: theme }, { data: students }) => {
+                .then(axios.spread(({ data: student }, { data: attempt }) => {
                     setSuccess(true)
-                    setTheme(theme)
-                    setThemeStudents(students)
+                    setStudent(student)
+                    setAttempt(attempt)
                 }))
                 .catch(err => {
                     setSuccess(false)
@@ -46,14 +46,14 @@ const TestAttempt = () => {
                 <>
                     {success ?
                         <>
-                            {theme && themeStudents &&
+                            {/* {student && attempt &&
                                 <ThemeTemplate
                                     {...{
                                         theme,
                                         themeStudents
                                     }}
                                 />
-                            }
+                            } */}
                         </>
                         :
                         <LoadingErrorTemplate
