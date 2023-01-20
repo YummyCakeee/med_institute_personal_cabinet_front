@@ -25,7 +25,8 @@ const UserBlockForm = ({
 
     const onSubmit = async (values: FormikValues) => {
         const params = {
-            lockoutEnd: mode === "block" ? values.lockoutEnd : new Date().toISOString()
+            lockoutEnd: mode === "block" ? values.lockoutEnd : new Date().toISOString(),
+            userId: user.userId
         }
         return axiosApi.post(`${ENDPOINT_ACCOUNT}/Lockout/${user.userId}`, null, { params })
             .then(res => {
@@ -63,7 +64,7 @@ const UserBlockForm = ({
                                 component={Datetime}
                                 disabled={isSubmitting}
                                 value={new Date(values.lockoutEnd!)}
-                                onChange={(e: Moment | string) => setValues({ lockoutEnd: (e as Moment)?.format() || new Date().toISOString() })}
+                                onChange={(e: string) => setValues({ lockoutEnd: e.length === 0 ? "" : new Date(e).toISOString() })}
                             />
                         </>
                     }
