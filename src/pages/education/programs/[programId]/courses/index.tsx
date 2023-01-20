@@ -21,10 +21,10 @@ const Program = () => {
     const [coursesInfo, setCoursesInfo] = useState<CourseInfoType[]>([])
 
     useEffect(() => {
-        if (user.authorized) {
+        if (user.authorized && router.isReady) {
             const { programId } = router.query
             axios.all([
-                axiosApi.get(`${ENDPOINT_PROGRAMS}/${programId}`),
+                axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}`),
                 axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses`)
             ])
                 .then(axios.spread(({ data: program }, { data: courses }) => {
@@ -38,7 +38,7 @@ const Program = () => {
                 })
         }
 
-    }, [router.query, user.authorized])
+    }, [router, user.authorized])
 
 
     return (

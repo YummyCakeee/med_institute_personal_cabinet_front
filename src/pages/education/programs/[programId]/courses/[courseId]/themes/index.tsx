@@ -25,7 +25,7 @@ const Course = () => {
             const { programId, courseId } = router.query
             axios.all([
                 axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes`),
-                axiosApi.get(`${ENDPOINT_COURSES}/${courseId}`)
+                axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}`)
             ])
                 .then(axios.spread(({ data: themeInfos }, { data: course }) => {
                     setSuccess(true)
