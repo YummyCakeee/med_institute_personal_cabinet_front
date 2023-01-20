@@ -41,12 +41,12 @@ const TestingTemplate = ({
                         {
                             title: "Название",
                             field: "collectionName",
-                            colSize: "300px"
+                            colSize: "500px"
                         },
                         {
                             title: "Число тестов",
                             field: "tests.length",
-                            colSize: "300px",
+                            colSize: "200px",
                             textAlign: "center"
                         },
                     ]}
