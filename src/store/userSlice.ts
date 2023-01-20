@@ -16,6 +16,7 @@ export type StateUserType = {
     profilePicture?: string,
     roles?: string[],
     authorized?: boolean,
+    infoLoadStatus?: "pending" | "fulfilled" | "rejected"
 }
 
 const initialState: StateUserType = {
@@ -28,7 +29,8 @@ const initialState: StateUserType = {
     email: '',
     profilePicture: '',
     roles: [],
-    authorized: false
+    authorized: false,
+    infoLoadStatus: "pending"
 }
 
 export const getUserInfo = createAsyncThunk("user/getUserInfo", async () => {
@@ -45,7 +47,8 @@ export const getUserInfo = createAsyncThunk("user/getUserInfo", async () => {
         email: data.user?.email || "",
         profilePicture: data.profilePicture || "",
         roles: data.user?.userRoles?.map(el => el.role.name!) || [],
-        authorized: true
+        authorized: true,
+        infoLoadStatus: "fulfilled"
     }
 
     return userInfo
@@ -67,14 +70,24 @@ const userSlice = createSlice({
     },
     extraReducers: builder => {
         builder
+            .addCase(getUserInfo.pending, (state) => {
+                return {
+                    ...state,
+                    infoLoadStatus: "pending"
+                }
+            })
             .addCase(getUserInfo.fulfilled, (state, action) => {
                 return {
                     ...state,
-                    ...action.payload
+                    ...action.payload,
+                    infoLoadStatus: "fulfilled"
                 }
             })
             .addCase(getUserInfo.rejected, (state, action) => {
-                return initialState
+                return {
+                    ...initialState,
+                    infoLoadStatus: "rejected"
+                }
             })
             .addCase(HYDRATE, (state, action: AnyAction) => {
                 return {
