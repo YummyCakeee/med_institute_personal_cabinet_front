@@ -45,11 +45,13 @@ const CourseTemplate = ({
                         {
                             title: "Редактировать",
                             onClick: onThemeEditClick,
+                            size: "small",
                             stretchable: true
                         },
                         {
                             title: "Настройка",
                             onClick: onThemeSetupClick,
+                            size: "small",
                             stretchable: true
                         },
                         {

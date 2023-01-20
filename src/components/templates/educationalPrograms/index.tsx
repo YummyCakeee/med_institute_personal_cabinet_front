@@ -71,6 +71,7 @@ const EducationalProgramsTemplate = ({
                         {
                             title: "Обучающиеся",
                             onClick: onEducationalProgramStudentsClick,
+                            size: "small",
                             stretchable: true
                         },
                         {
