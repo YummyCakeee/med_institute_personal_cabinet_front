@@ -20,7 +20,7 @@ const EducationTemplate = ({
     const onProgramClick = (programId: string) => {
         router.push(`${ROUTE_EDUCATION}/${programId}/courses`)
     }
-
+    
     return (
         <Layout>
             <Head>
