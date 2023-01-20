@@ -10,6 +10,7 @@
     box-shadow: 0px 10px 20px #0000003f;
     display: flex;
     flex-direction: column;
+    height: fit-content;
 }
 
 .header {
@@ -17,7 +18,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-around;
-        padding: 10px 0;
+        padding: 10px 5px;
         background-color: $mainGreyColor;
     }
 
@@ -43,14 +44,13 @@
 }
 
 .item {
-    overflow: hidden;
     height: 60px;
     display: flex;
     flex-direction: row;
     background-color: #ffffffa6;
     border-radius: 10px;
     box-shadow: 0px 10px 20px #0000004f;
-    margin: 0 5px 10px 5px;
+    margin-bottom: 10px;
     transition: all 0.2s ease-in-out;
     z-index: 1;
     backdrop-filter: blur(5px);
@@ -88,6 +88,10 @@
         padding: 5px 10px;
         overflow: hidden;
         box-sizing: border-box;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
     }
 
 
@@ -199,8 +203,7 @@
 
         min-height: 150px;
         max-height: 500px;
-        background-color: #fff;
-        padding: 5px 0;
+        padding: 5px 5px;
         overflow-y: auto;
         flex: 1;
         transition: all 0.3s ease-in-out;
@@ -231,10 +234,12 @@
         &_background_column {
             &_odd {
                 background-color: #fff;
+                height: 100%;
             }
 
             &_even {
                 background-color: transparentize($mainGreyColor, 0.9);
+                height: 100%;
             }
         }
 

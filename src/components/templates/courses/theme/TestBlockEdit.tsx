@@ -86,12 +86,11 @@ const TestBlockEdit = ({
     }
 
 
-    const onDateChange = (e: Moment | string) => {
-        if (testBlock && (e as Moment)?.format)
-            setTestBlock({
-                ...testBlock,
-                dateEnd: (e as Moment)?.format() || new Date().toISOString()
-            })
+    const onDateChange = (e: string) => {
+        setTestBlock({
+            ...testBlock,
+            dateEnd: new Date(e).toISOString()
+        })
     }
 
     const onTestBlockTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {

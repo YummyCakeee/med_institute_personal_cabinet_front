@@ -56,12 +56,19 @@
 
         &_name {
             font-size: 18px;
+            margin: 5px 0 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
 
             & span {
                 color: $mainDarkBlueColor;
             }
 
-            margin-bottom: 10px;
+            &:hover {
+                & span {
+                    color: $mainBlueColor;
+                }
+            }
         }
 
         &_description {
@@ -91,7 +98,6 @@
 }
 
 .comments {
-    &_section {}
 
     &_title {
         font-size: 20px;

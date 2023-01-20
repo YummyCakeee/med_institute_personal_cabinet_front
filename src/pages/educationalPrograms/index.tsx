@@ -3,7 +3,7 @@ import EducationalProgramsTemplate from 'components/templates/educationalProgram
 import { ProgramType, UserProgramType } from 'components/templates/educationalPrograms/types'
 import LoadingErrorTemplate from 'components/templates/loadingError'
 import UnauthorizedTemplate from 'components/templates/unauthorized'
-import { ENDPOINT_EDUCATION, ENDPOINT_EDUCATIONAL_PROGRAMS } from 'constants/endpoints'
+import { ENDPOINT_EDUCATION, ENDPOINT_PROGRAMS } from 'constants/endpoints'
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { userSelector } from 'store/userSlice'
@@ -18,7 +18,7 @@ const EducationalPrograms = () => {
 
   useEffect(() => {
     if (user.authorized) {
-      axiosApi.get(ENDPOINT_EDUCATIONAL_PROGRAMS)
+      axiosApi.get(ENDPOINT_PROGRAMS)
         .then(res => {
           setSuccess(true)
           setEducationalPrograms(res.data)

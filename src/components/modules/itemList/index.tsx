@@ -37,7 +37,8 @@ type ItemListProps = {
     pageNavigation?: boolean,
     pagesCount?: number,
     onPageClick?: (pageNumber: number) => void,
-    deselectItemOnItemControlClick?: boolean
+    deselectItemOnItemControlClick?: boolean,
+    scrollToBottomOnItemsUpdate?: boolean
 }
 
 const ItemList = ({
@@ -52,18 +53,21 @@ const ItemList = ({
     pageNavigation,
     pagesCount = 1,
     onPageClick = () => { },
-    deselectItemOnItemControlClick = false
+    deselectItemOnItemControlClick = false,
+    scrollToBottomOnItemsUpdate = false
 }: ItemListProps) => {
 
     const [selectedItemIndex, setSetectedItemIndex] = useState<number | null>(null)
     const [pagesList, setPagesList] = useState<number[]>([])
     const [currentPage, setCurrentPage] = useState<number>(1)
     const headersRef = useRef<HTMLDivElement>(null)
+    const containerRef = useRef<HTMLDivElement>(null)
+    const itemListEndRef = useRef<HTMLDivElement>(null)
 
     const defaultColSize = useMemo(() => {
-        if (headersRef?.current) {
+        if (headersRef.current && containerRef.current) {
             const paddingCorrection = 10
-            const containerWidth = headersRef.current.clientWidth - paddingCorrection
+            const containerWidth = headersRef.current.clientWidth - (containerRef.current.offsetWidth - containerRef.current.clientWidth) - paddingCorrection
             let customWidthHeadersCount = 0
             let customWidthSum = 0
             const childNodesCount = headersRef.current.childNodes.length
@@ -76,16 +80,18 @@ const ItemList = ({
             return `${(containerWidth - customWidthSum) / (childNodesCount - customWidthHeadersCount)}px`
         }
         return `${100 / headers.length}%`
-    }, [headers, headersRef, className])
+    }, [headers, headersRef, containerRef, className])
+
+    useEffect(() => {
+        setSetectedItemIndex(null)
+        if (scrollToBottomOnItemsUpdate && itemListEndRef.current)
+            itemListEndRef.current.scrollIntoView({ behavior: "smooth" })
+    }, [items])
 
     const onItemClick = (index: number) => {
         if (selectedItemIndex !== index && itemControlButtons) setSetectedItemIndex(index)
         else setSetectedItemIndex(null)
     }
-
-    useEffect(() => {
-        setSetectedItemIndex(null)
-    }, [items])
 
     useEffect(() => {
         const offset =
@@ -135,7 +141,10 @@ const ItemList = ({
     }
 
     return (
-        <div className={cn(styles.container, className)}>
+        <div
+            className={cn(styles.container, className)}
+            ref={containerRef}
+        >
             <div
                 className={styles.header_list}
                 ref={headersRef}
@@ -217,12 +226,14 @@ const ItemList = ({
                                                 { [styles[`text_align_${header.textAlign}`]]: header.textAlign }
                                             )}
                                             style={{ width: header?.colSize || defaultColSize }}
+                                            title={getItemFieldValue(item, header.field)}
                                         >
                                             {getItemFieldValue(item, header.field)}
                                         </div>
                                     ))}
                                 </div>
                             ))}
+                            <div ref={itemListEndRef}></div>
                         </div>
                     </> :
                     <div className={styles.item_list_empty}>

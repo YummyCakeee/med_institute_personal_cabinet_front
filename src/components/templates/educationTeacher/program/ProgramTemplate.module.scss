@@ -1,0 +1,46 @@
+@use "src/styles/utils.module.scss" as *;
+
+.course {
+
+    font-size: 22px;
+    margin: 10px 0;
+    color: #000;
+
+    & span {
+        color: $mainDarkBlueColor;
+    }
+
+    &:not(.course_unavailable) {
+
+        & span {
+            color: $mainDarkBlueColor;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+
+            &:hover {
+                color: $mainBlueColor;
+            }
+        }
+    }
+
+    &_unavailable {
+        filter: grayscale(0.6);
+    }
+
+    &_container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &_dependencies {
+        &_title {
+            font-size: 18px;
+        }
+    }
+
+    &_dependency {
+        font-size: 14px;
+        color: $mainGreyColor;
+    }
+}

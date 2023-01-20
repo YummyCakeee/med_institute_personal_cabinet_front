@@ -20,13 +20,14 @@ const LoadingStatusWrapper = ({
     const [childrenStyles, setChildrenStyles] = useState<React.CSSProperties>()
     useEffect(() => {
         if (ref.current && window) {
-            const { borderRadius, width, height } = window.getComputedStyle(ref.current.children[0])
+            const { borderRadius, width, height, margin }
+                = window.getComputedStyle(ref.current.children[0])
             setChildrenStyles({
                 borderRadius,
                 width,
-                height
+                height,
+                margin
             })
-            console.log(width)
         }
     }, [children, window])
 

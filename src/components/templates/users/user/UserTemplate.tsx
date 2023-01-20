@@ -3,11 +3,12 @@ import React from "react"
 import utilStyles from "styles/utils.module.scss"
 import styles from "./UserTemplate.module.scss"
 import cn from "classnames"
-import { UserProfileType } from "./types"
 import Image from "next/image"
 import Link from "next/link"
 import { ROUTE_USERS } from "constants/routes"
 import { ArrowIcon } from "components/elements/icons"
+import { UserProfileType } from "../types"
+import Head from "next/head"
 
 type UserTemplateProps = {
     user: UserProfileType
@@ -50,6 +51,9 @@ const UserTemplate = ({
 
     return (
         <Layout>
+            <Head>
+                <title>{`Пользователь ${user.lastName} ${user.firstName}`}</title>
+            </Head>
             <Link href={ROUTE_USERS}>
                 <div className={styles.back_to_user_list}>
                     <ArrowIcon
@@ -87,7 +91,7 @@ const UserTemplate = ({
                         src={user.profilePicture || "/images/user.png"}
                         alt="Фото профиля пользователя"
                         width={150}
-                        height={200}
+                        height={150}
                         quality={100}
                     />
                 </div>

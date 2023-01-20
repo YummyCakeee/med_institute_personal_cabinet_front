@@ -97,10 +97,11 @@ const UsersTemplate = () => {
                                 fieldName: UserField.ROLES
                             }
                         ]}
-                        itemControlButtons={({ items, selectedItem }) => [
+                        itemControlButtons={({ selectedItem }) => [
                             {
                                 title: "Подробнее",
                                 onClick: onUserDetailsClick,
+                                size: "small",
                                 stretchable: true
                             },
                             {

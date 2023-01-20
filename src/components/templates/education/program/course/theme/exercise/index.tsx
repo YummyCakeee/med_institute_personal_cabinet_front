@@ -1,4 +1,4 @@
-import { ExerciseCommentType, SolvedTestType, UserExerciseType } from "components/templates/education/types"
+import { EduFileType, ExerciseCommentType, SolvedTestType, UserExerciseType } from "components/templates/education/types"
 import { useModalWindowContext } from "context/modalWindowContext"
 import { useRouter } from "next/router"
 import React, { useEffect, useRef, useState } from "react"
@@ -32,6 +32,7 @@ const ExerciseTemplate = ({
     const [files, setFiles] = useState<File[]>([])
     const router = useRouter()
     const [currentExerciceIndex, setCurrentExerciceIndex] = useState(-1)
+    const downloadFileRef = useRef<HTMLAnchorElement>(null)
 
     const {
         setConfirmActionModalWindowState
@@ -142,6 +143,25 @@ const ExerciseTemplate = ({
         setFiles([])
     }
 
+    const onAttachedFileDownload = async (file: EduFileType) => {
+        const params = {
+            filename: file.fileLink
+        }
+        axiosApi.get(`${ENDPOINT_EDUCATION}/DownloadFile`, { params, responseType: "blob" })
+            .then(res => {
+                let url = window.URL.createObjectURL(res.data);
+                if (downloadFileRef.current) {
+                    const extension = file.fileLink.match(/.*(\..*)$/)
+                    downloadFileRef.current.href = url
+                    downloadFileRef.current.download = `${file.fileName}${extension?.length ? extension[1] : "txt"}`
+                    downloadFileRef.current.click()
+                }
+            })
+            .catch(err => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось скачать файл:\n${err.code}` })
+            })
+    }
+
     return (
         <Layout>
             <Head>
@@ -172,7 +192,12 @@ const ExerciseTemplate = ({
                             {userExercise.file ?
                                 <div className={styles.exercise_file_info}>
                                     <div>Вы прикрепили файл</div>
-                                    <div className={styles.exercise_file_name}>Название: <span>{userExercise.file.fileName}</span></div>
+                                    <div className={styles.exercise_file_name}>Название:{' '}
+                                        <span onClick={() => onAttachedFileDownload(userExercise.file!)}>
+                                            {userExercise.file.fileName}
+                                        </span>
+                                        <a ref={downloadFileRef} target="_blank" rel="noreferrer" download></a>
+                                    </div>
                                     <div className={styles.exercise_file_description}>Описание: <span>{userExercise.file.fileDescription}</span></div>
                                 </div> :
                                 <div className={styles.exercise_file_absent}>
@@ -194,7 +219,8 @@ const ExerciseTemplate = ({
                                                 <FileLoader
                                                     {...{
                                                         files,
-                                                        setFiles
+                                                        setFiles,
+                                                        accept: ".doc, .docx, .pdf"
                                                     }}
                                                 />
                                                 <Form>

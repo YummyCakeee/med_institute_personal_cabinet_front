@@ -1,6 +1,7 @@
 import Button from "components/elements/button/Button"
 import Layout from "components/layouts/Layout"
 import ItemList from "components/modules/itemList"
+import UserExerciseResultsInfo from "components/modules/userExerciseResultInfo"
 import UserTestResultsInfo from "components/modules/userTestResultsInfo"
 import { SolvedTestType, UserThemeType } from "components/templates/education/types"
 import { TestBlockType } from "components/templates/testing/types"
@@ -14,6 +15,7 @@ import axiosApi from "utils/axios"
 import { convertSecondsToFullTime } from "utils/formatters"
 import addNotification from "utils/notifications"
 import styles from "./ThemeTemplate.module.scss"
+import cn from "classnames"
 
 type ThemeTemplateProps = {
     userTheme: UserThemeType,
@@ -111,7 +113,7 @@ const ThemeTemplate = ({
                                         className={styles.theme_file}
                                         key={key}
                                     >
-                                        <a href={`${hostName}${el.fileLink}`} target="_blank" rel="noreferrer" download={true}>{el.fileName}</a>
+                                        <a href={`${hostName}${el.fileLink}`} target="_blank" rel="noreferrer" download>{el.fileName}</a>
                                         <div>
                                             {el.fileDescription}
                                         </div>
@@ -143,7 +145,7 @@ const ThemeTemplate = ({
                                     activeAttemptLeftTime,
                                     onTestResumeClick,
                                     onTestStartClick,
-                                    isFileTestBlock: testBlock.isFileTestBlock
+                                    testBlock
                                 }}
                             />
                         </div>
@@ -151,10 +153,17 @@ const ThemeTemplate = ({
                 </div>
                 {solvedTests && selectedSolvedTestIndex !== undefined &&
                     <div className={styles.test_result_section}>
-                        <UserTestResultsInfo
-                            solvedTest={solvedTests[selectedSolvedTestIndex]}
-                            onClose={onCloseTestInfoClick}
-                        />
+                        {solvedTests[selectedSolvedTestIndex].userQuestions.length > 0 ?
+                            <UserTestResultsInfo
+                                solvedTest={solvedTests[selectedSolvedTestIndex]}
+                                onClose={onCloseTestInfoClick}
+                            /> :
+                            <UserExerciseResultsInfo
+                                solvedTest={solvedTests[selectedSolvedTestIndex]}
+                                onClose={onCloseTestInfoClick}
+                                mode="student"
+                            />
+                        }
                     </div>
                 }
             </div>
@@ -221,6 +230,7 @@ const PreviousAttempts = ({
                     ]}
                     itemListClassName={styles.test_attempts_list}
                     deselectItemOnItemControlClick
+                    scrollToBottomOnItemsUpdate
                 />
             </div>
         </div>
@@ -232,7 +242,7 @@ type CurrentAttemptProps = {
     activeAttemptLeftTime: number,
     onTestResumeClick: () => void,
     onTestStartClick: () => void,
-    isFileTestBlock: boolean,
+    testBlock: TestBlockType,
 }
 
 const CurrentAttempt = ({
@@ -240,8 +250,14 @@ const CurrentAttempt = ({
     activeAttemptLeftTime,
     onTestResumeClick,
     onTestStartClick,
-    isFileTestBlock
+    testBlock
 }: CurrentAttemptProps) => {
+
+    const isOutdated = useMemo(() => {
+        const currentTime = new Date().getTime()
+        const endTime = new Date(testBlock.dateEnd).getTime()
+        return currentTime >= endTime
+    }, [testBlock])
 
     return (
         <div className={utilStyles.section}>
@@ -276,7 +292,7 @@ const CurrentAttempt = ({
                             </div>
                         </div>
                         <Button
-                            title={isFileTestBlock ? "Редактировать" : "Продолжить"}
+                            title={testBlock.isFileTestBlock ? "Редактировать" : "Продолжить"}
                             size="small"
                             stretchable={true}
                             onClick={onTestResumeClick}
@@ -285,15 +301,25 @@ const CurrentAttempt = ({
                 </>
                 :
                 <>
-                    <div className={utilStyles.section_title}>{`${isFileTestBlock ? "Упражнение (ответ в виде файла)" : "Новая попытка (тест)"}`}</div>
-                    <div>
-                        <Button
-                            title={isFileTestBlock ? "Добавить ответ" : "Начать"}
-                            size="small"
-                            stretchable={true}
-                            onClick={onTestStartClick}
-                        />
-                    </div>
+                    {!isOutdated ?
+                        <>
+                            <div className={utilStyles.section_title}>{`${testBlock.isFileTestBlock ? "Упражнение (ответ в виде файла)" : "Новая попытка (тест)"}`}</div>
+                            <div>
+                                <Button
+                                    title={testBlock.isFileTestBlock ? "Добавить ответ" : "Начать"}
+                                    size="small"
+                                    stretchable={true}
+                                    onClick={onTestStartClick}
+                                />
+                            </div>
+                        </> :
+                        <div className={cn(
+                            utilStyles.text_medium,
+                            utilStyles.text_bold
+                        )}>
+                            Новые попытки больше недоступны
+                        </div>
+                    }
                 </>
             }
         </div>

@@ -7,6 +7,7 @@ import {
     ROUTE_COURSES,
     ROUTE_EDUCATION,
     ROUTE_EDUCATIONAL_PROGRAMS,
+    ROUTE_EDUCATION_TEACHER,
     ROUTE_PROFILE,
     ROUTE_REGISTRATION,
     ROUTE_TESTING,
@@ -62,6 +63,10 @@ const Header = () => {
             name: "Обучение",
             path: ROUTE_EDUCATION
         },
+        educationTeacher: {
+            name: "Обучение студентов",
+            path: ROUTE_EDUCATION_TEACHER
+        },
         profile: {
             name: "Мой профиль",
             path: ROUTE_PROFILE
@@ -76,15 +81,19 @@ const Header = () => {
             updatedUserSections.courses = sections.courses
             updatedUserSections.testing = sections.testing
             updatedUserSections.educationalPrograms = sections.educationalPrograms
+            updatedUserSections.educationTeacher = sections.educationTeacher
         }
 
         if (user.roles?.includes(UserRoleType.TEACHER)) {
             updatedUserSections.courses = sections.courses
             updatedUserSections.testing = sections.testing
             updatedUserSections.educationalPrograms = sections.educationalPrograms
+            updatedUserSections.educationTeacher = sections.educationTeacher
         }
 
-        updatedUserSections.education = sections.education
+        if (user.roles?.includes(UserRoleType.STUDENT)) {
+            updatedUserSections.education = sections.education
+        }
         updatedUserSections.profile = sections.profile
 
         const sectionsArray: SectionType[] = []

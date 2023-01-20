@@ -4,14 +4,14 @@ import Button from "components/elements/button/Button"
 import InputField from "components/elements/formikComponents/inputField/InputField"
 import utilStyles from "styles/utils.module.scss"
 import { composeValidators, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator } from "utils/validators"
-import Image from "next/image"
 import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
 import { UserProfileType } from "components/templates/users/types"
 import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import Datetime from "components/elements/datetime"
-import { Moment } from "moment"
+import UserAvatarField from "components/elements/formikComponents/userAvatarField"
+import { toBase64 } from "utils/formatters"
 
 type ProfileInfoFormProps = {
     onSuccess?: (user: UserProfileType) => void,
@@ -25,14 +25,20 @@ const ProfileInfoForm = ({
 
     const user = useSelector(userSelector)
     const onSubmit = async (values: FormikValues) => {
+        let profilePicture = values.profilePicture
+        if (typeof values.profilePicture !== "string")
+            profilePicture = await toBase64(values.profilePicture)
         const data: UserProfileType = {
             userId: user.id,
             firstName: values.firstName,
             lastName: values.lastName,
             secondName: values.secondName,
-            //dateOfBirth: values.dateOfBirth,
-            userName: values.login
+            ...(values.dateOfBirth.length > 0 && { dateOfBirth: values.dateOfBirth }),
+            userName: values.login,
+            profilePicture
         }
+        console.log(data)
+
         return axiosApi.post(`${ENDPOINT_ACCOUNT}/UpdatePersonalData`, data)
             .then(res => {
                 const updatedUser = data
@@ -50,7 +56,8 @@ const ProfileInfoForm = ({
                 firstName: user.firstName,
                 secondName: user.secondName,
                 login: user.login,
-                dateOfBirth: user.dateOfBirth
+                dateOfBirth: user.dateOfBirth,
+                profilePicture: user.profilePicture
             }}
             onSubmit={onSubmit}
             enableReinitialize
@@ -103,7 +110,8 @@ const ProfileInfoForm = ({
                         time={false}
                         disabled={isSubmitting}
                         value={values.dateOfBirth ? new Date(values.dateOfBirth) : ""}
-                        onChange={(e: Moment | string) => setValues({ ...values, dateOfBirth: (e as Moment)?.format() || new Date().toISOString() })}
+                        onChange={(e: string) => setValues({ ...values, dateOfBirth: e.length === 0 ? "" : new Date(e).toISOString() })}
+                        allowEmpty
                     />
                     <Field
                         name="login"
@@ -118,13 +126,10 @@ const ProfileInfoForm = ({
                                 val => maxLengthValueValidator(val, 20)
                             )}
                     />
-                    <Image
-                        style={{ borderRadius: "50px", objectFit: "cover" }}
-                        src={"https://get.pxhere.com/photo/person-people-portrait-facial-expression-hairstyle-smile-emotion-portrait-photography-134689.jpg"}
-                        alt="Фото профиля"
-                        width={100}
-                        height={100}
-                        quality={80}
+                    <Field
+                        name="profilePicture"
+                        component={UserAvatarField}
+                        maxSize={600}
                     />
                     <div className={utilStyles.form_button_container}>
                         <Button

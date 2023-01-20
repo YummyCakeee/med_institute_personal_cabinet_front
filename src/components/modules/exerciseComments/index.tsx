@@ -2,18 +2,21 @@ import Button from "components/elements/button/Button"
 import TextAreaField from "components/elements/formikComponents/textAreaField/TextAreaField"
 import { ExerciseCommentType } from "components/templates/education/types"
 import { Formik, Form, Field, FormikValues, FormikHelpers } from "formik"
-import React, { memo, useEffect, useMemo, useRef } from "react"
+import React, { useEffect, useMemo, useRef } from "react"
 import { notEmptyValidator } from "utils/validators"
 import styles from "./ExerciseComments.module.scss"
+import cn from "classnames"
 
 type ExerciseCommentsProps = {
     mode: "teacher" | "student",
     userComments?: ExerciseCommentType[],
     teacherComments?: ExerciseCommentType[],
-    onCommentSend: (comment: string) => Promise<any>
+    onCommentSend?: (comment: string) => Promise<any>,
+    readOnly?: boolean,
+    className?: string
 }
 
-type CommentType = ExerciseCommentType & {
+export type CommentType = ExerciseCommentType & {
     sender: "teacher" | "student"
 }
 
@@ -21,7 +24,9 @@ const ExerciseComments = ({
     mode,
     userComments,
     teacherComments,
-    onCommentSend
+    onCommentSend,
+    readOnly = false,
+    className
 }: ExerciseCommentsProps) => {
 
     const commentsEndRef = useRef<HTMLDivElement>(null)
@@ -53,6 +58,7 @@ const ExerciseComments = ({
     const onSubmit = async (
         values: FormikValues,
         helpers: FormikHelpers<{ comment: string }>) => {
+        if (!onCommentSend) return
         await onCommentSend(values.comment)
             .then(res => {
                 helpers.resetForm()
@@ -63,7 +69,10 @@ const ExerciseComments = ({
     }
 
     return (
-        <div className={styles.container}>
+        <div className={cn(
+            styles.container,
+            className
+        )}>
             <div className={styles.comments_title}>Коммментарии к упражнению</div>
             <div className={styles.comments}>
                 {comments.map((el, key) => (
@@ -87,33 +96,35 @@ const ExerciseComments = ({
                 ))}
                 <div ref={commentsEndRef}></div>
             </div>
-            <div>
-                <div className={styles.leave_comment_title}>Добавить комментарий</div>
-                <Formik
-                    initialValues={{
-                        comment: ""
-                    }}
-                    onSubmit={onSubmit}
-                >
-                    {({ isSubmitting, isValid }) => (
-                        <Form>
-                            <Field
-                                name="comment"
-                                component={TextAreaField}
-                                validate={notEmptyValidator}
-                                disabled={isSubmitting}
-                                placeholder="Ваш комментарий"
-                            />
-                            <Button
-                                title="Отправить"
-                                size="small"
-                                type="submit"
-                                disabled={isSubmitting || !isValid}
-                            />
-                        </Form>
-                    )}
-                </Formik>
-            </div>
+            {!readOnly &&
+                <div>
+                    <div className={styles.leave_comment_title}>Добавить комментарий</div>
+                    <Formik
+                        initialValues={{
+                            comment: ""
+                        }}
+                        onSubmit={onSubmit}
+                    >
+                        {({ isSubmitting, isValid }) => (
+                            <Form>
+                                <Field
+                                    name="comment"
+                                    component={TextAreaField}
+                                    validate={notEmptyValidator}
+                                    disabled={isSubmitting}
+                                    placeholder="Ваш комментарий"
+                                />
+                                <Button
+                                    title="Отправить"
+                                    size="small"
+                                    type="submit"
+                                    disabled={isSubmitting || !isValid}
+                                />
+                            </Form>
+                        )}
+                    </Formik>
+                </div>
+            }
         </div>
     )
 

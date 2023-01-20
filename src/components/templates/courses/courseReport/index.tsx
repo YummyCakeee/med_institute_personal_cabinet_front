@@ -97,11 +97,7 @@ const CourseReportTemplate = ({
                                         title: "Название",
                                         colSize: "400px"
                                     },
-                                    {
-                                        field: "status",
-                                        title: "Статус",
-                                        colSize: "200px"
-                                    }
+  
                                 ]}
                                 items={userThemesReport}
                                 customFieldsRendering={[
@@ -113,6 +109,7 @@ const CourseReportTemplate = ({
                                         }
                                     }
                                 ]}
+                                className={styles.theme_list}
                             />
                         </LoadingStatusWrapper>
                     </div>

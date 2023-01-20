@@ -1,7 +1,6 @@
 @use "src/styles/utils.module.scss" as *;
 
 .personal_info {
-    &_section {}
 
     &_data {
         display: flex;
@@ -24,7 +23,10 @@
 
     &_photo {
         object-fit: cover;
-        border-radius: 15px;
+        margin-left: 30px;
+        width: 150px;
+        height: 150px;
+        border-radius: 75px;
     }
 }
 
@@ -40,6 +42,10 @@
     &:hover {
         fill: $mainBlueColor;
         color: $mainBlueColor;
+
+        & .back_to_user_list_arrow {
+            transform: rotateZ(90deg) translateY(5px)
+        }
     }
 
     &_arrow {
@@ -47,9 +53,10 @@
         transform: rotateZ(90deg);
         width: 15px;
         height: 15px;
+        transition: transform 0.3s ease-in-out;
     }
 
     &_text {
-        margin-left: 10px;
+        margin-left: 5px;
     }
 }

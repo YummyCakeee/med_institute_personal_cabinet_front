@@ -2,7 +2,7 @@ import { CourseType } from "components/templates/courses/types"
 import { ProgramType } from "components/templates/educationalPrograms/types"
 import EducationalProgramCoursesTemplate from "components/templates/educationalPrograms/courses"
 import LoadingErrorTemplate from "components/templates/loadingError"
-import { ENDPOINT_COURSES, ENDPOINT_EDUCATIONAL_PROGRAMS } from "constants/endpoints"
+import { ENDPOINT_COURSES, ENDPOINT_PROGRAMS } from "constants/endpoints"
 import React, { useEffect, useState } from "react"
 import axiosApi from "utils/axios"
 import axios from "axios"
@@ -23,7 +23,7 @@ const EducationalProgramCourses = () => {
     useEffect(() => {
         if (user.authorized) {
             axios.all([
-                axiosApi.get(`${ENDPOINT_EDUCATIONAL_PROGRAMS}/${router.query.id}`),
+                axiosApi.get(`${ENDPOINT_PROGRAMS}/${router.query.id}`),
                 axiosApi.get(ENDPOINT_COURSES)
             ]).then(axios.spread(({ data: program }, { data: courses }) => {
                 setSuccess(true)

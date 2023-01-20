@@ -1,6 +1,6 @@
 import { ProgramType, ReportModelType } from "components/templates/educationalPrograms/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
-import { ENDPOINT_EDUCATIONAL_PROGRAMS, ENDPOINT_USERS } from "constants/endpoints"
+import { ENDPOINT_PROGRAMS, ENDPOINT_USERS } from "constants/endpoints"
 import React, { useEffect, useState } from "react"
 import axiosApi from "utils/axios"
 import axios from "axios"
@@ -25,9 +25,9 @@ const EducationalProgramUserReport = () => {
         if (user.authorized && router.isReady) {
             const { id: programId, userId } = router.query
             axios.all([
-                axiosApi.get(`${ENDPOINT_EDUCATIONAL_PROGRAMS}/${programId}/Users/${userId}/Report`),
+                axiosApi.get(`${ENDPOINT_PROGRAMS}/${programId}/Users/${userId}/Report`),
                 axiosApi.get(`${ENDPOINT_USERS}/${userId}`),
-                axiosApi.get(`${ENDPOINT_EDUCATIONAL_PROGRAMS}/${programId}`)
+                axiosApi.get(`${ENDPOINT_PROGRAMS}/${programId}`)
             ])
                 .then(axios.spread(({ data: programUserReport }, { data: programUser }, { data: program }) => {
                     setSuccess(true)

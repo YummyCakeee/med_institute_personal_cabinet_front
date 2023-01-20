@@ -41,7 +41,7 @@ const UserTestResultsInfo = ({
                 Вопросы
             </div>
             <div className={styles.question_list}>
-                {solvedTest.userQuestions?.map((userQuestion, userQuestionKey) => (
+                {solvedTest.userQuestions.map((userQuestion, userQuestionKey) => (
                     <div
                         key={userQuestionKey}
                         className={styles.question}

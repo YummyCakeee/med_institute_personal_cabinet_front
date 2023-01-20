@@ -1,49 +1,42 @@
+import LoadingErrorTemplate from "components/templates/loadingError"
+import { ENDPOINT_EDUCATION, ENDPOINT_PROGRAMS } from "constants/endpoints"
 import React, { useEffect, useState } from "react"
 import axiosApi from "utils/axios"
-import { ENDPOINT_USERS } from "constants/endpoints"
-import { UserProfileType } from "components/templates/users/types"
-import LoadingErrorTemplate from "components/templates/loadingError"
 import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
+import { ProgramType, UserProgramType } from "components/templates/educationalPrograms/types"
 import UnauthorizedTemplate from "components/templates/unauthorized"
-import { useRouter } from "next/router"
-import UserTemplate from "components/templates/users/user/UserTemplate"
+import EducationTeacherTemplate from "components/templates/educationTeacher"
 
-const Users = () => {
+const EducationTeacher = ({ }) => {
 
     const user = useSelector(userSelector)
-    const router = useRouter()
-    const [userProfile, setUserProfile] = useState<UserProfileType>()
+    const [programs, setPrograms] = useState<ProgramType[]>([])
     const [success, setSuccess] = useState<boolean>(true)
     const [error, setError] = useState<string>("")
 
     useEffect(() => {
-        const { id } = router.query
         if (user.authorized) {
-            axiosApi.get(`${ENDPOINT_USERS}/${id}`)
+            axiosApi.get(`${ENDPOINT_PROGRAMS}`)
                 .then(res => {
                     setSuccess(true)
-                    setUserProfile(res.data)
+                    setPrograms(res.data)
                 })
                 .catch(err => {
                     setSuccess(false)
                     setError(err.code)
                 })
         }
-    }, [user.authorized, router.query])
+    }, [user.authorized])
 
     return (
         <>
             {user.authorized ?
                 <>
                     {success ?
-                        <>
-                            {userProfile &&
-                                <UserTemplate
-                                    user={userProfile}
-                                />
-                            }
-                        </>
+                        <EducationTeacherTemplate
+                            programs={programs}
+                        />
                         :
                         <LoadingErrorTemplate
                             error={error}
@@ -57,4 +50,4 @@ const Users = () => {
     )
 }
 
-export default Users
+export default EducationTeacher

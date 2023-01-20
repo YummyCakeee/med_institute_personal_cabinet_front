@@ -3,7 +3,7 @@ import EducationalProgramStudentsTemplate from "components/templates/educational
 import { ProgramType } from "components/templates/educationalPrograms/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import { UserProfileType } from "components/templates/users/types"
-import { ENDPOINT_EDUCATIONAL_PROGRAMS, ENDPOINT_USERS } from "constants/endpoints"
+import { ENDPOINT_PROGRAMS, ENDPOINT_USERS } from "constants/endpoints"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
@@ -24,7 +24,7 @@ const EducationalProgramStudents = () => {
         if (user.authorized) {
             axios.all([
                 axiosApi.get(ENDPOINT_USERS),
-                axiosApi.get(`${ENDPOINT_EDUCATIONAL_PROGRAMS}/${id}`)
+                axiosApi.get(`${ENDPOINT_PROGRAMS}/${id}`)
             ]).then(axios.spread(({ data: users }, { data: program },) => {
                 setSuccess(true)
                 setUsers(users)

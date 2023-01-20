@@ -333,7 +333,6 @@ const FileBrowser = ({
         const maxFolderNumber = folderStructureInfo!.folders.map(el => {
             const match = el.name.match(regex)
             if (match) {
-                console.log(match[2])
                 if (match[2])
                     return parseInt(match[2])
                 if (match[1]) return 1
@@ -360,7 +359,6 @@ const FileBrowser = ({
                     folderCount: folderCount + 1,
                     folders: [...folderStructureInfo.folders, newFolder]
                 }))
-                console.log(folderStructureInfo)
                 setEditingItem({
                     index: folderCount,
                     isFile: false,
