@@ -50,10 +50,12 @@ const UsersTemplate = () => {
                         <div className={utilStyles.text_small}>
                             {sortingFieldHeaderTitle ?
                                 <>
-                                    По полю "<span>{sortingFieldHeaderTitle}</span>"
+                                    По полю &quot;<span>{sortingFieldHeaderTitle}</span>&quot;
                                     (по {sortOrder === "Asc" ? "возр." : "убыв."})
                                 </> :
-                                "Не выбрано"
+                                <>
+                                    Не выбрано
+                                </>
                             }
                         </div>
                     </div>
