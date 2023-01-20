@@ -369,7 +369,7 @@ const ThemeTemplate = ({
                     </> :
                     <div className={styles.test_block_button_container}>
                         <Button
-                            title="Привязать блок"
+                            title="Привязать блок тестирования"
                             stretchable
                             onClick={onBindBlockClick}
                         />
