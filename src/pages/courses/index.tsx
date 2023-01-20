@@ -1,70 +1,62 @@
 import CoursesTemplate from "components/templates/courses"
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import axiosApi from "utils/axios"
 import { ENDPOINT_COURSES } from "constants/endpoints"
 import { CourseType } from "components/templates/courses/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
-import { NextPageContext } from "next"
-import { wrapper } from "store"
-import { ROUTE_REGISTRATION } from "constants/routes"
 import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import { useRouter } from "next/router"
+import UnauthorizedTemplate from "components/templates/unauthorized"
 
-type CoursesPageProps = {
-    success: boolean,
-    courses: CourseType[],
-    redirectPath?: string
-}
 
-const Courses = ({
-    success,
-    courses,
-    redirectPath
-}: CoursesPageProps) => {
+const Courses = () => {
 
-    const user = useSelector(userSelector)
     const router = useRouter()
+    const user = useSelector(userSelector)
+    const [success, setSuccess] = useState<boolean>(true)
+    const [error, setError] = useState<string>("")
+    const [courses, setCourses] = useState<CourseType[]>([])
 
     useEffect(() => {
-        if (!success && redirectPath || !user.authorized)
-            router.replace(redirectPath || ROUTE_REGISTRATION)
-    }, [success, redirectPath, user, router])
+        if (user.authorized && router.isReady) {
+            axiosApi.get(ENDPOINT_COURSES)
+                .then(res => {
+                    setSuccess(true)
+                    setCourses(res.data)
+                })
+                .catch(err => {
+                    setSuccess(false)
+                    setError(err.code)
+                })
+        }
+
+    }, [router, user.authorized])
 
     return (
         <>
-            {success ?
-                <CoursesTemplate
-                    courses={courses}
-                /> :
-                <LoadingErrorTemplate />
+            {user.authorized ?
+                <>
+                    {success ?
+                        <>
+                            {courses &&
+                                <CoursesTemplate
+                                    courses={courses}
+                                />
+                            }
+                        </>
+                        :
+                        <LoadingErrorTemplate
+                            error={error}
+                        />
+                    }
+                </>
+                :
+                <UnauthorizedTemplate />
             }
         </>
     )
 }
 
-Courses.getInitialProps = wrapper.getInitialPageProps(store => async ({ }: NextPageContext) => {
-    const pageProps: CoursesPageProps = {
-        success: true,
-        courses: []
-    }
-
-    if (!store.getState().user.authorized) {
-        pageProps.success = false
-        pageProps.redirectPath = ROUTE_REGISTRATION
-        return
-    }
-
-    await axiosApi.get(ENDPOINT_COURSES)
-        .then(res => {
-            const data: CourseType[] = res.data;
-            pageProps.courses = data
-        })
-        .catch(err => {
-            pageProps.success = false
-        })
-
-    return pageProps
-})
 
 export default Courses
