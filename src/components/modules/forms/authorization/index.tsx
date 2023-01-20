@@ -6,7 +6,6 @@ import utilStyles from "styles/utils.module.scss"
 import { composeValidators, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator } from "utils/validators"
 import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
-import { Store } from "react-notifications-component"
 import addNotification from "utils/notifications"
 
 type AutorizationFormProps = {
