@@ -8,7 +8,7 @@ import { userSelector } from "store/userSlice"
 import { UserProgramType } from "components/templates/educationalPrograms/types"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 
-const Education = ({ }) => {
+const Education = () => {
 
     const user = useSelector(userSelector)
     const [userPrograms, setUserPrograms] = useState<UserProgramType[]>([])
