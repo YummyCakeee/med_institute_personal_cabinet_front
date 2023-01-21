@@ -7,17 +7,21 @@ import utilStyles from "styles/utils.module.scss"
 import styles from "./LoadingErrorTemplate.module.scss"
 
 type LoadingErrorTemplateProps = {
-    error?: string
+    error?: string,
+    showHeader?: boolean
 }
 
 const LoadingErrorTemplate = ({
-    error
+    error,
+    showHeader = true
 }: LoadingErrorTemplateProps) => {
 
     const router = useRouter()
 
     return (
-        <Layout>
+        <Layout
+            showHeader={showHeader}
+        >
             <Head>
                 <title>Ошибка</title>
             </Head>
