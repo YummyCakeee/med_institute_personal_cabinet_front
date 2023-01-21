@@ -147,10 +147,10 @@ const ThemeTemplate = ({
         }
         await axiosApi.put(`${ENDPOINT_COURSES}/Themes/${theme.themeId}`, data)
             .then(res => {
-                addNotification({ type: "success", title: "Тема сохранена" })
+                addNotification({ type: "success", title: "Успех", message: "Информационные разделы сохранены" })
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Не удалось сохранить тему", message: err.code })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось сохранить информационные разделы сохранены:\n${err.code}` })
             })
     }
 
