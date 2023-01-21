@@ -2,13 +2,16 @@ import React from "react"
 import { CrossIcon } from "../icons"
 import styles from "./ModalWindow.module.scss"
 import utilStyles from "styles/utils.module.scss"
+import cn from "classnames"
 
 export interface ModalWindowProps {
     onClose?: () => void
     closable?: boolean,
     children?: React.ReactNode,
     backgroundOverlap?: boolean,
-    title?: string
+    title?: string,
+    className?: string,
+    onOpenAnimation?: boolean
 }
 
 const ModalWindow = ({
@@ -16,7 +19,9 @@ const ModalWindow = ({
     closable,
     children,
     backgroundOverlap,
-    title
+    title,
+    className,
+    onOpenAnimation = true
 }: ModalWindowProps) => {
 
     const onBackgroundlClick = () => {
@@ -25,7 +30,11 @@ const ModalWindow = ({
 
     return (
         <>
-            <div className={styles.container}>
+            <div className={cn(
+                styles.container,
+                { [styles.container_animated]: onOpenAnimation },
+                className
+            )}>
                 {closable &&
                     <div
                         className={styles.close_button}
