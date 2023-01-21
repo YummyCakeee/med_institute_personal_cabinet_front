@@ -14,6 +14,12 @@ export const maxLengthValueValidator = (value: string, length: number) => {
     }
 }
 
+export const passwordValidator = (value: string) => {
+    if (!value.match(/^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!#$%&?{}^()"]).*$/g)) {
+        return "Пароль должен быть длиной от 6 символов и содержать хотя бы одну заглавную, одну прописную буквы и один символ из набора (!#$%&?{}^()\")"
+    }
+}
+
 export const composeValidators = (value: string, ...validators: ((value: string) => string | undefined)[]) => {
     for (let i = 0; i < validators.length; i++) {
         const error = validators[i](value)
