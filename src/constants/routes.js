@@ -8,3 +8,4 @@ export const ROUTE_EDUCATION = "/education/programs"
 export const ROUTE_EDUCATION_TEACHER = "/educationTeacher/programs"
 export const ROUTE_PROFILE = "/profile"
 export const ROUTE_COLLECTIONS = `${ROUTE_TESTING}/collections`
+export const ROUTE_RECOVERY = "/recovery"
