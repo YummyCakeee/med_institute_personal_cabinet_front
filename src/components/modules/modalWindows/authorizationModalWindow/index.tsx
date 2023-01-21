@@ -1,10 +1,11 @@
 import ModalWindow, { ModalWindowProps } from "components/elements/modalWindow/ModalWindow"
 import AuthorizationForm from "components/modules/forms/authorization"
 import RegistrationForm from "components/modules/forms/registration"
-import RecoveryForm from "components/modules/forms/recovery"
 import React, { useState } from "react"
 import utilStyles from "styles/utils.module.scss"
 import cn from "classnames"
+import styles from "./AuthorizationModalWindow.module.scss"
+import ForgotPasswordForm from "components/modules/forms/forgotPassword"
 
 export interface AuthorizationModalWindowProps extends ModalWindowProps {
     onSuccess: () => void,
@@ -25,6 +26,8 @@ const AuthorizationModalWindow = ({
                     "Регистрация" :
                     "Восстановление пароля"
             }
+            className={styles.container}
+            onOpenAnimation={false}
         >
             {mode === "auth" ?
                 <AuthorizationForm
@@ -39,14 +42,13 @@ const AuthorizationModalWindow = ({
                         <p className={cn(
                             utilStyles.modal_window_text,
                             utilStyles.modal_window_text_medium,
-                        )}>Укажите Ваш логин ниже:</p>
-                        <RecoveryForm />
+                        )}>Укажите Вашу почту от аккаунта:</p>
+                        <ForgotPasswordForm />
                         <p className={cn(
                             utilStyles.modal_window_text,
                             utilStyles.modal_window_text_medium,
                         )}>
-                            На почту, привязанную к нему,<br />
-                            будет отправлено письмо<br />
+                            На неё будет отправлено письмо<br />
                             c дальнейшими инструкциями<br />
                             по восстановлению пароля
                         </p>
