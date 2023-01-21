@@ -3,10 +3,11 @@ import { Formik, Form, FormikValues, Field } from "formik"
 import Button from "components/elements/button/Button"
 import InputField from "components/elements/formikComponents/inputField/InputField"
 import utilStyles from "styles/utils.module.scss"
-import { composeValidators, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator } from "utils/validators"
+import { composeValidators, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator, passwordValidator } from "utils/validators"
 import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
 import addNotification from "utils/notifications"
+import { getServerErrorResponse } from "utils/serverData"
 
 type RegistrationFormProps = {
     onSuccess: () => void
@@ -33,8 +34,7 @@ const RegistrationForm = ({
                 }
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось зарегистрироваться:\n${err.code}` })
-                console.log(err)
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось зарегистрироваться:\n${getServerErrorResponse(err)}` })
             })
     }
 
@@ -68,12 +68,7 @@ const RegistrationForm = ({
                         type="password"
                         size="large"
                         disabled={isSubmitting}
-                        validate={(value: string) =>
-                            composeValidators(value,
-                                notEmptyValidator,
-                                val => minLengthValueValidator(val, 3),
-                                val => maxLengthValueValidator(val, 20)
-                            )}
+                        validate={passwordValidator}
                     />
                     <div className={utilStyles.form_button_container}>
                         <Button

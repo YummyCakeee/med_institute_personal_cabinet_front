@@ -7,6 +7,7 @@ import { composeValidators, maxLengthValueValidator, minLengthValueValidator, no
 import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
 import addNotification from "utils/notifications"
+import { getServerErrorResponse } from "utils/serverData"
 
 type AutorizationFormProps = {
     onSuccess: () => void
@@ -28,13 +29,12 @@ const AuthorizationForm = ({
         }
         return axiosApi.post(`${ENDPOINT_ACCOUNT}/Login`, data)
             .then(res => {
-                console.log(res)
                 if (res.status === 200) {
                     onSuccess()
                 }
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось войти в аккаунт ${err.code}`})
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось войти в аккаунт ${getServerErrorResponse(err)}` })
             })
     }
 
@@ -57,7 +57,7 @@ const AuthorizationForm = ({
                         validate={(value: string) =>
                             composeValidators(value,
                                 notEmptyValidator,
-                                val => minLengthValueValidator(val, 3),
+                                val => minLengthValueValidator(val, 6),
                                 val => maxLengthValueValidator(val, 20)
                             )}
                     />
@@ -71,7 +71,7 @@ const AuthorizationForm = ({
                         validate={(value: string) =>
                             composeValidators(value,
                                 notEmptyValidator,
-                                val => minLengthValueValidator(val, 3),
+                                val => minLengthValueValidator(val, 6),
                                 val => maxLengthValueValidator(val, 20)
                             )}
                     />

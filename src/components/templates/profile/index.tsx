@@ -10,6 +10,7 @@ import { AppDispatch } from "store"
 import { StateUserType, userInfoChanged } from "store/userSlice"
 import ProfilePasswordForm from "components/modules/forms/profilePassword"
 import addNotification from "utils/notifications"
+import { getServerErrorResponse } from "utils/serverData"
 
 const ProfileTemplate = () => {
 
@@ -31,7 +32,7 @@ const ProfileTemplate = () => {
     }
 
     const onErrorUserInfoChange = (error: any) => {
-        addNotification({ type: "danger", title: "Ошибка", message: `Не удалось обновить информацию о пользователе: ${error.code}` })
+        addNotification({ type: "danger", title: "Ошибка", message: `Не удалось обновить информацию о пользователе: ${getServerErrorResponse(error)}` })
     }
 
     const onSuccesPasswordChange = () => {
@@ -41,7 +42,7 @@ const ProfileTemplate = () => {
 
     const onErrorPasswordChange = (error: any) => {
         console.log(error)
-        addNotification({ type: "danger", title: "Ошибка", message: `Не удалось изменить пароль: \n${error.code}` })
+        addNotification({ type: "danger", title: "Ошибка", message: `Не удалось изменить пароль: \n${getServerErrorResponse(error)}` })
     }
 
     return (
