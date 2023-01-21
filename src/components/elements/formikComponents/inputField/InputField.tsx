@@ -22,7 +22,6 @@ const InputField = ({
             <div className={cn(
                 styles.input_error,
                 { [styles.input_error_shown]: touched[field.name] && errors[field.name] }
-
             )}>
                 {`${errors[field.name]}`}
             </div>
