@@ -1,3 +1,4 @@
+import { AxiosError } from "axios"
 import { TestType } from "components/templates/testing/types"
 
 export const convertServerTestToClient = (test: TestType) => {
@@ -9,4 +10,18 @@ export const convertServerTestToClient = (test: TestType) => {
         answers: testBody.Answers?.map((el: any) => ({ text: el.Text, correct: el.Correct })) || [],
     }
     return newTest
+}
+
+export const getServerErrorResponse = (err: AxiosError) => {
+    console.log(err)
+    if (err.response?.data) {
+        const errors: string[] = []
+        const errorsData = (err.response.data as any).errors
+
+        Object.keys(errorsData).forEach(key => {
+            errors.push(errorsData[key])
+        })
+        return errors.join('\n')
+    }
+    return err.code
 }
