@@ -7,7 +7,7 @@ export const injectStore = (store: AppStore) => {
         return response
     },
         (error) => {
-            if (error.response.status === 401)
+            if (error.response?.status === 401)
                 store.dispatch(userLoggedOut())
             return Promise.reject(error)
         })
