@@ -29,34 +29,3 @@
         border-radius: 75px;
     }
 }
-
-.back_to_user_list {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    fill: #000;
-    color: #000;
-    transition: all 0.3s ease-in-out;
-    margin: 20px 0 40px 0;
-
-    &:hover {
-        fill: $mainBlueColor;
-        color: $mainBlueColor;
-
-        & .back_to_user_list_arrow {
-            transform: rotateZ(90deg) translateY(5px)
-        }
-    }
-
-    &_arrow {
-        fill: inherit;
-        transform: rotateZ(90deg);
-        width: 15px;
-        height: 15px;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    &_text {
-        margin-left: 5px;
-    }
-}
