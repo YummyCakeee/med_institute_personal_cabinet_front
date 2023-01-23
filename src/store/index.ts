@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit"
 import userSlice from "./userSlice"
 import { createWrapper } from "next-redux-wrapper";
+import breadCrumbsSlice from "./breadCrumbsSlice";
 
 const makeStore = () => configureStore({
     reducer: {
-        user: userSlice
+        user: userSlice,
+        breadCrumbs: breadCrumbsSlice
     },
 })
 

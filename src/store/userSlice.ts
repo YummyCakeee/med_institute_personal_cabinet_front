@@ -30,7 +30,7 @@ const initialState: StateUserType = {
     profilePicture: '',
     roles: [],
     authorized: false,
-    infoLoadStatus: "pending"
+    infoLoadStatus: "rejected"
 }
 
 export const getUserInfo = createAsyncThunk("user/getUserInfo", async () => {
