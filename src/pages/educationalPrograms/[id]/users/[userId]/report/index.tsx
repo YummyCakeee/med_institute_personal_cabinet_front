@@ -10,6 +10,9 @@ import { useRouter } from "next/router"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { UserProfileType } from "components/templates/users/types"
 import EducationalProgramUserReportTemplate from "components/templates/educationalPrograms/userReport"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
+import { ROUTE_EDUCATIONAL_PROGRAMS } from "constants/routes"
 
 const EducationalProgramUserReport = () => {
 
@@ -69,5 +72,18 @@ const EducationalProgramUserReport = () => {
         </>
     )
 }
+
+EducationalProgramUserReport.getInitialProps = wrapper.getInitialPageProps(store => ({ query }) => {
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Образовательные программы",
+            route: ROUTE_EDUCATIONAL_PROGRAMS
+        },
+        {
+            title: "Отчёт по программе",
+            route: `${ROUTE_EDUCATIONAL_PROGRAMS}/${query.id}/report`
+        }
+    ]))
+})
 
 export default EducationalProgramUserReport

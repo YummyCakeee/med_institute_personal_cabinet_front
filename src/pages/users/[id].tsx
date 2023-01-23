@@ -8,8 +8,11 @@ import { userSelector } from "store/userSlice"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { useRouter } from "next/router"
 import UserTemplate from "components/templates/users/user/UserTemplate"
+import { ROUTE_USERS } from "constants/routes"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
 
-const Users = () => {
+const User = () => {
 
     const user = useSelector(userSelector)
     const router = useRouter()
@@ -57,4 +60,13 @@ const Users = () => {
     )
 }
 
-export default Users
+User.getInitialProps = wrapper.getInitialPageProps(store => () => {
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Пользователи",
+            route: ROUTE_USERS
+        }
+    ]))
+})
+
+export default User
