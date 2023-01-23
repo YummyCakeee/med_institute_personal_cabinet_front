@@ -1,0 +1,84 @@
+@use "src/styles/utils.module.scss" as *;
+
+.container {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 700px;
+    border: transparentize($mainBlueColor, 0.5) solid 1px;
+    box-shadow: $boxShadow;
+}
+
+.file {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 150px;
+    width: 100px;
+    margin: 10px;
+    background-color: desaturate(transparentize($mainBlueColor, 0.6), 70%);
+    padding: 20px 10px 10px 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    position: relative;
+    cursor: default;
+    box-shadow: $boxShadow;
+
+    &_icon {
+        width: 70%;
+        height: 70%;
+    }
+
+    &_name {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &_delete_icon {
+        fill: $mainRedColor;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        height: 10px;
+        width: 10px;
+        cursor: pointer;
+    }
+
+    &_list {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 200px;
+        overflow-x: auto;
+
+        &_empty {
+            width: 100%;
+            color: $mainBlueColor;
+            font-size: 20px;
+            text-align: center;
+        }
+    }
+
+    &_select {
+        border: 2px solid $mainBlueColor;
+        border-radius: 12px;
+        color: $mainBlueColor;
+        display: inline-block;
+        font-size: 20px;
+        padding: 0px 10px;
+        height: 30px;
+        cursor: pointer;
+        margin: 10px;
+    }
+}
+
+.control_section {
+    border-top: 1px solid $mainBlueColor;
+    background-color: $mainLighterGreyColor;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
