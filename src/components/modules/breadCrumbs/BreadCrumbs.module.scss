@@ -1,0 +1,55 @@
+@use "src/styles/utils.module.scss" as *;
+
+.bread_crumbs_container {
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    height: fit-content;
+    margin: 20px 0 40px 0;
+}
+
+.bread_crumb {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    fill: #000;
+    color: #000;
+    transition: all 0.3s ease-in-out;
+
+    &_arrow {
+        fill: inherit;
+        transform: rotateZ(90deg);
+        width: 15px;
+        height: 15px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    &_text {
+        margin-left: 5px;
+        width: 20px;
+        overflow: hidden;
+        transition: width 0.2s ease-in-out;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        font-size: 16px;
+        max-height: 16px;
+        line-height: 16px;
+    }
+
+    &_active {
+        fill: $mainBlueColor;
+        color: $mainBlueColor;
+
+        & .bread_crumb_text {
+            width: 200px;
+        }
+    }
+
+    &_last {
+        &_active {
+            & .bread_crumb_text {
+                width: 200px;
+            }
+        }
+    }
+}
