@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Layout from "components/layouts/Layout"
 import Head from "next/head"
 import { ProgramType, ReportModelType } from "../types"
@@ -6,6 +6,11 @@ import utilStyles from "styles/utils.module.scss"
 import styles from "./EducationalProgramUserReportTemplate.module.scss"
 import ItemList from "components/modules/itemList"
 import { UserProfileType } from "components/templates/users/types"
+import CertificateForm from "components/modules/forms/certificate"
+import addNotification from "utils/notifications"
+import { AxiosError } from "axios"
+import { getServerErrorResponse } from "utils/serverData"
+import Button from "components/elements/button/Button"
 
 type EducationalProgramUserReportTemplateProps = {
     program: ProgramType,
@@ -18,6 +23,18 @@ const EducationalProgramUserReportTemplate = ({
     programUser,
     programUserReport
 }: EducationalProgramUserReportTemplateProps) => {
+
+    const [isShowingUploadSection, setIsShowingUploadSection] = useState<boolean>(false)
+
+    const onCertificateUploadSuccess = () => {
+        addNotification({ type: "success", title: "Успех", message: "Сертификат загружен" })
+        setIsShowingUploadSection(false)
+    }
+
+    const onCertificateUploadError = (err: AxiosError) => {
+        console.log(err)
+        addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить сертификат:\n${getServerErrorResponse(err)}` })
+    }
 
     return (
         <Layout>
@@ -75,6 +92,47 @@ const EducationalProgramUserReportTemplate = ({
                         }
                     ]}
                 />
+            </div>
+            <div className={utilStyles.section}>
+                <div className={utilStyles.section_title}>Сертификаты студента</div>
+                <div className={styles.certificates_section}>
+                    <ItemList
+                        headers={[
+                            {
+                                field: "name",
+                                title: "Название",
+                                colSize: "600px"
+                            },
+                            {
+                                field: "date",
+                                title: "Дата выдачи",
+                                colSize: "200px"
+                            }
+                        ]}
+                        items={[]}
+                        controlButtonsBottom={[
+                            {
+                                title: "Загрузить",
+                                size: "small",
+                                onClick: () => setIsShowingUploadSection(true)
+                            }
+                        ]}
+                    />
+                    <div
+                        className={styles.upload_certificate_container}
+                        data-visible={isShowingUploadSection}
+                    >
+                        <CertificateForm
+                            onSuccess={onCertificateUploadSuccess}
+                            onError={onCertificateUploadError}
+                        />
+                        <Button
+                            title="Отмена"
+                            size="small"
+                            onClick={() => setIsShowingUploadSection(false)}
+                        />
+                    </div>
+                </div>
             </div>
         </Layout>
     )
