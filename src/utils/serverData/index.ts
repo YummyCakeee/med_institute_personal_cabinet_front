@@ -13,7 +13,6 @@ export const convertServerTestToClient = (test: TestType) => {
 }
 
 export const getServerErrorResponse = (err: AxiosError) => {
-    console.log(err)
     if (err.response?.data) {
         const errors: string[] = []
         const errorsData = (err.response.data as any).errors
@@ -23,5 +22,5 @@ export const getServerErrorResponse = (err: AxiosError) => {
         })
         return errors.join('\n')
     }
-    return err.code
+    return err.message ? err.message : err.code
 }
