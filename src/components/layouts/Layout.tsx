@@ -2,6 +2,7 @@ import React from "react"
 import Header from "components/modules/header/Header"
 import Footer from "components/modules/footer/Footer"
 import styles from "./Layout.module.scss"
+import BreadCrumbs from "components/modules/breadCrumbs"
 
 type LayoutProps = {
     children: React.ReactNode,
@@ -18,6 +19,7 @@ const Layout = ({
                 <Header />
             }
             <div className={styles.content}>
+                <BreadCrumbs />
                 {children}
             </div>
             <Footer />
