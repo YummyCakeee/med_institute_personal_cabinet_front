@@ -21,3 +21,21 @@
         }
     }
 }
+
+.certificates_section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    & .upload_certificate_container {
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &[data-visible="true"] {
+            opacity: 1;
+        }
+    }
+}
