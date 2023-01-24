@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch } from "store"
 import { userLoggedOut, userSelector } from "store/userSlice"
 import Image from "next/image"
+import UserAvatar from "components/elements/userAvatar"
 
 type SectionType = {
     name: string,
@@ -145,11 +146,12 @@ const Header = () => {
             </div>
             {user.authorized &&
                 <div className={styles.logout_section}>
+                    <UserAvatar />
                     <div
                         className={styles.logout_section_button}
                         onClick={onLogoutClick}
+                        title="Выйти из аккаунта"
                     >
-                        Выйти из аккаунта
                         <LogoutIcon
                             className={styles.logout_section_button_icon}
                             width={15}

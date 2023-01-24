@@ -1,5 +1,5 @@
 import { AnyAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { UserProfileType } from "components/templates/users/types"
+import { UserProfileType, UserWithCertificatesType } from "components/templates/users/types"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
 import { StateType } from "store"
 import axiosApi from "utils/axios"
@@ -36,7 +36,7 @@ const initialState: StateUserType = {
 export const getUserInfo = createAsyncThunk("user/getUserInfo", async () => {
     const response = await axiosApi.get(`${ENDPOINT_ACCOUNT}/CurrentUserInfo`)
 
-    const data: UserProfileType = response.data
+    const data = (response.data as UserWithCertificatesType).user
     const userInfo: StateUserType = {
         id: data.userId || "",
         firstName: data.firstName || "",

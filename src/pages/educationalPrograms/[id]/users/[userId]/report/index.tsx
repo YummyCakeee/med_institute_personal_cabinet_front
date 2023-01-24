@@ -8,7 +8,7 @@ import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import { useRouter } from "next/router"
 import UnauthorizedTemplate from "components/templates/unauthorized"
-import { UserProfileType } from "components/templates/users/types"
+import { UserProfileType, UserWithCertificatesType } from "components/templates/users/types"
 import EducationalProgramUserReportTemplate from "components/templates/educationalPrograms/userReport"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
@@ -17,7 +17,7 @@ import { ROUTE_EDUCATIONAL_PROGRAMS } from "constants/routes"
 const EducationalProgramUserReport = () => {
 
     const [programUserReport, setProgramUserReport] = useState<ReportModelType[]>()
-    const [programUser, setProgramUser] = useState<UserProfileType>()
+    const [programUser, setProgramUser] = useState<UserWithCertificatesType>()
     const [program, setProgram] = useState<ProgramType>()
     const [success, setSuccess] = useState<boolean>(true)
     const [error, setError] = useState<string>("")

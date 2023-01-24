@@ -6,13 +6,19 @@ import React from "react"
 import axiosApi from "utils/axios"
 import { notEmptyValidator } from "utils/validators"
 import utilStyles from "styles/utils.module.scss"
+import { CertificateType, UserProfileType } from "components/templates/users/types"
+import { ProgramType } from "components/templates/educationalPrograms/types"
 
 type CertificateFormProps = {
-    onSuccess?: () => void,
+    user: UserProfileType,
+    program: ProgramType,
+    onSuccess?: (certificate: CertificateType) => void,
     onError?: (error: any) => void
 }
 
 const CertificateForm = ({
+    user,
+    program,
     onSuccess = () => { },
     onError = () => { }
 }: CertificateFormProps) => {
@@ -25,9 +31,13 @@ const CertificateForm = ({
 
         const fd = new FormData()
         fd.append("file", values.file)
-        await axiosApi.post(`${ENDPOINT_USERS}/UploadCertificate`, fd)
+        await axiosApi.post(`${ENDPOINT_USERS}/${user.userId}/Program/${program.programId}/UploadCertificate`, fd)
             .then(res => {
-                onSuccess()
+                const certificate: CertificateType = {
+                    name: res.data.filename,
+                    date: new Date().toISOString()
+                }
+                onSuccess(certificate)
                 helpers.resetForm()
             })
             .catch(err => {

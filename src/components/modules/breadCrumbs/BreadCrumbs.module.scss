@@ -5,7 +5,7 @@
     flex-direction: row;
     width: fit-content;
     height: fit-content;
-    margin: 20px 0 40px 0;
+    margin-bottom: 40px;
 }
 
 .bread_crumb {
@@ -30,10 +30,8 @@
         overflow: hidden;
         transition: width 0.2s ease-in-out;
         text-overflow: ellipsis;
-        word-break: break-all;
+        white-space: nowrap;
         font-size: 16px;
-        max-height: 16px;
-        line-height: 16px;
     }
 
     &_active {

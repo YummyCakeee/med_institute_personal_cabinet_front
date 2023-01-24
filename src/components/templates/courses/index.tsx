@@ -17,7 +17,7 @@ const CoursesTemplate = ({ courses: initialCourses }: CoursesTemplateProps) => {
         setCourses,
         onCourseAddClick,
         onCourseDeleteClick,
-        onCourseSetupClick,
+        onCourseThemesClick,
         onCourseEditClick,
         onCourseReportClick
     } = useCourses()
@@ -60,8 +60,9 @@ const CoursesTemplate = ({ courses: initialCourses }: CoursesTemplateProps) => {
                             size: "small"
                         },
                         {
-                            title: "Настройка тем курса",
-                            onClick: onCourseSetupClick,
+                            title: "Темы курса",
+                            onClick: onCourseThemesClick,
+                            size: "small",
                             stretchable: true
                         },
                         {

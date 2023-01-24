@@ -9,6 +9,7 @@ type InputFieldProps = FieldProps & InputProps
 const InputField = ({
     field,
     form: { touched, errors },
+    size = "medium",
     ...props
 }: InputFieldProps) => {
     return (
@@ -16,12 +17,14 @@ const InputField = ({
             <Input
                 {...{
                     ...field,
+                    size,
                     ...props
                 }}
             />
             <div className={cn(
                 styles.input_error,
-                { [styles.input_error_shown]: touched[field.name] && errors[field.name] }
+                { [styles.input_error_shown]: touched[field.name] && errors[field.name] },
+                styles[size]
             )}>
                 {`${errors[field.name]}`}
             </div>

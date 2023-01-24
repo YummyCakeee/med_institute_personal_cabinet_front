@@ -162,7 +162,7 @@
                 user-select: none;
                 background-color: transparentize($mainBlueColor, 0.9);
                 transition: all 0.3s ease-in-out;
-                color: transparentize($mainGreyColor, 0.4);
+                color: transparentize(#fff, 0.4);
 
                 &:hover {
                     color: $mainBlueColor;

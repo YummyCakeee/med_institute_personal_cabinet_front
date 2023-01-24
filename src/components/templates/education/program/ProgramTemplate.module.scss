@@ -6,8 +6,19 @@
     margin: 10px 0;
     color: #000;
 
-    & span {
-        color: $mainDarkBlueColor;
+    &_name {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        & span {
+            color: $mainDarkBlueColor;
+            margin: 0 10px;
+        }
+    }
+
+    &_status {
+        font-size: 16px;
     }
 
     &:not(.course_unavailable) {

@@ -1,4 +1,4 @@
-import LoadingStatusWrapper, { LoadingStatusType } from "components/elements/LoadingStatusWrapper/LoadingStatusWrapper"
+import LoadingStatusWrapper, { LoadingStatusType } from "components/modules/LoadingStatusWrapper/LoadingStatusWrapper"
 import Layout from "components/layouts/Layout"
 import ItemList from "components/modules/itemList"
 import UserExerciseResultInfo from "components/modules/userExerciseResultInfo"

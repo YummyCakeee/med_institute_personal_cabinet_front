@@ -2,6 +2,7 @@ import axios from "axios"
 import { CourseType, ThemeType } from "components/templates/courses/types"
 import CourseTemplate from "components/templates/education/program/course"
 import { ThemeInfoType } from "components/templates/education/types"
+import { ReportModelType } from "components/templates/educationalPrograms/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { ENDPOINT_PROGRAMS, ENDPOINT_EDUCATION, ENDPOINT_COURSES } from "constants/endpoints"
@@ -18,6 +19,7 @@ const Course = () => {
     const [success, setSuccess] = useState<boolean>(true)
     const [error, setError] = useState<string>("")
     const [course, setCourse] = useState<CourseType>()
+    const [courseReport, setCourseReport] = useState<ReportModelType[]>()
     const [themeInfos, setThemeInfos] = useState<ThemeInfoType[]>()
 
     useEffect(() => {
@@ -25,12 +27,14 @@ const Course = () => {
             const { programId, courseId } = router.query
             axios.all([
                 axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes`),
-                axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}`)
+                axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}`),
+                axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Report`)
             ])
-                .then(axios.spread(({ data: themeInfos }, { data: course }) => {
+                .then(axios.spread(({ data: themeInfos }, { data: course }, { data: courseReport }) => {
                     setSuccess(true)
                     setThemeInfos(themeInfos)
                     setCourse(course)
+                    setCourseReport(courseReport)
                 }))
                 .catch(err => {
                     setSuccess(false)
@@ -46,10 +50,13 @@ const Course = () => {
                 <>
                     {success ?
                         <>
-                            {themeInfos && course &&
+                            {themeInfos && course && courseReport &&
                                 <CourseTemplate
-                                    course={course}
-                                    themeInfos={themeInfos}
+                                    {...{
+                                        course,
+                                        themeInfos,
+                                        courseReport
+                                    }}
                                 />
                             }
                         </>

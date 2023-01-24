@@ -7,7 +7,7 @@ import utilStyles from "styles/utils.module.scss"
 import ItemList from "components/modules/itemList"
 import styles from "./CourseReportTemplate.module.scss"
 import { ReportModelType } from "components/templates/educationalPrograms/types"
-import LoadingStatusWrapper, { LoadingStatusType } from "components/elements/LoadingStatusWrapper/LoadingStatusWrapper"
+import LoadingStatusWrapper, { LoadingStatusType } from "components/modules/LoadingStatusWrapper/LoadingStatusWrapper"
 import axiosApi from "utils/axios"
 import { useRouter } from "next/router"
 import { ENDPOINT_COURSES } from "constants/endpoints"
@@ -97,7 +97,11 @@ const CourseReportTemplate = ({
                                         title: "Название",
                                         colSize: "400px"
                                     },
-  
+                                    {
+                                        field: "status",
+                                        title: "Статус",
+                                        colSize: "200px"
+                                    },
                                 ]}
                                 items={userThemesReport}
                                 customFieldsRendering={[

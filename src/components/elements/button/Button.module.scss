@@ -5,6 +5,7 @@ $buttonColor: #3769c7;
     color: $buttonColor;
     border: transparentize($buttonColor, 0.5) solid 2px;
     font-size: 20px;
+    white-space: nowrap;
     display: flex;
     align-items: center;
     justify-content: center;

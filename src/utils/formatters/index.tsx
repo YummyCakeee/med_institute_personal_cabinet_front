@@ -11,4 +11,9 @@ export const toBase64 = (file: File) => new Promise<string>((resolve, reject) =>
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = error => reject(error);
-});
+})
+
+export const toISOStringWithTimeZone = (date: string) => {
+    var tzoffset = (new Date(date)).getTimezoneOffset() * 60000
+    return (new Date(new Date(date).getTime() - tzoffset)).toISOString().slice(0, -1)
+} 

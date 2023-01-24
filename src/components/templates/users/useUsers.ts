@@ -1,17 +1,18 @@
-import { LoadingStatusType } from "components/elements/LoadingStatusWrapper/LoadingStatusWrapper"
+import { LoadingStatusType } from "components/modules/LoadingStatusWrapper/LoadingStatusWrapper"
 import { ENDPOINT_USERS } from "constants/endpoints"
 import { ROUTE_USERS } from "constants/routes"
 import { useModalWindowContext } from "context/modalWindowContext"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Store } from "react-notifications-component"
 import axiosApi from "utils/axios"
 import addNotification from "utils/notifications"
+import { getServerErrorResponse } from "utils/serverData"
 import { UserProfileType } from "./types"
 
 export enum UserField {
     SECOND_NAME = "secondName", FIRST_NAME = "firstName", LAST_NAME = "lastName",
-    LOGIN = "user.userName", EMAIL = "user.email", ROLES = "user.userRoles"
+    LOGIN = "userName", EMAIL = "user.email", ROLES = "user.userRoles"
 }
 
 export enum FilterSortField {
@@ -71,7 +72,6 @@ const useUsers = () => {
     ])
 
     const {
-        setConfirmActionModalWindowState,
         setUserModalWindowState,
         setUserBlockModalWindowState
     } = useModalWindowContext()
@@ -79,7 +79,8 @@ const useUsers = () => {
     useEffect(() => {
         setUsersLoadingStatus(LoadingStatusType.LOADING)
         const params = {
-            filterField: filteringFieldName
+            filterField: filteringFieldName,
+            filterString: filteringFieldValue
         }
         axiosApi.get(`${ENDPOINT_USERS}/Count`, { params })
             .then(res => {
@@ -91,7 +92,7 @@ const useUsers = () => {
                 setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
             })
 
-    }, [filteringFieldName])
+    }, [filteringFieldName, filteringFieldValue])
 
     useEffect(() => {
         const getUsers = () => {
@@ -164,26 +165,42 @@ const useUsers = () => {
         router.push(`${ROUTE_USERS}/${id}`)
     }
 
+    const onUserAddClick = () => {
+        setUserModalWindowState({
+            mode: "add",
+            closable: true,
+            backgroundOverlap: true,
+            onSuccess: (user) => {
+                setUsers([...users, user])
+                addNotification({ type: "success", title: "Успех", message: "Пользователь добавлен" })
+                setUserModalWindowState(undefined)
+            },
+            onError: (err) => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось добавить пользователя:\n${getServerErrorResponse(err)}` })
+            }
+        })
+    }
+
     const onUserEditClick = (index: number) => {
         setUserModalWindowState({
             mode: "edit",
             user: users[index],
             closable: true,
-            backgroundOverlap: true
-        })
-    }
-
-    const onUserDeleteClick = (index: number) => {
-        setConfirmActionModalWindowState({
-            onDismiss: () => setConfirmActionModalWindowState(undefined),
-            onConfirm: () => {
-                const deletedUserId = users[index].userId
-                setUsers(users.filter(el => el.userId !== deletedUserId))
-                setConfirmActionModalWindowState(undefined)
-            },
-            text: `Удалить пользователя ${users[index].secondName} ${users[index].firstName}?`,
             backgroundOverlap: true,
-            closable: true
+            onSuccess: (user) => {
+                setUsers(users.map(el => {
+                    if (el.userId !== user.userId) return el
+                    return {
+                        ...el,
+                        ...user
+                    }
+                }))
+                addNotification({ type: "success", title: "Успех", message: "Данные пользователя обновлены" })
+                setUserModalWindowState(undefined)
+            },
+            onError: (err) => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось обновить данные пользователя:\n${getServerErrorResponse(err)}` })
+            }
         })
     }
 
@@ -204,28 +221,20 @@ const useUsers = () => {
                     return el
                 }))
                 setUserBlockModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: result === "blocked" ?
+                addNotification({
+                    type: "success", title: "Успех",
+                    message: result === "blocked" ?
                         "Пользователь заблокирован" :
-                        "Пользователь разблокирован",
-                    dismiss: {
-                        duration: 5000,
-                        onScreen: true
-                    }
+                        "Пользователь разблокирован"
                 })
             },
             onError: (err) => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Ошибка",
-                    message: err.code,
-                    dismiss: {
-                        duration: 5000,
-                        onScreen: true
-                    }
+                const user = users[index]
+                const initialLockout = user.user!.lockoutEnd &&
+                    new Date(user.user!.lockoutEnd) > new Date()
+                addNotification({
+                    type: "danger", title: "Ошибка",
+                    message: `Не удалось ${initialLockout ? "раз" : "за"}блокировать пользователя:\n${getServerErrorResponse(err)}`,
                 })
             },
             onDismiss: () => setUserBlockModalWindowState(undefined),
@@ -234,25 +243,20 @@ const useUsers = () => {
         })
     }
 
-    const onUserAddClick = () => {
-        setUserModalWindowState({
-            mode: "add",
-            closable: true,
-            backgroundOverlap: true
-        })
-    }
+    const sortingFieldHeaderTitle = useMemo(() => {
+        return headers.find(el => el.filterSortFieldName === sortingFieldName)?.title
+    }, [headers, sortingFieldName])
 
     return {
         headers,
-        sortingFieldName,
         sortOrder,
         users,
+        usersLoadingStatus,
         totalUsersCount,
         usersPerPage,
-        usersLoadingStatus,
+        sortingFieldHeaderTitle,
         onUserDetailsClick,
         onUserEditClick,
-        onUserDeleteClick,
         onUserBlockClick,
         onUserAddClick,
         onHeaderClick,

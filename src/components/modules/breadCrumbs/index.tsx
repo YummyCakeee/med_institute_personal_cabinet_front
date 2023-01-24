@@ -2,8 +2,8 @@ import { ArrowIcon } from "components/elements/icons"
 import { ROUTE_USERS } from "constants/routes"
 import Link from "next/link"
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import { useSelector } from "react-redux"
-import { breadCrumbsSelector } from "store/breadCrumbsSlice"
+import { useDispatch, useSelector } from "react-redux"
+import { breadCrumbsSelector, clearBreadCrumbs } from "store/breadCrumbsSlice"
 import styles from "./BreadCrumbs.module.scss"
 import cn from "classnames"
 
@@ -12,6 +12,7 @@ const BreadCrumbs = () => {
     const breadCrumbs = useSelector(breadCrumbsSelector).breadCrumbs
     const [activeBreadCrumbIndex, setActiveBreadCrumbIndex] = useState<number>()
     const ref = useRef<HTMLDivElement>(null)
+    const dispatch = useDispatch()
 
     useEffect(() => {
 
@@ -39,7 +40,9 @@ const BreadCrumbs = () => {
             {breadCrumbs.slice(0, breadCrumbs.length - 1).map((el, key) => (
                 <Link
                     href={el.route}
-                    key={key}>
+                    key={key}
+                    onClick={() => dispatch(clearBreadCrumbs())}
+                >
                     <div
                         className={cn(
                             styles.bread_crumb,
@@ -60,7 +63,10 @@ const BreadCrumbs = () => {
                 </Link>
             ))}
             {lastBreadCrumb &&
-                <Link href={lastBreadCrumb.route}>
+                <Link
+                    href={lastBreadCrumb.route}
+                    onClick={() => dispatch(clearBreadCrumbs())}
+                >
                     <div
                         className={cn(
                             styles.bread_crumb,

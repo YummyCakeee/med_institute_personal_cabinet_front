@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import { userSelector } from "store/userSlice"
 import { useSelector } from "react-redux"
-import { ProgramType } from "components/templates/educationalPrograms/types"
+import { ProgramType, ReportModelType } from "components/templates/educationalPrograms/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import axiosApi from "utils/axios"
@@ -18,6 +18,7 @@ const Program = () => {
     const [success, setSuccess] = useState<boolean>(true)
     const [error, setError] = useState<string>("")
     const [program, setProgram] = useState<ProgramType>()
+    const [programReport, setProgramReport] = useState<ReportModelType[]>()
     const [coursesInfo, setCoursesInfo] = useState<CourseInfoType[]>([])
 
     useEffect(() => {
@@ -25,12 +26,14 @@ const Program = () => {
             const { programId } = router.query
             axios.all([
                 axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}`),
-                axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses`)
+                axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses`),
+                axiosApi.get(`${ENDPOINT_EDUCATION}/Programs/${programId}/Report`)
             ])
-                .then(axios.spread(({ data: program }, { data: courses }) => {
+                .then(axios.spread(({ data: program }, { data: courses }, { data: programReport }) => {
                     setSuccess(true)
                     setProgram(program)
                     setCoursesInfo(courses)
+                    setProgramReport(programReport)
                 }))
                 .catch(err => {
                     setSuccess(false)
@@ -47,10 +50,13 @@ const Program = () => {
                 <>
                     {success ?
                         <>
-                            {program && coursesInfo &&
+                            {program && coursesInfo && programReport &&
                                 <ProgramTemplate
-                                    program={program}
-                                    coursesInfo={coursesInfo}
+                                    {...{
+                                        program,
+                                        coursesInfo,
+                                        programReport
+                                    }}
                                 />
                             }
                         </>

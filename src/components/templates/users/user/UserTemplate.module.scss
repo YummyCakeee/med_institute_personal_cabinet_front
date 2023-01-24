@@ -19,6 +19,10 @@
 
     &_col {
         margin-right: 20px;
+
+        &:last-child {
+            color: $mainDarkBlueColor;
+        }
     }
 
     &_photo {

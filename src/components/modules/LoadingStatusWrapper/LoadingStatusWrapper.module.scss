@@ -16,6 +16,7 @@
     justify-content: center;
     align-items: center;
     opacity: 0;
+    z-index: 5;
     text-shadow: 0px 0px 5px #0000008e;
 
     &:not(.status_loading):not(.status_error) {

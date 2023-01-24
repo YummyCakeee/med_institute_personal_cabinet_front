@@ -35,7 +35,8 @@ type ItemListProps = {
     controlButtonsBottom?: ButtonProps[],
     onHeaderClick?: (index: number) => void,
     pageNavigation?: boolean,
-    pagesCount?: number,
+    totalItemsCount?: number,
+    itemsPerPage?: number,
     onPageClick?: (pageNumber: number) => void,
     deselectItemOnItemControlClick?: boolean,
     scrollToBottomOnItemsUpdate?: boolean
@@ -51,7 +52,8 @@ const ItemList = ({
     controlButtonsBottom,
     onHeaderClick = () => { },
     pageNavigation,
-    pagesCount = 1,
+    totalItemsCount = 1,
+    itemsPerPage = 1,
     onPageClick = () => { },
     deselectItemOnItemControlClick = false,
     scrollToBottomOnItemsUpdate = false
@@ -82,6 +84,10 @@ const ItemList = ({
         return `${100 / headers.length}%`
     }, [headers, headersRef, containerRef, className])
 
+    const pagesCount = useMemo(() => {
+        return Math.max(Math.ceil(totalItemsCount / itemsPerPage), 1)
+    }, [totalItemsCount, itemsPerPage])
+
     useEffect(() => {
         setSetectedItemIndex(null)
         if (scrollToBottomOnItemsUpdate && itemListEndRef.current)
@@ -100,15 +106,20 @@ const ItemList = ({
                 currentPage === pagesCount ?
                     -1 :
                     0
+        const sliceOffset = (currentPage - 1 + offset) === 0 ? 1 : 0
         let newPagesList = [
             currentPage - 1 + offset,
             currentPage + offset,
             currentPage + 1 + offset
-        ].slice(0, pagesCount)
+        ].slice(sliceOffset, pagesCount + sliceOffset)
 
         setPagesList(newPagesList)
 
     }, [pagesCount, currentPage])
+
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [pagesCount])
 
     useEffect(() => {
         onPageClick(currentPage)

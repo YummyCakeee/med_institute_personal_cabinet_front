@@ -1,6 +1,6 @@
 import Layout from "components/layouts/Layout"
 import { CourseInfoType } from "components/templates/courses/types"
-import { ProgramType } from "components/templates/educationalPrograms/types"
+import { ProgramType, ReportModelType } from "components/templates/educationalPrograms/types"
 import { ROUTE_EDUCATION } from "constants/routes"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -11,13 +11,15 @@ import cn from "classnames"
 
 type ProgramTemplateProps = {
     program: ProgramType,
-    coursesInfo: CourseInfoType[]
+    coursesInfo: CourseInfoType[],
+    programReport: ReportModelType[]
 }
 
 
 const ProgramTemplate = ({
     program,
-    coursesInfo
+    coursesInfo,
+    programReport
 }: ProgramTemplateProps) => {
 
     const router = useRouter()
@@ -33,23 +35,31 @@ const ProgramTemplate = ({
             const dependencies = coursesInfo.filter(el =>
                 programCourse.dependencies.courseIds.includes(el.course.courseId!)
             )
+            const status = programReport.find(el => el.id === courseInfo.course.courseId)?.status
             return {
                 ...courseInfo,
-                dependencies: dependencies
+                dependencies,
+                status
             }
         }).sort((a, b) => {
             if (a.dependencies.map(el => el.course.courseId).includes(b.course.courseId))
                 return -1
             return 1
         }) || []
-    }, [coursesInfo])
+    }, [coursesInfo, programReport])
 
     return (
         <Layout>
             <Head>
-                <title>{`Курсы программы "${program.title}"`}</title>
+                <title>{`Программа "${program.title}"`}</title>
             </Head>
             <div className={utilStyles.title}>{`Программа "${program.title}"`}</div>
+            <div className={utilStyles.section}>
+                <div className={utilStyles.section_title}>Описание программы</div>
+                <div className={utilStyles.text_medium}>
+                    {program.description}
+                </div>
+            </div>
             <div className={utilStyles.section_title}>Курсы программы</div>
             <div className={styles.course_container}>
                 {courses?.map((course, courseKey) => (
@@ -62,7 +72,7 @@ const ProgramTemplate = ({
                         onClick={() => onCourseClick(course.course.courseId!)}
                     >
                         <div className={styles.course_name}>
-                            {courseKey + 1}. <span>{course.course.title}</span>
+                            {courseKey + 1}. <span>{course.course.title}</span><div className={styles.course_status}>{`(${course.status}%)`}</div>
                         </div>
                         {course.dependencies.length > 0 &&
                             <div className={styles.course_dependencies}>

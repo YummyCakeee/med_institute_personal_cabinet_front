@@ -46,7 +46,8 @@ const UserTemplate = ({
             },
             {
                 name: "Доступ",
-                value: user.user?.lockoutEnd && new Date(user.user.lockoutEnd) > new Date() ? "Заблокирован" : "Открыт"
+                value: user.user?.lockoutEnd && new Date(user.user.lockoutEnd) > new Date() ?
+                    `Заблокирован до ${new Date(user.user.lockoutEnd).toLocaleString()}` : "Открыт"
             },
         ]
     }, [user])
@@ -69,12 +70,12 @@ const UserTemplate = ({
                                 className={styles.personal_info_line}
                             >
                                 <p className={cn(
-                                    utilStyles.text,
+                                    utilStyles.text_medium,
                                     utilStyles.text_bold,
                                     styles.personal_info_col
                                 )}>{el.name}</p>
                                 <p className={cn(
-                                    utilStyles.text,
+                                    utilStyles.text_medium,
                                     styles.personal_info_col
                                 )}>{el.value}</p>
                             </div>

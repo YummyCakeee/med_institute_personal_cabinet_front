@@ -22,5 +22,5 @@ export const getServerErrorResponse = (err: AxiosError) => {
         })
         return errors.join('\n')
     }
-    return err.message ? err.message : err.code
+    return err.message || err.code || ""
 }

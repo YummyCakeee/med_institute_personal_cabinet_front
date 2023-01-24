@@ -1,30 +1,30 @@
 @use "src/styles/utils.module.scss" as *;
 
 .container {
-    width: fit-content;
     position: relative;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 10px 0;
+    justify-content: space-between;
+    align-items: flex-start;
+    min-height: 70px;
+    display: flex;
+    flex-direction: column;
 }
 
-.input {
+.input_error {
+    top: 100%;
+    color: $mainRedColor;
+    font-size: 15px;
+    max-height: 0px;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: pre-line;
 
-    &_error {
-        position: absolute;
-        bottom: 0;
-        color: $mainRedColor;
-        font-size: 15px;
-        max-height: 0px;
-        opacity: 0;
-        overflow: hidden;
-
-        &_shown {
-            max-height: 20px;
-            opacity: 1;
-            transition: all 0.3s ease-in-out
-        }
+    &_shown {
+        max-height: 100px;
+        max-width: inherit;
+        opacity: 1;
+        transition: all 0.3s ease-in-out;
     }
 }

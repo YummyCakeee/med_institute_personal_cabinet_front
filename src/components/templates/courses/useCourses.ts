@@ -16,7 +16,7 @@ const useCourses = () => {
 
     const [courses, setCourses] = useState<CourseType[]>([])
 
-    const onCourseSetupClick = (index: number) => {
+    const onCourseThemesClick = (index: number) => {
         const id = courses[index].courseId
         router.push(`${ROUTE_COURSES}/${id}${ROUTE_THEMES}`)
     }
@@ -139,7 +139,7 @@ const useCourses = () => {
     return {
         courses,
         setCourses,
-        onCourseSetupClick,
+        onCourseThemesClick,
         onCourseDeleteClick,
         onCourseEditClick,
         onCourseAddClick,

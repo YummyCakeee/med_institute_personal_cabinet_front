@@ -1,4 +1,3 @@
-import CourseTemplate from "components/templates/courses/course"
 import React, { useEffect, useState } from "react"
 import { CourseType } from "components/templates/courses/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
@@ -8,8 +7,12 @@ import { useRouter } from "next/router"
 import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import UnauthorizedTemplate from "components/templates/unauthorized"
+import CourseThemesTemplate from "components/templates/courses/courseThemes"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
+import { ROUTE_COURSES } from "constants/routes"
 
-const Course = () => {
+const CourseThemes = () => {
 
 
     const router = useRouter()
@@ -41,7 +44,7 @@ const Course = () => {
                     {success ?
                         <>
                             {course &&
-                                <CourseTemplate
+                                <CourseThemesTemplate
                                     course={course}
                                 />
                             }
@@ -59,4 +62,13 @@ const Course = () => {
     )
 }
 
-export default Course
+CourseThemes.getInitialProps = wrapper.getInitialPageProps(store => () => {
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Курсы",
+            route: ROUTE_COURSES
+        }
+    ]))
+})
+
+export default CourseThemes

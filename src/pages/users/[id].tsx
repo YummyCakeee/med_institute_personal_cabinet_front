@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import axiosApi from "utils/axios"
 import { ENDPOINT_USERS } from "constants/endpoints"
-import { UserProfileType } from "components/templates/users/types"
+import { UserProfileType, UserWithCertificatesType } from "components/templates/users/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
@@ -26,7 +26,7 @@ const User = () => {
             axiosApi.get(`${ENDPOINT_USERS}/${id}`)
                 .then(res => {
                     setSuccess(true)
-                    setUserProfile(res.data)
+                    setUserProfile((res.data as UserWithCertificatesType).user)
                 })
                 .catch(err => {
                     setSuccess(false)

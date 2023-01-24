@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     min-height: 90px;
     display: flex;
     flex-direction: column;
@@ -26,6 +26,18 @@
         max-width: inherit;
         opacity: 1;
         transition: all 0.3s ease-in-out;
+    }
+
+    &.small {
+        width: 200px;
+    }
+
+    &.medium {
+        width: 350px;
+    }
+
+    &.large {
+        width: 100%;
     }
 
 }

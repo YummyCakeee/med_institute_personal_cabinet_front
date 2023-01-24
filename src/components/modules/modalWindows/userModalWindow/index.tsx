@@ -5,12 +5,16 @@ import React from "react"
 
 export interface UserModalWindowProps extends ModalWindowProps {
     mode?: "add" | "edit",
-    user?: UserProfileType
+    user?: UserProfileType,
+    onSuccess?: (user: UserProfileType) => void,
+    onError?: (error: any) => void
 }
 
 const UserModalWindow = ({
     mode,
     user,
+    onSuccess,
+    onError,
     ...props
 }: UserModalWindowProps) => {
     return (
@@ -23,8 +27,12 @@ const UserModalWindow = ({
             }}
         >
             <UserForm
-                mode={mode}
-                user={user}
+                {...{
+                    user,
+                    mode,
+                    onSuccess,
+                    onError
+                }}
             />
         </ModalWindow>
     )

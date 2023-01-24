@@ -11,7 +11,8 @@ import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import Datetime from "components/elements/datetime"
 import UserAvatarField from "components/elements/formikComponents/userAvatarField"
-import { toBase64 } from "utils/formatters"
+import { toBase64, toISOStringWithTimeZone } from "utils/formatters"
+import moment from "moment"
 
 type ProfileInfoFormProps = {
     onSuccess?: (user: UserProfileType) => void,
@@ -34,7 +35,7 @@ const ProfileInfoForm = ({
             lastName: values.lastName,
             secondName: values.secondName,
             ...(values.dateOfBirth.length > 0 && { dateOfBirth: values.dateOfBirth }),
-            userName: values.login,
+            userName: user.login,
             profilePicture
         }
         console.log(data)
@@ -55,7 +56,6 @@ const ProfileInfoForm = ({
                 lastName: user.lastName,
                 firstName: user.firstName,
                 secondName: user.secondName,
-                login: user.login,
                 dateOfBirth: user.dateOfBirth,
                 profilePicture: user.profilePicture
             }}
@@ -110,21 +110,10 @@ const ProfileInfoForm = ({
                         time={false}
                         disabled={isSubmitting}
                         value={values.dateOfBirth ? new Date(values.dateOfBirth) : ""}
-                        onChange={(e: string) => setValues({ ...values, dateOfBirth: e.length === 0 ? "" : new Date(e).toISOString() })}
+                        onChange={(e: string) => {
+                            setValues({ ...values, dateOfBirth: e.length === 0 ? "" : toISOStringWithTimeZone(e) })
+                        }}
                         allowEmpty
-                    />
-                    <Field
-                        name="login"
-                        component={InputField}
-                        placeholder="Логин"
-                        label="Логин:"
-                        disabled={isSubmitting}
-                        validate={(value: string) =>
-                            composeValidators(value,
-                                notEmptyValidator,
-                                val => minLengthValueValidator(val, 3),
-                                val => maxLengthValueValidator(val, 20)
-                            )}
                     />
                     <Field
                         name="profilePicture"

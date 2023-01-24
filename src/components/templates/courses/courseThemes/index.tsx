@@ -6,13 +6,13 @@ import utilStyles from "styles/utils.module.scss"
 import ItemList from "components/modules/itemList"
 import useCourse from "./useCourse"
 
-type CourseTemplateProps = {
+type CourseThemesTemplateProps = {
     course: CourseType
 }
 
-const CourseTemplate = ({
+const CourseThemesTemplate = ({
     course
-}: CourseTemplateProps) => {
+}: CourseThemesTemplateProps) => {
 
     const {
         themes,
@@ -27,7 +27,7 @@ const CourseTemplate = ({
     return (
         <Layout>
             <Head>
-                <title>{`Настройка курса ${course.title}`}</title>
+                <title>{`Темы курса ${course.title}`}</title>
             </Head>
             <div className={utilStyles.title}>{`Темы курса "${course.title}"`}</div>
             <div>
@@ -78,4 +78,4 @@ const CourseTemplate = ({
     )
 }
 
-export default CourseTemplate
+export default CourseThemesTemplate

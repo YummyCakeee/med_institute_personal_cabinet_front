@@ -56,7 +56,7 @@ export type CountStudentsModelType = {
 }
 
 export type ReportModelType = {
-    id: number,
+    id: string,
     name: string,
     status: number
 }

@@ -1,20 +1,30 @@
 import Layout from "components/layouts/Layout"
 import Head from "next/head"
-import React from "react"
+import React, { useRef } from "react"
 import styles from "./ProfileTemplate.module.scss"
 import utilStyles from "styles/utils.module.scss"
 import ProfileInfoForm from "components/modules/forms/profileInfo"
-import { UserProfileType } from "../users/types"
+import { CertificateType, UserProfileType } from "../users/types"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "store"
 import { StateUserType, userInfoChanged } from "store/userSlice"
 import ProfilePasswordForm from "components/modules/forms/profilePassword"
 import addNotification from "utils/notifications"
 import { getServerErrorResponse } from "utils/serverData"
+import ItemList from "components/modules/itemList"
+import { ENDPOINT_USERS } from "constants/endpoints"
+import axiosApi from "utils/axios"
 
-const ProfileTemplate = () => {
+type ProfileTemplateProps = {
+    certificates: CertificateType[]
+}
+
+const ProfileTemplate = ({
+    certificates
+}: ProfileTemplateProps) => {
 
     const dispatch = useDispatch<AppDispatch>()
+    const downloadFileRef = useRef<HTMLAnchorElement>(null)
 
     const onSuccesUserInfoChange = (user: UserProfileType) => {
 
@@ -41,8 +51,28 @@ const ProfileTemplate = () => {
     }
 
     const onErrorPasswordChange = (error: any) => {
-        console.log(error)
         addNotification({ type: "danger", title: "Ошибка", message: `Не удалось изменить пароль: \n${getServerErrorResponse(error)}` })
+    }
+
+    const onDownloadCertificateClick = async (index: number) => {
+        const filename = certificates[index].name
+        const params = {
+            filename
+        }
+        axiosApi.get(`${ENDPOINT_USERS}/DownloadCertificate`, { params, responseType: "blob" })
+            .then(res => {
+                console.log(res.data)
+                let url = window.URL.createObjectURL(res.data);
+                if (downloadFileRef.current) {
+                    const extension = filename.match(/.*(\..*)$/)
+                    downloadFileRef.current.href = url
+                    downloadFileRef.current.download = `${filename}${extension?.length ? extension[1] : "txt"}`
+                    downloadFileRef.current.click()
+                }
+            })
+            .catch(err => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось скачать сертификат:\n${getServerErrorResponse(err)}` })
+            })
     }
 
     return (
@@ -53,14 +83,35 @@ const ProfileTemplate = () => {
             <div>
                 <p className={utilStyles.section_title}>Сертификаты</p>
                 <div className={styles.certificates}>
-                    {/* <ItemList
+                    <ItemList
                         headers={[
                             {
+                                field: "name",
                                 title: "Название",
-                                field: "name"
+                                colSize: "600px"
+                            },
+                            {
+                                field: "date",
+                                title: "Дата выдачи",
+                                colSize: "200px"
                             }
                         ]}
-                    /> */}
+                        items={certificates}
+                        itemControlButtons={() => [
+                            {
+                                title: "Скачать",
+                                size: "small",
+                                onClick: onDownloadCertificateClick
+                            }
+                        ]}
+                        customFieldsRendering={[
+                            {
+                                fieldName: "date",
+                                render: value => new Date(value).toLocaleDateString()
+                            }
+                        ]}
+                    />
+                    <a ref={downloadFileRef} target="_blank" rel="noreferrer" download></a>
                 </div>
             </div>
             <div>

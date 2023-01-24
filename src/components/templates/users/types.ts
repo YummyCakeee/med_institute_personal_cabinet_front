@@ -1,3 +1,8 @@
+export type UserWithCertificatesType = {
+    user: UserProfileType,
+    certificates: CertificateType[]
+}
+
 
 export type UserProfileType = {
     userId?: string,
@@ -66,4 +71,9 @@ export type ApplicationRole = {
     name?: string,
     normalizedName?: string
     concurrencyStamp?: string
+}
+
+export type CertificateType = {
+    name: string,
+    date: string
 }

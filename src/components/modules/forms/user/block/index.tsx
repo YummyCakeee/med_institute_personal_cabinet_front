@@ -3,10 +3,11 @@ import { Formik, Form, Field, FormikValues } from "formik"
 import React, { useMemo } from "react"
 import utilStyles from "styles/utils.module.scss"
 import { UserProfileType } from "components/templates/users/types"
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import Datetime from "components/elements/datetime"
 import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
+import { toISOStringWithTimeZone } from "utils/formatters"
 
 interface UserBlockFormProps {
     user: UserProfileType,
@@ -48,7 +49,7 @@ const UserBlockForm = ({
         <Formik
             initialValues={
                 {
-                    lockoutEnd: mode === "unblock" ? user.user!.lockoutEnd : new Date().toISOString()
+                    lockoutEnd: mode === "unblock" ? user.user!.lockoutEnd! : new Date().toISOString()
                 }
             }
             onSubmit={onSubmit}
@@ -63,8 +64,8 @@ const UserBlockForm = ({
                                 name="lockoutEnd"
                                 component={Datetime}
                                 disabled={isSubmitting}
-                                value={new Date(values.lockoutEnd!)}
-                                onChange={(e: string) => setValues({ lockoutEnd: e.length === 0 ? "" : new Date(e).toISOString() })}
+                                value={new Date(values.lockoutEnd)}
+                                onChange={(e: string) => setValues({ lockoutEnd: e.length === 0 ? "" : toISOStringWithTimeZone(e) })}
                             />
                         </>
                     }

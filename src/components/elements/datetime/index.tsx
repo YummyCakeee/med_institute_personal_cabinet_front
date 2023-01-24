@@ -4,13 +4,15 @@ import { Moment } from 'moment';
 import "react-datetime/css/react-datetime.css"
 import styles from "./Datetime.module.scss"
 import 'moment/locale/ru';
+import cn from "classnames"
 
 type DatetimeProps = {
     value: Date | Moment | undefined,
     onChange: (value: string) => void,
     time?: boolean,
     label?: string,
-    allowEmpty?: boolean
+    allowEmpty?: boolean,
+    disabled?: boolean
 }
 
 const Datetime = ({
@@ -18,13 +20,22 @@ const Datetime = ({
     onChange,
     time,
     label,
-    allowEmpty = false,
+    allowEmpty,
+    disabled,
     ...props
 }: DatetimeProps) => {
 
     const renderInput = (props: any, openCalendar: Function, closeCalandar: Function) => {
         return (
-            <input {...props} className={styles.dateTime} />
+            <input
+                {...{
+                    disabled,
+                    ...props
+                }}
+                className={cn(
+                    styles.dateTime,
+                    { [styles.disabled]: disabled }
+                )} />
         )
     }
 
@@ -38,23 +49,25 @@ const Datetime = ({
         catch { }
     }
 
-    return <div className={styles.container}>
-        {label &&
-            <div className={styles.label}>{label}</div>
-        }
-        <LibDatetime
-            {...{
-                closeOnClickOutside: true,
-                locale: "ru",
-                dateFormat: "DD.MM.YYYY",
-                timeFormat: time ? "HH:mm" : "",
-                value,
-                onChange: onDateChange,
-                renderInput,
-                ...props
-            }}
-        />
-    </div>
+    return (
+        <div className={styles.container}>
+            {label &&
+                <div className={styles.label}>{label}</div>
+            }
+            <LibDatetime
+                {...{
+                    closeOnClickOutside: true,
+                    locale: "ru",
+                    dateFormat: "DD.MM.YYYY",
+                    timeFormat: time ? "HH:mm" : "",
+                    value,
+                    onChange: onDateChange,
+                    renderInput,
+                    ...props
+                }}
+            />
+        </div>
+    )
 }
 
 export default Datetime
