@@ -27,8 +27,6 @@ const ExerciseTemplate = ({
     test
 }: ExerciseTemplateProps) => {
 
-    const [leftTime, setLeftTime] = useState<number>(0)
-    const timeoutRef = useRef<NodeJS.Timeout>()
     const [initialTest, setInitialTest] = useState<SolvedTestType>()
     const router = useRouter()
     const [currentExerciceIndex, setCurrentExerciceIndex] = useState(-1)
@@ -36,20 +34,7 @@ const ExerciseTemplate = ({
 
     useEffect(() => {
         setInitialTest(test)
-        const endTime = new Date(test.endTestTime).getTime()
-        const currentTime = new Date().getTime()
-        const leftTime = Math.floor((endTime - currentTime) / 1000)
-        setLeftTime(leftTime)
     }, [test])
-
-    useEffect(() => {
-        if (leftTime > 0) {
-            timeoutRef.current = setTimeout(() => {
-                setLeftTime(leftTime - 1)
-            }, 1000)
-        }
-        return () => clearTimeout(timeoutRef.current)
-    }, [leftTime, setLeftTime, timeoutRef])
 
     const onFileUpload = async (
         values: FormikValues,
@@ -108,7 +93,7 @@ const ExerciseTemplate = ({
         const data: UserExerciseType = {
             exerciseText: currentExercice.exerciseText,
             rating: currentExercice.rating,
-            teacherComments: currentExercice.teacherComments,
+            teacherComments: [],
             userComments: [newComment],
         }
         return axiosApi.put(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes/${themeId}/TestBlock/Exercise`, data)
@@ -159,15 +144,6 @@ const ExerciseTemplate = ({
                 <title>Упражнения</title>
             </Head>
             <div className={styles.container}>
-                <div className={styles.time_left_container}>
-                    <div className={styles.text}>Оставшееся время:</div>
-                    <div className={cn(
-                        styles.time,
-                        { [styles.time_out]: leftTime === 0 }
-                    )}>
-                        {convertSecondsToFullTime(leftTime)}
-                    </div>
-                </div>
                 {initialTest?.userExercises.map((userExercise, userExerciseKey) => (
                     <div
                         className={styles.exercise_container}

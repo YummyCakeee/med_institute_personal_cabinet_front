@@ -1,7 +1,7 @@
 import Layout from "components/layouts/Layout"
 import ItemList from "components/modules/itemList"
 import { CourseType, ThemeType } from "components/templates/courses/types"
-import { ROUTE_EDUCATION, ROUTE_EDUCATION_TEACHER } from "constants/routes"
+import { ROUTE_EDUCATION_TEACHER } from "constants/routes"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import React from "react"
@@ -49,6 +49,7 @@ const CourseTemplate = ({
                             onClick: onThemeStudentsClick
                         }
                     ]}
+                    className={styles.theme_list}
                 />
             </div>
         </Layout >

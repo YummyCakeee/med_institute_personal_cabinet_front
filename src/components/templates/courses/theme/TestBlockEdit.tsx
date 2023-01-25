@@ -114,15 +114,17 @@ const TestBlockEdit = ({
                     onChange={onPercentSuccessChange}
                     inputClassName={styles.test_block_input}
                 />
-                <Input
-                    label="Ограничение времени"
-                    placeholder="0"
-                    type="number"
-                    min={0}
-                    value={testBlock.timeLimit}
-                    onChange={onTimeLimitChange}
-                    inputClassName={styles.test_block_input}
-                />
+                {!testBlock.isFileTestBlock &&
+                    <Input
+                        label="Ограничение времени (мин.)"
+                        placeholder="0"
+                        type="number"
+                        min={0}
+                        value={testBlock.timeLimit}
+                        onChange={onTimeLimitChange}
+                        inputClassName={styles.test_block_input}
+                    />
+                }
                 <Datetime
                     value={new Date(testBlock.dateEnd)}
                     onChange={onDateChange}

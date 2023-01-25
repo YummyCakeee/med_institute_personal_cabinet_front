@@ -2,34 +2,31 @@ import React, { memo, useEffect, useMemo, useRef } from "react"
 import { EduFileType, SolvedTestType } from "components/templates/education/types"
 import styles from "./UserExerciseResultInfo.module.scss"
 import Button from "components/elements/button/Button"
-import { convertSecondsToFullTime } from "utils/formatters"
-import ExerciseComments, { CommentType } from "../exerciseComments"
+import ExerciseComments from "../exerciseComments"
 import { ENDPOINT_EDUCATION } from "constants/endpoints"
 import axiosApi from "utils/axios"
 import addNotification from "utils/notifications"
-import { ExerciseCommentType } from "components/templates/education/types"
-
+import { getServerErrorResponse } from "utils/serverData"
 
 type UserExerciseResultsInfoProps = {
     solvedTest: SolvedTestType,
     onClose?: () => void,
-    mode: "student" | "teacher"
+    onCommentSend?: (comment: string, exerciseIndex: number) => Promise<any>,
+    onExerciseScoreSetClick?: (exerciseIndex: number) => void,
+    onFinishAttemptClick?: () => void,
+    mode: "student" | "teacher",
 }
 
 const UserExerciseResultsInfo = ({
     solvedTest,
     onClose,
+    onCommentSend = () => Promise.resolve(),
+    onExerciseScoreSetClick = () => { },
+    onFinishAttemptClick: finishAttempt = () => { },
     mode
 }: UserExerciseResultsInfoProps) => {
 
     const downloadFileRef = useRef<HTMLAnchorElement>(null)
-
-    const elapsedTime = useMemo(() => {
-        const startTime = new Date(solvedTest.startTestTime).getTime()
-        const endTime = new Date(solvedTest.finishedTestTime).getTime()
-        const time = Math.floor((endTime - startTime) / 1000)
-        return time
-    }, [solvedTest])
 
     const isFinished = useMemo(() => {
         const currentTime = new Date().getTime()
@@ -52,10 +49,20 @@ const UserExerciseResultsInfo = ({
                 }
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось скачать файл:\n${err.code}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось скачать файл:\n${getServerErrorResponse(err)}` })
             })
     }
 
+    const onFinishAttemptClick = () => {
+        const unscoredExercises: number[] = []
+        solvedTest.userExercises.forEach((el, index) => {
+            if (!el.rating) unscoredExercises.push(index)
+        })
+        if (unscoredExercises.length) {
+            addNotification({ type: "danger", title: "Ошибка", message: `Вы не выставили оценки за упражнения: ${unscoredExercises.join(', ')}` })
+        }
+        else finishAttempt()
+    }
 
     return (
         <div className={styles.container}>
@@ -95,15 +102,17 @@ const UserExerciseResultsInfo = ({
                             }
                         </div>
                         <div className={styles.exercise_comments}>
-                            {(el.teacherComments && el.teacherComments.length > 0) ||
-                                (el.userComments && el.userComments.length > 0) ?
+                            {((el.teacherComments && el.teacherComments.length > 0) ||
+                                (el.userComments && el.userComments.length > 0)) ||
+                                mode === "teacher" ?
                                 <ExerciseComments
                                     {...{
                                         mode,
                                         userComments: el.userComments,
                                         teacherComments: el.teacherComments,
-                                        readOnly: true,
-                                        className: styles.exercise_comments_container
+                                        readOnly: mode === "student",
+                                        className: styles.exercise_comments_container,
+                                        onCommentSend: (comment) => onCommentSend(comment, key)
                                     }}
                                 />
                                 :
@@ -113,15 +122,30 @@ const UserExerciseResultsInfo = ({
                             }
                         </div>
                         <div className={styles.exercise_score}>
-                            Оценка: <span>{el.rating}</span>
+                            Оценка: <span>{el.rating || "Не выставлена"}</span>
+                            {mode === "teacher" &&
+                                <Button
+                                    title={el.rating ? "Поменять оценку" : "Выставить оценку"}
+                                    size="small"
+                                    stretchable
+                                    className={styles.exercise_score_button}
+                                    onClick={() => onExerciseScoreSetClick(key)}
+                                />
+                            }
                         </div>
                     </div>
                 ))}
             </div>
+            {mode === "teacher" && !isFinished &&
+                < Button
+                    title="Завершить попытку"
+                    size="small"
+                    stretchable
+                    className={styles.finish_attempt_button}
+                    onClick={onFinishAttemptClick}
+                />
+            }
             <div className={styles.result_info}>
-                {/* <div className={styles.correct_answers_amount}>
-                    Верных ответов: <span>{correctAnswersAmount}/{solvedTest.userQuestions.length}</span>
-                </div> */}
                 <div className={styles.result}>
                     Итоговый результат: <span>{solvedTest.resultPercent.toFixed()}%</span>
                 </div>

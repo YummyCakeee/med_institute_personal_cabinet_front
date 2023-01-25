@@ -1,28 +1,5 @@
 @use "src/styles/utils.module.scss" as *;
 
-.theme {
-
-    font-size: 22px;
-    margin: 10px 0;
-    color: #000;
-
-    & span {
-        color: $mainDarkBlueColor;
-    }
-
-    & span {
-        color: $mainDarkBlueColor;
-        transition: all 0.3s ease-in-out;
-        cursor: pointer;
-
-        &:hover {
-            color: $mainBlueColor;
-        }
-    }
-
-    &_container {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
+.theme_list {
+    width: 600px;
 }

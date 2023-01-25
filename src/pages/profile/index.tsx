@@ -2,7 +2,7 @@ import LoadingErrorTemplate from 'components/templates/loadingError'
 import ProfileTemplate from 'components/templates/profile'
 import UnauthorizedTemplate from 'components/templates/unauthorized'
 import { CertificateType, UserWithCertificatesType } from 'components/templates/users/types'
-import { ENDPOINT_USERS } from 'constants/endpoints'
+import { ENDPOINT_ACCOUNT, ENDPOINT_USERS } from 'constants/endpoints'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { userSelector } from 'store/userSlice'
@@ -17,7 +17,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (user.authorized) {
-      axiosApi.get(`${ENDPOINT_USERS}/${user.id}`)
+      axiosApi.get(`${ENDPOINT_ACCOUNT}/CurrentUserInfo`)
         .then(res => {
           setCertificates((res.data as UserWithCertificatesType).certificates)
           setSuccess(true)

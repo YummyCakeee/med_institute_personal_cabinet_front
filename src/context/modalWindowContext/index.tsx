@@ -4,6 +4,7 @@ import { ConfirmActionModalWindowProps } from "components/modules/modalWindows/c
 import CourseModalWindow, { CourseModalWindowProps } from "components/modules/modalWindows/courseModalWindow"
 import ThemesOrderModalWindow, { ThemesOrderModalWindowProps } from "components/modules/modalWindows/courseModalWindow/themesOrderModalWindow"
 import EducationalProgramModalWindow, { EducationalProgramModalWindowProps } from "components/modules/modalWindows/educationalProgramModalWindow"
+import ExerciseScoreModalWindow, { ExerciseScoreModalWindowProps } from "components/modules/modalWindows/exerciseScoreModalWindow"
 import TestBlockModalWindow, { TestBlockModalWindowProps } from "components/modules/modalWindows/testBlockModalWindow"
 import TestModalWindow, { TestModalWindowProps } from "components/modules/modalWindows/testModalWindow"
 import ThemeFileModalWindow, { ThemeFileModalWindowProps } from "components/modules/modalWindows/themeFileModalWindow"
@@ -23,7 +24,8 @@ interface ModalWindowContext {
     setTestBlockModalWindowState: React.Dispatch<React.SetStateAction<TestBlockModalWindowProps | undefined>>,
     setThemesOrderModalWindowState: React.Dispatch<React.SetStateAction<ThemesOrderModalWindowProps | undefined>>,
     setUserBlockModalWindowState: React.Dispatch<React.SetStateAction<UserBlockModalWindowProps | undefined>>,
-    setThemeFileModalWindowState: React.Dispatch<React.SetStateAction<ThemeFileModalWindowProps | undefined>>
+    setThemeFileModalWindowState: React.Dispatch<React.SetStateAction<ThemeFileModalWindowProps | undefined>>,
+    setExerciseScoreModalWindowState: React.Dispatch<React.SetStateAction<ExerciseScoreModalWindowProps | undefined>>,
 }
 
 const ModalWindowContext = createContext<ModalWindowContext>({
@@ -37,7 +39,8 @@ const ModalWindowContext = createContext<ModalWindowContext>({
     setTestBlockModalWindowState: () => { },
     setThemesOrderModalWindowState: () => { },
     setUserBlockModalWindowState: () => { },
-    setThemeFileModalWindowState: () => { }
+    setThemeFileModalWindowState: () => { },
+    setExerciseScoreModalWindowState: () => { }
 })
 
 const ModalWindowWrapper = ({
@@ -54,6 +57,7 @@ const ModalWindowWrapper = ({
     const [themesOrderModalWindowState, setThemesOrderModalWindowState] = useState<ThemesOrderModalWindowProps>()
     const [userBlockModalWindowState, setUserBlockModalWindowState] = useState<UserBlockModalWindowProps>()
     const [themeFileModalWindowState, setThemeFileModalWindowState] = useState<ThemeFileModalWindowProps>()
+    const [exerciseScoreModalWindowState, setExerciseScoreModalWindowState] = useState<ExerciseScoreModalWindowProps>()
 
     return (
         <ModalWindowContext.Provider
@@ -68,7 +72,8 @@ const ModalWindowWrapper = ({
                 setTestBlockModalWindowState,
                 setThemesOrderModalWindowState,
                 setUserBlockModalWindowState,
-                setThemeFileModalWindowState
+                setThemeFileModalWindowState,
+                setExerciseScoreModalWindowState
             }}
         >
             {!!confirmActionModalWindowState &&
@@ -157,6 +162,14 @@ const ModalWindowWrapper = ({
                     {...{
                         onClose: () => setThemeFileModalWindowState(undefined),
                         ...themeFileModalWindowState
+                    }}
+                />
+            }
+            {!!exerciseScoreModalWindowState &&
+                <ExerciseScoreModalWindow
+                    {...{
+                        onClose: () => setExerciseScoreModalWindowState(undefined),
+                        ...exerciseScoreModalWindowState
                     }}
                 />
             }

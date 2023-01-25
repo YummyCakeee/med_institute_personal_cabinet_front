@@ -78,7 +78,6 @@ const CoursesTemplate = ({ courses: initialCourses }: CoursesTemplateProps) => {
                             size: "small"
                         }
                     ]}
-                    scrollToBottomOnItemsUpdate
                 />
             </div>
         </Layout>

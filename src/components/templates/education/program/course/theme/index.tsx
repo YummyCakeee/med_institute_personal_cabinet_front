@@ -282,14 +282,16 @@ const CurrentAttempt = ({
                                     {new Date(activeTest.endTestTime).toLocaleString()}
                                 </div>
                             </div>
-                            <div className={styles.test_attempt_info_section}>
-                                <div className={styles.test_attempt_info_header}>
-                                    Оставшееся время
+                            {!testBlock.isFileTestBlock &&
+                                <div className={styles.test_attempt_info_section}>
+                                    <div className={styles.test_attempt_info_header}>
+                                        Оставшееся время
+                                    </div>
+                                    <div className={styles.test_attempt_info_cell}>
+                                        {convertSecondsToFullTime(activeAttemptLeftTime)}
+                                    </div>
                                 </div>
-                                <div className={styles.test_attempt_info_cell}>
-                                    {convertSecondsToFullTime(activeAttemptLeftTime)}
-                                </div>
-                            </div>
+                            }
                         </div>
                         <Button
                             title={testBlock.isFileTestBlock ? "Редактировать" : "Продолжить"}

@@ -73,7 +73,7 @@ const ExerciseComments = ({
             styles.container,
             className
         )}>
-            <div className={styles.comments_title}>Коммментарии к упражнению</div>
+            <div className={styles.comments_title}>Комментарии к упражнению</div>
             <div className={styles.comments}>
                 {comments.map((el, key) => (
                     <div

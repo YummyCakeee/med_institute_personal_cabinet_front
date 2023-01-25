@@ -101,7 +101,15 @@
         & span {
             color: $mainDarkBlueColor
         }
+
+        &_button {
+            margin: 10px auto;
+        }
     }
+}
+
+.finish_attempt_button {
+    margin: 20px auto;
 }
 
 .result_info {
