@@ -110,9 +110,11 @@ const ExerciseComments = ({
                                 <Field
                                     name="comment"
                                     component={TextAreaField}
+                                    size="large"
                                     validate={notEmptyValidator}
                                     disabled={isSubmitting}
                                     placeholder="Ваш комментарий"
+                                    className={styles.leave_comment_field}
                                 />
                                 <Button
                                     title="Отправить"
