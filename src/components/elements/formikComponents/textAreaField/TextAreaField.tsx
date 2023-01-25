@@ -5,12 +5,14 @@ import styles from "./TextAreaField.module.scss"
 
 type TextAreaFieldProps = FieldProps & React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
     size?: "small" | "medium" | "large",
+    className?: string
 }
 
 const TextAreaField = ({
     field,
     form: { touched, errors },
     size = "medium",
+    className,
     ...props
 }: TextAreaFieldProps) => {
 
@@ -20,7 +22,8 @@ const TextAreaField = ({
                 className={cn(
                     styles.text_area_container,
                     { [styles.disabled]: props.disabled },
-                    styles[size]
+                    styles[size],
+                    className
                 )}
                 {...{
                     ...field,
