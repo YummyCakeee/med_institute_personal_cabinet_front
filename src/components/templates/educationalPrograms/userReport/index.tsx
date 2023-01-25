@@ -27,17 +27,17 @@ const EducationalProgramUserReportTemplate = ({
     programUserReport
 }: EducationalProgramUserReportTemplateProps) => {
 
-    const [certificates, setCertificates] = useState<CertificateType[]>([])
+    const [certificate, setCertificate] = useState<CertificateType>()
     const [isShowingUploadSection, setIsShowingUploadSection] = useState<boolean>(false)
     const downloadFileRef = useRef<HTMLAnchorElement>(null)
     const { setConfirmActionModalWindowState } = useModalWindowContext()
 
     useEffect(() => {
-        setCertificates(programUser.certificates)
+        setCertificate(programUser.certificates.find(el => el.programName === program.title))
     }, [programUser.certificates])
 
     const onCertificateUploadSuccess = (certificate: CertificateType) => {
-        setCertificates([...certificates, certificate])
+        setCertificate(certificate)
         addNotification({ type: "success", title: "Успех", message: "Сертификат загружен" })
         setIsShowingUploadSection(false)
     }
@@ -46,23 +46,23 @@ const EducationalProgramUserReportTemplate = ({
         addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить сертификат:\n${getServerErrorResponse(err)}` })
     }
 
-    const onDeleteCertificateClick = (index: number) => {
+    const onDeleteCertificateClick = () => {
         setConfirmActionModalWindowState({
             text: "Вы уверены, что хотите удалить сертификат?",
-            onConfirm: () => deleteCertificate(index),
+            onConfirm: deleteCertificate,
             onDismiss: () => setConfirmActionModalWindowState(undefined),
             backgroundOverlap: true,
             closable: true
         })
     }
 
-    const deleteCertificate = (index: number) => {
+    const deleteCertificate = async () => {
         const params = {
-            filename: certificates[index].name
+            filename: certificate!.name
         }
         axiosApi.post(`${ENDPOINT_USERS}/${programUser.user.userId}/DeleteCertificate`, null, { params })
             .then(res => {
-                setCertificates(certificates.filter((el, key) => key !== index))
+                setCertificate(undefined)
                 addNotification({ type: "success", title: "Успех", message: "Сертификат удалён" })
                 setConfirmActionModalWindowState(undefined)
             })
@@ -71,8 +71,8 @@ const EducationalProgramUserReportTemplate = ({
             })
     }
 
-    const onDownloadCertificateClick = async (index: number) => {
-        const filename = certificates[index].name
+    const onDownloadCertificateClick = async () => {
+        const filename = certificate!.name
         const params = {
             filename
         }
@@ -95,10 +95,10 @@ const EducationalProgramUserReportTemplate = ({
     return (
         <Layout>
             <Head>
-                <title>{`Отчёт по программе обучения — ${program.title}`}</title>
+                <title>{`Отчёт по программе обучения — ${program.title} для студента ${programUser.user.lastName} ${programUser.user.firstName}`}</title>
             </Head>
             <div className={utilStyles.title}>
-                Отчёт по программе<br />{program.title}
+                {`Отчёт по программе обучения\n${program.title}\nдля студента ${programUser.user.lastName} ${programUser.user.firstName}`}
             </div>
             <div className={utilStyles.section}>
                 <div className={utilStyles.section_title}>Основная информация о студенте</div>
@@ -150,65 +150,32 @@ const EducationalProgramUserReportTemplate = ({
                 />
             </div>
             <div className={utilStyles.section}>
-                <div className={utilStyles.section_title}>Сертификаты студента</div>
-                <div className={styles.certificates_section}>
-                    <ItemList
-                        headers={[
-                            {
-                                field: "name",
-                                title: "Название",
-                                colSize: "600px"
-                            },
-                            {
-                                field: "date",
-                                title: "Дата выдачи",
-                                colSize: "200px"
-                            }
-                        ]}
-                        items={certificates}
-                        itemControlButtons={() => [
-                            {
-                                title: "Скачать",
-                                size: "small",
-                                onClick: onDownloadCertificateClick
-                            },
-                            {
-                                title: "Удалить",
-                                size: "small",
-                                onClick: onDeleteCertificateClick
-                            }
-                        ]}
-                        controlButtonsBottom={[
-                            {
-                                title: "Загрузить",
-                                size: "small",
-                                onClick: () => setIsShowingUploadSection(true)
-                            }
-                        ]}
-                        customFieldsRendering={[
-                            {
-                                fieldName: "date",
-                                render: value => new Date(value).toLocaleDateString()
-                            }
-                        ]}
-                    />
-                    <a ref={downloadFileRef} target="_blank" rel="noreferrer" download></a>
-                    <div
-                        className={styles.upload_certificate_container}
-                        data-visible={isShowingUploadSection}
-                    >
+                <div className={utilStyles.section_title}>Сертификат студента по программе</div>
+                <div className={styles.certificate_section}>
+                    {certificate ?
+                        <div className={styles.downloaded_certificate}>
+                            <div
+                                className={styles.downloaded_certificate_text}
+                                onClick={onDownloadCertificateClick}
+                            >
+                                Сертификат по программе загружен
+                            </div>
+                            <div className={styles.downloaded_certificate_controls}>
+                                <Button
+                                    title="Удалить"
+                                    size="small"
+                                    onClick={onDeleteCertificateClick}
+                                />
+                            </div>
+                            <a ref={downloadFileRef} target="_blank" rel="noreferrer" download></a>
+                        </div> :
                         <CertificateForm
                             user={programUser.user}
                             program={program}
                             onSuccess={onCertificateUploadSuccess}
                             onError={onCertificateUploadError}
                         />
-                        <Button
-                            title="Отмена"
-                            size="small"
-                            onClick={() => setIsShowingUploadSection(false)}
-                        />
-                    </div>
+                    }
                 </div>
             </div>
         </Layout>

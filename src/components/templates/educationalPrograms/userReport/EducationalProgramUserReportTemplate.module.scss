@@ -22,20 +22,26 @@
     }
 }
 
-.certificates_section {
+.certificate_section {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 
-    & .upload_certificate_container {
-        opacity: 0;
-        transition: all 0.3s ease-in-out;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    & .downloaded_certificate {
+        &_text {
+            font-size: 18px;
+            color: $mainDarkBlueColor;
+            transition: all 0.3s ease-in-out;
+            margin: 10px 0;
+            cursor: pointer;
 
-        &[data-visible="true"] {
-            opacity: 1;
+            &:hover {
+                color: $mainBlueColor;
+            }
+        }
+
+        &_controls {
+            margin-top: 20px;
         }
     }
 }

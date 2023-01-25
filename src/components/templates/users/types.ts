@@ -75,5 +75,6 @@ export type ApplicationRole = {
 
 export type CertificateType = {
     name: string,
-    date: string
+    date: string,
+    programName?: string
 }

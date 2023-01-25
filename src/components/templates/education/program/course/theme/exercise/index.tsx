@@ -17,6 +17,7 @@ import addNotification from "utils/notifications"
 import axiosApi from "utils/axios"
 import { ENDPOINT_EDUCATION } from "constants/endpoints"
 import ExerciseComments from "components/modules/exerciseComments"
+import FileUploaderField from "components/elements/formikComponents/fileUploaderField"
 
 type ExerciseTemplateProps = {
     test: SolvedTestType
@@ -29,15 +30,9 @@ const ExerciseTemplate = ({
     const [leftTime, setLeftTime] = useState<number>(0)
     const timeoutRef = useRef<NodeJS.Timeout>()
     const [initialTest, setInitialTest] = useState<SolvedTestType>()
-    const [files, setFiles] = useState<File[]>([])
     const router = useRouter()
     const [currentExerciceIndex, setCurrentExerciceIndex] = useState(-1)
     const downloadFileRef = useRef<HTMLAnchorElement>(null)
-
-    const {
-        setConfirmActionModalWindowState
-    } = useModalWindowContext()
-
 
     useEffect(() => {
         setInitialTest(test)
@@ -59,17 +54,14 @@ const ExerciseTemplate = ({
     const onFileUpload = async (
         values: FormikValues,
         helpers: FormikHelpers<{
+            file: File | undefined,
             fileName: string;
             fileDescription: string;
         }>) => {
         if (!initialTest) return
-        if (!files.length) {
-            addNotification({ type: "danger", title: "Ошибка", message: "Вы не прикрепили файл" })
-            return
-        }
         let serverFileName = ""
         const fd = new FormData()
-        fd.append("file", files[0])
+        fd.append("file", values.file)
         await axiosApi.post(`${ENDPOINT_EDUCATION}/UploadFile`, fd)
             .then(res => {
                 serverFileName = res.data.filename
@@ -98,7 +90,7 @@ const ExerciseTemplate = ({
                     })
                 })
                 addNotification({ type: "success", title: "Успех", message: "Файл загружен" })
-                setFiles([])
+                setCurrentExerciceIndex(-1)
                 helpers.resetForm()
             })
             .catch(err => {
@@ -140,7 +132,6 @@ const ExerciseTemplate = ({
 
     const onGiveExerciseAnswerClick = (index: number) => {
         setCurrentExerciceIndex(index)
-        setFiles([])
     }
 
     const onAttachedFileDownload = async (file: EduFileType) => {
@@ -209,6 +200,7 @@ const ExerciseTemplate = ({
                                     <div className={styles.exercise_file_new_title}>Прекрепить новый файл</div>
                                     <Formik
                                         initialValues={{
+                                            file: undefined as File | undefined,
                                             fileName: "",
                                             fileDescription: ""
                                         }}
@@ -216,14 +208,14 @@ const ExerciseTemplate = ({
                                     >
                                         {({ isSubmitting, isValid }) => (
                                             <>
-                                                <FileLoader
-                                                    {...{
-                                                        files,
-                                                        setFiles,
-                                                        accept: ".doc, .docx, .pdf"
-                                                    }}
-                                                />
                                                 <Form>
+                                                    <Field
+                                                        name="file"
+                                                        type="file"
+                                                        component={FileUploaderField}
+                                                        validate={notEmptyValidator}
+                                                        accept=".doc, .docx, .pdf"
+                                                    />
                                                     <Field
                                                         name="fileName"
                                                         component={InputField}

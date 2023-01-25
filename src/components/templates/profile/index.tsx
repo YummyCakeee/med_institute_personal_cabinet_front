@@ -86,8 +86,8 @@ const ProfileTemplate = ({
                     <ItemList
                         headers={[
                             {
-                                field: "name",
-                                title: "Название",
+                                field: "programName",
+                                title: "По программе",
                                 colSize: "600px"
                             },
                             {
