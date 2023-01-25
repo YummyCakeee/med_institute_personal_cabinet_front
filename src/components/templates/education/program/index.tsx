@@ -72,7 +72,7 @@ const ProgramTemplate = ({
                         onClick={() => onCourseClick(course.course.courseId!)}
                     >
                         <div className={styles.course_name}>
-                            {courseKey + 1}. <span>{course.course.title}</span><div className={styles.course_status}>{`(${course.status}%)`}</div>
+                            {courseKey + 1}. <span>{course.course.title}</span><div className={styles.course_status}>{`(${course.status?.toFixed()}%)`}</div>
                         </div>
                         {course.dependencies.length > 0 &&
                             <div className={styles.course_dependencies}>

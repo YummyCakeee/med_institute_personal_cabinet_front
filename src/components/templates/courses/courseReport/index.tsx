@@ -109,7 +109,7 @@ const CourseReportTemplate = ({
                                         fieldName: "status",
                                         render: (value) => {
                                             return value === 0 ? "Не приступал" :
-                                                value === 1 ? "Завершил" : "В процессе"
+                                                value === 100 ? "Завершил" : "В процессе"
                                         }
                                     }
                                 ]}

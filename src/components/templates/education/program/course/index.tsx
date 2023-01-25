@@ -24,7 +24,9 @@ const CourseTemplate = ({
 
     const router = useRouter()
 
-    const onThemeClick = (themeId: string) => {
+    const onThemeClick = (themeInfo: ThemeInfoType) => {
+        if (!themeInfo.available) return
+        const themeId = themeInfo.userTheme.themeId
         const { programId, courseId } = router.query
         router.push(`${ROUTE_EDUCATION}/${programId}/courses/${courseId}/themes/${themeId}`)
     }
@@ -61,11 +63,11 @@ const CourseTemplate = ({
                                 styles.theme,
                                 { [styles.theme_unavailable]: !theme.themeInfo.available }
                             )}
-                            onClick={() => onThemeClick(theme.themeInfo.userTheme.themeId)}
+                            onClick={() => onThemeClick(theme.themeInfo)}
                         >
                             <div className={styles.theme_name}>
                                 {themeKey + 1}. <span>{theme.themeInfo.userTheme.theme.title}</span>
-                                <div className={styles.theme_status}>{`(${theme.status}%)`}</div>
+                                <div className={styles.theme_status}>{`(${theme.status?.toFixed()}%)`}</div>
                             </div>
                         </div>
                     ))}

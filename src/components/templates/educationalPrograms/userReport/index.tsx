@@ -142,7 +142,7 @@ const EducationalProgramUserReportTemplate = ({
                             fieldName: "status",
                             render: (value) => {
                                 return value === 0 ? "Не приступал" :
-                                    value === 1 ? "Пройден" :
+                                    value === 100 ? "Завершил" :
                                         "В процессе"
                             }
                         }
