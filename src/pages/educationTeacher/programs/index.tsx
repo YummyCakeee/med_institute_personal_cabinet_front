@@ -1,12 +1,14 @@
 import LoadingErrorTemplate from "components/templates/loadingError"
-import { ENDPOINT_EDUCATION, ENDPOINT_PROGRAMS } from "constants/endpoints"
+import { ENDPOINT_PROGRAMS } from "constants/endpoints"
 import React, { useEffect, useState } from "react"
 import axiosApi from "utils/axios"
 import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
-import { ProgramType, UserProgramType } from "components/templates/educationalPrograms/types"
+import { ProgramType } from "components/templates/educationalPrograms/types"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import EducationTeacherTemplate from "components/templates/educationTeacher"
+import { wrapper } from "store"
+import { clearBreadCrumbs } from "store/breadCrumbsSlice"
 
 const EducationTeacher = ({ }) => {
 
@@ -49,5 +51,9 @@ const EducationTeacher = ({ }) => {
         </>
     )
 }
+
+EducationTeacher.getInitialProps = wrapper.getInitialPageProps(store => () => {
+    store.dispatch(clearBreadCrumbs())
+})
 
 export default EducationTeacher

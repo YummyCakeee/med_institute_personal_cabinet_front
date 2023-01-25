@@ -4,9 +4,12 @@ import CourseTemplate from "components/templates/educationTeacher/program/course
 import LoadingErrorTemplate from "components/templates/loadingError"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { ENDPOINT_COURSES } from "constants/endpoints"
+import { ROUTE_EDUCATION_TEACHER } from "constants/routes"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
 
@@ -45,7 +48,7 @@ const Course = () => {
                 <>
                     {success ?
                         <>
-                            { course && themes &&
+                            {course && themes &&
                                 <CourseTemplate
                                     course={course}
                                     themes={themes}
@@ -64,5 +67,19 @@ const Course = () => {
         </>
     )
 }
+
+Course.getInitialProps = wrapper.getInitialPageProps(store => ({ query }) => {
+    const { programId } = query
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Программы обучения",
+            route: ROUTE_EDUCATION_TEACHER
+        },
+        {
+            title: "Курсы программы",
+            route: `${ROUTE_EDUCATION_TEACHER}/${programId}/courses`
+        }
+    ]))
+})
 
 export default Course

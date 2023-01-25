@@ -7,6 +7,8 @@ import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import { UserProgramType } from "components/templates/educationalPrograms/types"
 import UnauthorizedTemplate from "components/templates/unauthorized"
+import { wrapper } from "store"
+import { clearBreadCrumbs } from "store/breadCrumbsSlice"
 
 const Education = () => {
 
@@ -49,5 +51,9 @@ const Education = () => {
         </>
     )
 }
+
+Education.getInitialProps = wrapper.getInitialPageProps(store => () => {
+    store.dispatch(clearBreadCrumbs())
+})
 
 export default Education

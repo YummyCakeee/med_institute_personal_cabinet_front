@@ -3,9 +3,12 @@ import CollectionTemplate from "components/templates/testing/collection/index"
 import { CollectionType } from "components/templates/testing/types"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { ENDPOINT_COLLECTIONS } from "constants/endpoints"
+import { ROUTE_TESTING, ROUTE_USERS } from "constants/routes"
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
 
@@ -65,5 +68,14 @@ const Collection = () => {
     )
 
 }
+
+Collection.getInitialProps = wrapper.getInitialPageProps(store => () => {
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Тестирование",
+            route: ROUTE_TESTING
+        }
+    ]))
+})
 
 export default Collection

@@ -39,15 +39,20 @@
         color: $mainBlueColor;
 
         & .bread_crumb_text {
-            width: 200px;
+            width: fit-content;
+            text-align: center;
         }
-    }
 
-    &_last {
-        &_active {
+        &:not(.bread_crumb_last) {
             & .bread_crumb_text {
                 width: 200px;
             }
+        }
+    }
+
+    &_last_active {
+        & .bread_crumb_text {
+            width: fit-content;
         }
     }
 }

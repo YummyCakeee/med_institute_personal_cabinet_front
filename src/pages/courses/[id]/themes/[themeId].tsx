@@ -10,6 +10,9 @@ import { useRouter } from "next/router"
 import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import UnauthorizedTemplate from "components/templates/unauthorized"
+import { ROUTE_COURSES } from "constants/routes"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
 
 const Theme = () => {
 
@@ -80,5 +83,19 @@ const Theme = () => {
         </>
     )
 }
+
+Theme.getInitialProps = wrapper.getInitialPageProps(store => ({ query }) => {
+    const { id } = query
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Курсы",
+            route: ROUTE_COURSES
+        },
+        {
+            title: "Темы курса",
+            route: `${ROUTE_COURSES}/${id}/themes`
+        }
+    ]))
+})
 
 export default Theme

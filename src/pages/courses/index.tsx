@@ -8,6 +8,8 @@ import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import { useRouter } from "next/router"
 import UnauthorizedTemplate from "components/templates/unauthorized"
+import { clearBreadCrumbs } from "store/breadCrumbsSlice"
+import { wrapper } from "store"
 
 
 const Courses = () => {
@@ -58,5 +60,8 @@ const Courses = () => {
     )
 }
 
+Courses.getInitialProps = wrapper.getInitialPageProps(store => () => {
+    store.dispatch(clearBreadCrumbs())
+})
 
 export default Courses

@@ -10,6 +10,9 @@ import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import { useRouter } from "next/router"
 import UnauthorizedTemplate from "components/templates/unauthorized"
+import { ROUTE_EDUCATIONAL_PROGRAMS } from "constants/routes"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
 
 const EducationalProgramCourses = () => {
 
@@ -59,5 +62,14 @@ const EducationalProgramCourses = () => {
         </>
     )
 }
+
+EducationalProgramCourses.getInitialProps = wrapper.getInitialPageProps(store => () => {
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Программы обучения",
+            route: ROUTE_EDUCATIONAL_PROGRAMS
+        }
+    ]))
+})
 
 export default EducationalProgramCourses

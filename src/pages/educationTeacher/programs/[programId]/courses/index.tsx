@@ -10,6 +10,9 @@ import axiosApi from "utils/axios"
 import { ENDPOINT_COURSES, ENDPOINT_PROGRAMS } from "constants/endpoints"
 import { CourseType } from "components/templates/courses/types"
 import axios from "axios"
+import { ROUTE_EDUCATION_TEACHER } from "constants/routes"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
 
 const Program = () => {
 
@@ -66,5 +69,14 @@ const Program = () => {
         </>
     )
 }
+
+Program.getInitialProps = wrapper.getInitialPageProps(store => () => {
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Программы обучения",
+            route: ROUTE_EDUCATION_TEACHER
+        }
+    ]))
+})
 
 export default Program

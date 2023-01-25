@@ -51,7 +51,7 @@ const UserTestResultsInfo = ({
                         </div>
                         <div>
                             <div>
-                                Вы ответили:
+                                Ответ:
                             </div>
                             <div className={styles.question_answer_list}>
                                 <UserAnswers

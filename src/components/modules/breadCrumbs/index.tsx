@@ -41,7 +41,6 @@ const BreadCrumbs = () => {
                 <Link
                     href={el.route}
                     key={key}
-                    onClick={() => dispatch(clearBreadCrumbs())}
                 >
                     <div
                         className={cn(
@@ -65,11 +64,11 @@ const BreadCrumbs = () => {
             {lastBreadCrumb &&
                 <Link
                     href={lastBreadCrumb.route}
-                    onClick={() => dispatch(clearBreadCrumbs())}
                 >
                     <div
                         className={cn(
                             styles.bread_crumb,
+                            styles.bread_crumb_last,
                             { [styles.bread_crumb_active]: activeBreadCrumbIndex === breadCrumbs.length - 1 },
                             { [styles.bread_crumb_last_active]: activeBreadCrumbIndex === undefined }
                         )}

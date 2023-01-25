@@ -11,6 +11,9 @@ import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
 import { UserProfileType } from "components/templates/users/types"
 import { ENDPOINT_EDUCATION, ENDPOINT_THEMES } from "constants/endpoints"
+import { ROUTE_EDUCATION_TEACHER } from "constants/routes"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
 
 const Theme = () => {
 
@@ -67,5 +70,23 @@ const Theme = () => {
         </>
     )
 }
+
+Theme.getInitialProps = wrapper.getInitialPageProps(store => ({ query }) => {
+    const { programId, courseId } = query
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Программы обучения",
+            route: ROUTE_EDUCATION_TEACHER
+        },
+        {
+            title: "Курсы программы",
+            route: `${ROUTE_EDUCATION_TEACHER}/${programId}/courses`
+        },
+        {
+            title: "Темы курса",
+            route: `${ROUTE_EDUCATION_TEACHER}/${programId}/courses/${courseId}/themes`
+        }
+    ]))
+})
 
 export default Theme

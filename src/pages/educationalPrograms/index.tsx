@@ -1,11 +1,12 @@
-import educationalPrograms from 'components/templates/educationalPrograms'
 import EducationalProgramsTemplate from 'components/templates/educationalPrograms'
-import { ProgramType, UserProgramType } from 'components/templates/educationalPrograms/types'
+import { ProgramType } from 'components/templates/educationalPrograms/types'
 import LoadingErrorTemplate from 'components/templates/loadingError'
 import UnauthorizedTemplate from 'components/templates/unauthorized'
-import { ENDPOINT_EDUCATION, ENDPOINT_PROGRAMS } from 'constants/endpoints'
+import { ENDPOINT_PROGRAMS } from 'constants/endpoints'
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { wrapper } from 'store'
+import { clearBreadCrumbs } from 'store/breadCrumbsSlice'
 import { userSelector } from 'store/userSlice'
 import axiosApi from 'utils/axios'
 
@@ -51,5 +52,9 @@ const EducationalPrograms = () => {
     </>
   )
 }
+
+EducationalPrograms.getInitialProps = wrapper.getInitialPageProps(store => () => {
+  store.dispatch(clearBreadCrumbs())
+})
 
 export default EducationalPrograms

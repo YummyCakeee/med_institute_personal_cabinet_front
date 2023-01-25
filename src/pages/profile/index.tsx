@@ -2,9 +2,11 @@ import LoadingErrorTemplate from 'components/templates/loadingError'
 import ProfileTemplate from 'components/templates/profile'
 import UnauthorizedTemplate from 'components/templates/unauthorized'
 import { CertificateType, UserWithCertificatesType } from 'components/templates/users/types'
-import { ENDPOINT_ACCOUNT, ENDPOINT_USERS } from 'constants/endpoints'
+import { ENDPOINT_ACCOUNT } from 'constants/endpoints'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { wrapper } from 'store'
+import { clearBreadCrumbs, setBreadCrumbs } from 'store/breadCrumbsSlice'
 import { userSelector } from 'store/userSlice'
 import axiosApi from 'utils/axios'
 import { getServerErrorResponse } from 'utils/serverData'
@@ -53,5 +55,9 @@ const Profile = () => {
     </>
   )
 }
+
+Profile.getInitialProps = wrapper.getInitialPageProps(store => () => {
+  store.dispatch(clearBreadCrumbs())
+})
 
 export default Profile

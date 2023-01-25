@@ -76,7 +76,7 @@ const EducationalProgramUserReport = () => {
 EducationalProgramUserReport.getInitialProps = wrapper.getInitialPageProps(store => ({ query }) => {
     store.dispatch(setBreadCrumbs([
         {
-            title: "Образовательные программы",
+            title: "Программы обучения",
             route: ROUTE_EDUCATIONAL_PROGRAMS
         },
         {

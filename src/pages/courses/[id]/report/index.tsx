@@ -10,6 +10,9 @@ import UnauthorizedTemplate from "components/templates/unauthorized"
 import { UserProfileType } from "components/templates/users/types"
 import { CourseType } from "components/templates/courses/types"
 import CourseReportTemplate from "components/templates/courses/courseReport"
+import { ROUTE_COURSES } from "constants/routes"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
 
 const CourseReport = () => {
 
@@ -64,5 +67,14 @@ const CourseReport = () => {
         </>
     )
 }
+
+CourseReport.getInitialProps = wrapper.getInitialPageProps(store => () => {
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Курсы",
+            route: ROUTE_COURSES
+        }
+    ]))
+})
 
 export default CourseReport

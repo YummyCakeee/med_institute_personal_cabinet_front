@@ -6,9 +6,12 @@ import { ReportModelType } from "components/templates/educationalPrograms/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { ENDPOINT_PROGRAMS, ENDPOINT_EDUCATION, ENDPOINT_COURSES } from "constants/endpoints"
+import { ROUTE_EDUCATION, ROUTE_EDUCATIONAL_PROGRAMS } from "constants/routes"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
 
@@ -72,5 +75,19 @@ const Course = () => {
         </>
     )
 }
+
+Course.getInitialProps = wrapper.getInitialPageProps(store => ({ query }) => {
+    const { programId } = query
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Программы обучения",
+            route: ROUTE_EDUCATION
+        },
+        {
+            title: "Курсы программы",
+            route: `${ROUTE_EDUCATION}/${programId}/courses`
+        }
+    ]))
+})
 
 export default Course

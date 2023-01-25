@@ -32,11 +32,11 @@ const EducationalProgramsTemplate = ({
     return (
         <Layout>
             <Head>
-                <title>Образовательные программы</title>
+                <title>ПРограммы обучения</title>
             </Head>
-            <div className={utilStyles.title}>Образовательные программы</div>
+            <div className={utilStyles.title}>Программы обучения</div>
             <div className={utilStyles.section}>
-                <div className={utilStyles.section_title}>Список образовательных программ</div>
+                <div className={utilStyles.section_title}>Список программ обучения</div>
                 <ItemList
                     headers={[
                         {

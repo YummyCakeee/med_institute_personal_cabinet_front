@@ -4,9 +4,12 @@ import { ProgramType } from "components/templates/educationalPrograms/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import { UserProfileType } from "components/templates/users/types"
 import { ENDPOINT_PROGRAMS, ENDPOINT_USERS } from "constants/endpoints"
+import { ROUTE_EDUCATIONAL_PROGRAMS } from "constants/routes"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
 
@@ -52,5 +55,14 @@ const EducationalProgramStudents = () => {
         </>
     )
 }
+
+EducationalProgramStudents.getInitialProps = wrapper.getInitialPageProps(store => () => {
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Программы обучения",
+            route: ROUTE_EDUCATIONAL_PROGRAMS
+        }
+    ]))
+})
 
 export default EducationalProgramStudents

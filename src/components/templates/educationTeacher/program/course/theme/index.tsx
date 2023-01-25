@@ -9,13 +9,14 @@ import { UserProfileType } from "components/templates/users/types"
 import { ENDPOINT_EDUCATION } from "constants/endpoints"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import utilStyles from "styles/utils.module.scss"
 import axiosApi from "utils/axios"
 import addNotification from "utils/notifications"
 import styles from "./ThemeTemplate.module.scss"
 import { useModalWindowContext } from "context/modalWindowContext"
 import { getServerErrorResponse } from "utils/serverData"
+import ReactToPrint from "react-to-print"
 
 type ThemeTemplateProps = {
     theme: ThemeType,
@@ -36,11 +37,16 @@ const ThemeTemplate = ({
     const [studentAttempts, setStudentAttempts] = useState<AttemptType[]>([])
     const [attempt, setAttempt] = useState<SolvedTestType>()
     const [selectedStudentIndex, setSelectedStudentIndex] = useState<number>()
+    const resultComponentRef = useRef(null)
     const { setExerciseScoreModalWindowState } = useModalWindowContext()
 
     useEffect(() => {
         setAttempt(undefined)
     }, [selectedStudentIndex])
+
+    const reactToPrintContent = useCallback(() => {
+        return resultComponentRef.current;
+    }, [resultComponentRef.current]);
 
     const onStudentAttemptsClick = async (index: number) => {
         setStudentAttemptsStatus(LoadingStatusType.LOADING)
@@ -152,6 +158,22 @@ const ThemeTemplate = ({
             })
     }
 
+    const reactToPrintTrigger = React.useCallback(() => {
+        // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+        // to the root node of the returned component as it will be overwritten.
+
+        // Bad: the `onClick` here will be overwritten by `react-to-print`
+        // return <button onClick={() => alert('This will not work')}>Print this out!</button>;
+
+        // Good
+        return (
+            <button>
+                Print a Functional Component (using `forwardRef`) using a Functional
+                Component
+            </button>
+        ); // eslint-disable-line max-len
+    }, []);
+
     return (
         <Layout>
             <Head>
@@ -207,7 +229,8 @@ const ThemeTemplate = ({
                             ]}
                             itemControlButtons={() => [
                                 {
-                                    title: "Информация о попытке",
+                                    title: "Результат",
+                                    size: "small",
                                     stretchable: true,
                                     onClick: onAttemptInfoClick
                                 }
@@ -225,7 +248,7 @@ const ThemeTemplate = ({
                                         solvedTest: attempt,
                                         onCommentSend,
                                         onExerciseScoreSetClick,
-                                        onFinishAttemptClick
+                                        onFinishAttemptClick,
                                     }}
                                 />
                             }
@@ -241,6 +264,10 @@ const ThemeTemplate = ({
                     }
                 </div>
             </div>
+            {/* <ReactToPrint
+                content={reactToPrintContent}
+                trigger={reactToPrintTrigger}
+            /> */}
         </Layout >
     )
 }
