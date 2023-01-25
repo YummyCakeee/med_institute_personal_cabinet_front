@@ -268,7 +268,7 @@ const ThemeTemplate = ({
     }
 
     const onSaveClick = async () => {
-        saveMainData()
+        await saveMainData()
         if (initialTestBlock) {
             if (!testBlock)
                 return removeTestBlock()
