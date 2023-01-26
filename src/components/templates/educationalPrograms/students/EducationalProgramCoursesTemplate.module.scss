@@ -3,64 +3,33 @@
 .lists_container {
     display: flex;
     flex-direction: row;
+}
 
-    &_bottom {
-        margin-top: 20px;
-        opacity: 0;
-        overflow: hidden;
-        max-height: 0;
-        transition: all 0.3s ease-in-out;
+.user_list {
+    width: 700px !important;
+    margin-right: 40px;
 
-        &.shown {
-            max-height: 400px;
-            opacity: 1;
+    &_control_section {
+        margin-bottom: 30px;
+
+        & span {
+            color: $mainDarkBlueColor;
+        }
+
+        & .filter_field_value {
+
+            &_input {
+                width: 200px;
+                height: 40px;
+                background-color: #fff;
+            }
         }
     }
 }
 
-.dependent_courses {
-    margin: 0 10px;
-
-    &_list {
-        background-color: #b4b4b44f;
-        padding: 5px;
-        border-radius: 10px;
-        width: 500px;
-        height: 300px;
-        overflow-y: auto;
-
-        &_item {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            margin: 5px 0;
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 5px;
-            width: 100%;
-            height: 60px;
-            box-sizing: border-box;
-
-            & .text {
-                font-size: 18px;
-            }
-
-            & .icon {
-                margin-right: 10px;
-            }
-
-        }
-    }
-}
-
-.course_criteria {
-    margin-left: 50px;
-}
-
-.save_button_container {
-    width: 100%;
-
+.all_users_section {
+    display: flex;
+    flex-direction: row;
 }
 
 .save_button {
