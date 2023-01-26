@@ -1,18 +1,24 @@
-import React, { memo, useMemo } from "react"
+import React, { memo, useCallback, useMemo, useRef } from "react"
 import { SolvedTestType, UserAnswerType } from "components/templates/education/types"
 import styles from "./UserTestResultInfo.module.scss"
 import { convertSecondsToFullTime } from "utils/formatters"
 import cn from "classnames"
 import Button from "components/elements/button/Button"
+import ReactToPrint from "react-to-print"
+import { UserProfileType } from "components/templates/users/types"
 
 type UserTestResultsInfoProps = {
     solvedTest: SolvedTestType,
-    onClose?: () => void
+    onClose?: () => void,
+    mode: "teacher" | "student",
+    user?: UserProfileType
 }
 
 const UserTestResultsInfo = ({
     solvedTest,
-    onClose
+    onClose,
+    mode,
+    user
 }: UserTestResultsInfoProps) => {
 
 
@@ -32,11 +38,22 @@ const UserTestResultsInfo = ({
         cur.score === 1 ? acc + 1 : acc
     ), 0)
 
+    const resultComponentRef = useRef(null)
+
+    const reactToPrintContent = useCallback(() => {
+        return resultComponentRef.current;
+    }, [resultComponentRef.current]);
+
     return (
-        <div className={styles.container}>
+        <div className={styles.container} ref={resultComponentRef}>
             <div className={styles.test_results_title}>
                 Результаты теста от <span>{new Date(solvedTest.startTestTime).toLocaleString()}</span>
             </div>
+            {user &&
+                <div className={styles.test_student_info}>
+                    {`Студент ${user.lastName} ${user.firstName} ${user.secondName}`}
+                </div>
+            }
             <div className={styles.questions_title}>
                 Вопросы
             </div>
@@ -87,6 +104,19 @@ const UserTestResultsInfo = ({
                     className={styles.close_result_info_button}
                     onClick={onClose}
                 />
+            }
+            {mode === "teacher" &&
+                <div className={styles.print_result_section}>
+                    <ReactToPrint
+                        trigger={() =>
+                            <Button
+                                title="Распечатать"
+                                stretchable
+                                size="small"
+                            />}
+                        content={reactToPrintContent}
+                    />
+                </div>
             }
         </div>
     )
