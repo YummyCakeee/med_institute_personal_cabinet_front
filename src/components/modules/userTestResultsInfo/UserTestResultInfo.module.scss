@@ -6,17 +6,26 @@
     border-radius: 12px;
     padding: 10px;
     width: 700px;
-    box-shadow: 0 10px 20px #0000002c;
+    box-shadow: $boxShadow;
 }
 
-.test_results_title {
-    font-size: 20px;
-    font-weight: 500;
-    text-align: center;
-    margin: 10px 0;
+.test {
+    &_results_title {
+        font-size: 20px;
+        font-weight: 500;
+        text-align: center;
+        margin: 10px 0;
 
-    & span {
-        color: $mainDarkBlueColor;
+        & span {
+            color: $mainDarkBlueColor;
+        }
+    }
+
+    &_student_info {
+        font-size: 16px;
+        font-weight: 500;
+        text-align: center;
+        margin-bottom: 20px;
     }
 }
 
@@ -103,6 +112,32 @@
     }
 }
 
+.print_result_section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 .close_result_info_button {
     margin: 10px auto;
+}
+
+@media print {
+
+    .container {
+        background-color: #fff;
+        border: none;
+        border-radius: 0px;
+        padding: 10px;
+        width: 700px;
+        box-shadow: none;
+    }
+
+    .print_result_section {
+        display: none;
+    }
+
+    .question_list {
+        max-height: fit-content;
+    }
 }
