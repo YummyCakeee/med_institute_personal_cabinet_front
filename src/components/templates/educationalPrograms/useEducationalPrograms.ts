@@ -5,7 +5,9 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import { Store } from "react-notifications-component"
 import axiosApi from "utils/axios"
+import addNotification from "utils/notifications"
 import { ProgramType } from "./types"
+import { getServerErrorResponse } from "utils/serverData"
 
 const useEducationalPrograms = () => {
 
@@ -94,27 +96,10 @@ const useEducationalPrograms = () => {
             .then(res => {
                 setPrograms(prev => prev.filter(el => el.programId !== programs[index].programId))
                 setConfirmActionModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Программа удалена",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Программа удалена" })
             })
             .catch(err => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось удалить программу",
-                    message: err.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось удалить программу:\n${getServerErrorResponse(err)}` })
             })
     }
 

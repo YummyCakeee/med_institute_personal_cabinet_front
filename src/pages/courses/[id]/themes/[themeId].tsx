@@ -13,6 +13,7 @@ import UnauthorizedTemplate from "components/templates/unauthorized"
 import { ROUTE_COURSES } from "constants/routes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
+import { getServerErrorResponse } from "utils/serverData"
 
 const Theme = () => {
 
@@ -39,7 +40,7 @@ const Theme = () => {
                     }))
                     .catch(err => {
                         setSuccess(false)
-                        setError(err.code)
+                        setError(getServerErrorResponse(err))
                     })
                 if (theme?.testBlockId) {
                     await axiosApi.get(`${ENDPOINT_TEST_BLOCK_COLLECTIONS}`)
@@ -51,7 +52,7 @@ const Theme = () => {
                         })
                         .catch(err => {
                             setSuccess(false)
-                            setError(err.code)
+                            setError(getServerErrorResponse(err))
                         })
                 }
             }

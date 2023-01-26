@@ -6,6 +6,8 @@ import { ROUTE_COLLECTIONS } from "constants/routes"
 import { Store } from "react-notifications-component"
 import axiosApi from "utils/axios"
 import { ENDPOINT_COLLECTIONS } from "constants/endpoints"
+import addNotification from "utils/notifications"
+import { getServerErrorResponse } from "utils/serverData"
 
 const useTesting = () => {
 
@@ -66,27 +68,10 @@ const useTesting = () => {
             .then(res => {
                 setCollections(prev => prev.filter(el => el.collectionId !== id))
                 setConfirmActionModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Коллекция удалена",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Коллекция удалена" })
             })
             .catch(err => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось удалить коллекцию",
-                    message: err.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось удалить коллекцию:\n${getServerErrorResponse(err)}` })
             })
     }
 

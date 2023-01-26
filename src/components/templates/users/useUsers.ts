@@ -4,7 +4,6 @@ import { ROUTE_USERS } from "constants/routes"
 import { useModalWindowContext } from "context/modalWindowContext"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState } from "react"
-import { Store } from "react-notifications-component"
 import axiosApi from "utils/axios"
 import addNotification from "utils/notifications"
 import { getServerErrorResponse } from "utils/serverData"
@@ -88,7 +87,7 @@ const useUsers = () => {
                 setUsersLoadingStatus(LoadingStatusType.LOADED)
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось получить число всех пользователей:\n${err.code}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось получить число всех пользователей:\n${getServerErrorResponse(err)}` })
                 setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
             })
 
@@ -113,7 +112,7 @@ const useUsers = () => {
                     setUsersLoadingStatus(LoadingStatusType.LOADED)
                 })
                 .catch(err => {
-                    addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить список пользователей:\n${err.code}` })
+                    addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить список пользователей:\n${getServerErrorResponse(err)}` })
                     setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
                 })
         }

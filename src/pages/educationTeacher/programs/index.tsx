@@ -9,6 +9,7 @@ import UnauthorizedTemplate from "components/templates/unauthorized"
 import EducationTeacherTemplate from "components/templates/educationTeacher"
 import { wrapper } from "store"
 import { clearBreadCrumbs } from "store/breadCrumbsSlice"
+import { getServerErrorResponse } from "utils/serverData"
 
 const EducationTeacher = ({ }) => {
 
@@ -26,7 +27,7 @@ const EducationTeacher = ({ }) => {
                 })
                 .catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
     }, [user.authorized])

@@ -53,7 +53,7 @@ const ThemeTemplate = ({
                 setStudentAttemptsStatus(LoadingStatusType.LOADED)
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить спосок попыток студента:\n${err.code}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить спосок попыток студента:\n${getServerErrorResponse(err)}` })
                 setStudentAttemptsStatus(LoadingStatusType.LOAD_ERROR)
             })
     }
@@ -68,7 +68,7 @@ const ThemeTemplate = ({
                 setAttempt(res.data)
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось получить информацию о попытке:\n${err.code}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось получить информацию о попытке:\n${getServerErrorResponse(err)}` })
             })
     }
 
@@ -99,7 +99,7 @@ const ThemeTemplate = ({
                 })
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось отправить комментарий:\n${err.code}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось отправить комментарий:\n${getServerErrorResponse(err)}` })
                 return Promise.reject()
             })
     }

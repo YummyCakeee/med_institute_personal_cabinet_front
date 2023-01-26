@@ -6,6 +6,8 @@ import { ENDPOINT_COURSES } from "constants/endpoints"
 import { Store } from "react-notifications-component"
 import { useEffect, useState } from "react"
 import { CourseType, ThemeType } from "../types"
+import { getServerErrorResponse } from "utils/serverData"
+import addNotification from "utils/notifications"
 
 const useCourse = (course: CourseType) => {
 
@@ -40,28 +42,11 @@ const useCourse = (course: CourseType) => {
                     }
                     return el
                 }).sort(sortThemes))
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Тема изменена",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Тема изменена" })
                 setThemeModalWindowState(undefined)
             },
             onError: (err) => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось изменить тему",
-                    message: `${err.code}`,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось изменить тему:\n${getServerErrorResponse(err)}` })
             },
             backgroundOverlap: true,
             closable: true
@@ -95,16 +80,7 @@ const useCourse = (course: CourseType) => {
                     }
                 })
                 .catch(err => {
-                    Store.addNotification({
-                        container: "top-right",
-                        type: "danger",
-                        title: "Не удалось удалить тему",
-                        message: `${err.code}`,
-                        dismiss: {
-                            onScreen: true,
-                            duration: 5000
-                        }
-                    })
+                    addNotification({ type: "danger", title: "Ошибка", message: `Не удалось удалить тему:\n${getServerErrorResponse(err)}` })
                 })
         }
 
@@ -134,16 +110,7 @@ const useCourse = (course: CourseType) => {
                 setThemeModalWindowState(undefined)
             },
             onError: (err) => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось добавить тему",
-                    message: `${err.code}`,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось добавить тему:\n${getServerErrorResponse(err)}` })
             },
             mode: "add",
             backgroundOverlap: true,

@@ -14,6 +14,7 @@ import { ENDPOINT_EDUCATION, ENDPOINT_THEMES } from "constants/endpoints"
 import { ROUTE_EDUCATION_TEACHER } from "constants/routes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
+import { getServerErrorResponse } from "utils/serverData"
 
 const Theme = () => {
 
@@ -38,7 +39,7 @@ const Theme = () => {
                 }))
                 .catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
     }, [user, router])

@@ -14,6 +14,7 @@ import { useRouter } from "next/router"
 import { useModalWindowContext } from "context/modalWindowContext"
 import { ROUTE_EDUCATION } from "constants/routes"
 import addNotification from "utils/notifications"
+import { getServerErrorResponse } from "utils/serverData"
 
 type TestTemplateProps = {
     test: SolvedTestType
@@ -107,7 +108,7 @@ const TestTemplate = ({
                     })
             })
             .catch(err =>
-                addNotification({ type: "danger", title: "Ошибка при сохранении ответа", message: err.code })
+                addNotification({ type: "danger", title: "Ошибка", message: `Ошибка при сохранении ответа:\n${getServerErrorResponse(err)}` })
             )
     }
 
@@ -119,7 +120,7 @@ const TestTemplate = ({
                 router.replace(`${ROUTE_EDUCATION}/${programId}/courses/${courseId}/themes/${themeId}`)
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Не удалось завершить тест", message: err.code })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось завершить тест:\n${getServerErrorResponse(err)}` })
             })
     }
 

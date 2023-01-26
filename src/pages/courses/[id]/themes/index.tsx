@@ -11,6 +11,7 @@ import CourseThemesTemplate from "components/templates/courses/courseThemes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { ROUTE_COURSES } from "constants/routes"
+import { getServerErrorResponse } from "utils/serverData"
 
 const CourseThemes = () => {
 
@@ -31,7 +32,7 @@ const CourseThemes = () => {
                 })
                 .catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
 

@@ -11,6 +11,8 @@ import axios from "axios"
 import { ENDPOINT_PROGRAMS } from "constants/endpoints"
 import { Store } from "react-notifications-component"
 import { UserProfileType } from "components/templates/users/types"
+import addNotification from "utils/notifications"
+import { getServerErrorResponse } from "utils/serverData"
 
 type EducationalProgramCoursesTemplateProps = {
     program: ProgramType,
@@ -68,27 +70,10 @@ const EducationalProgramStudentsTemplate = ({
         ])
             .then(res => {
                 setInitialProgramUsers(programUsers)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Обучающиеся программы обновлены",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Обучающиеся программы обновлены" })
             })
             .catch(err => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось обновить обучающихся программы",
-                    message: `${err.code}`,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось обновить обучающихся программы:\n${getServerErrorResponse(err)}` })
             })
 
     }, [initialProgramUsers, programUsers, program])

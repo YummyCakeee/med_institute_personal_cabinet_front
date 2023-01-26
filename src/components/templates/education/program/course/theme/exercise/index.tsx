@@ -18,6 +18,7 @@ import axiosApi from "utils/axios"
 import { ENDPOINT_EDUCATION } from "constants/endpoints"
 import ExerciseComments from "components/modules/exerciseComments"
 import FileUploaderField from "components/elements/formikComponents/fileUploaderField"
+import { getServerErrorResponse } from "utils/serverData"
 
 type ExerciseTemplateProps = {
     test: SolvedTestType
@@ -52,7 +53,7 @@ const ExerciseTemplate = ({
                 serverFileName = res.data.filename
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить файл:\n${err.code}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить файл:\n${getServerErrorResponse(err)}` })
                 return
             })
         const { programId, courseId, themeId } = router.query
@@ -79,7 +80,7 @@ const ExerciseTemplate = ({
                 helpers.resetForm()
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить файл:\n${err.code}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить файл:\n${getServerErrorResponse(err)}` })
             })
     }
 
@@ -110,7 +111,7 @@ const ExerciseTemplate = ({
                 })
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось отправить комментарий:\n${err.code}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось отправить комментарий:\n${getServerErrorResponse(err)}` })
                 return Promise.reject()
             })
     }
@@ -134,7 +135,7 @@ const ExerciseTemplate = ({
                 }
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось скачать файл:\n${err.code}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось скачать файл:\n${getServerErrorResponse(err)}` })
             })
     }
 

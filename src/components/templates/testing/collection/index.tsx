@@ -8,6 +8,8 @@ import { Store } from "react-notifications-component"
 import axiosApi from "utils/axios"
 import { ENDPOINT_TESTS } from "constants/endpoints"
 import styles from "./CollectionTemplate.module.scss"
+import addNotification from "utils/notifications"
+import { getServerErrorResponse } from "utils/serverData"
 
 type CollectionTemplateProps = {
     collection: CollectionType
@@ -106,27 +108,10 @@ const CollectionTemplate = ({ collection }: CollectionTemplateProps) => {
             .then(res => {
                 setTests(prev => prev.filter(el => el.testId !== id))
                 setConfirmActionModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Тест удалён",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Тест удалён" })
             })
             .catch(err => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось удалить тест",
-                    message: err.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "danger", title: "Успех", message: `Не удалось удалить тест:\n${getServerErrorResponse(err)}` })
             })
 
     }

@@ -12,6 +12,7 @@ import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
+import { getServerErrorResponse } from "utils/serverData"
 
 const Course = () => {
 
@@ -36,7 +37,7 @@ const Course = () => {
                 }))
                 .catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
 

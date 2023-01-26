@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
+import { getServerErrorResponse } from "utils/serverData"
 
 const Exercise = () => {
 
@@ -30,7 +31,7 @@ const Exercise = () => {
                 })
                 .catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
     }, [user.authorized, router])

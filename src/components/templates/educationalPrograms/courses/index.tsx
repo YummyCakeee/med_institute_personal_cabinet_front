@@ -15,7 +15,8 @@ import Input from "components/elements/input/Input"
 import ComboBox from "components/elements/comboBox/ComboBox"
 import { maxMinConstraint } from "utils/computations"
 import cn from "classnames"
-import { Store } from "react-notifications-component"
+import { getServerErrorResponse } from "utils/serverData"
+import addNotification from "utils/notifications"
 
 type EducationalProgramCoursesTemplateProps = {
     program: ProgramType,
@@ -176,27 +177,11 @@ const EducationalProgramCoursesTemplate = ({
         ])
             .then(res => {
                 setInitialProgramCourses(programCourses)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Курсы обновлены",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Курсы обновлены" })
             })
             .catch(err => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось обновить курсы",
-                    message: `${err.code}`,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "danger", title: "Ошибка",
+                    message: `Не удалось обновить курсы:\n${getServerErrorResponse(err)}` })
             })
 
     }, [initialProgramCourses, programCourses, program])

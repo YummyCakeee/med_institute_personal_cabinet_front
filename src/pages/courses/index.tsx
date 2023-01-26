@@ -10,6 +10,7 @@ import { useRouter } from "next/router"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { clearBreadCrumbs } from "store/breadCrumbsSlice"
 import { wrapper } from "store"
+import { getServerErrorResponse } from "utils/serverData"
 
 
 const Courses = () => {
@@ -29,7 +30,7 @@ const Courses = () => {
                 })
                 .catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
 

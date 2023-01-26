@@ -14,6 +14,7 @@ import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
+import { getServerErrorResponse } from "utils/serverData"
 
 export type TestBlockInfoType = {
     isFileTestBlock: boolean
@@ -44,7 +45,7 @@ const Theme = () => {
                     })
                     .catch(err => {
                         setSuccess(false)
-                        setError(err.code)
+                        setError(getServerErrorResponse(err))
                         return
                     })
                 if (userTheme?.theme.testBlockId !== undefined) {
@@ -67,7 +68,7 @@ const Theme = () => {
                         }))
                         .catch(err => {
                             setSuccess(false)
-                            setError(err.code)
+                            setError(getServerErrorResponse(err))
                         })
                 }
             }

@@ -6,6 +6,8 @@ import { CourseType } from "./types"
 import { Store } from "react-notifications-component"
 import axiosApi from "utils/axios"
 import { ENDPOINT_COURSES } from "constants/endpoints"
+import { getServerErrorResponse } from "utils/serverData"
+import addNotification from "utils/notifications"
 
 const useCourses = () => {
     const router = useRouter()
@@ -65,27 +67,10 @@ const useCourses = () => {
             .then(res => {
                 setCourses(prev => prev.filter(el => el.courseId !== id))
                 setConfirmActionModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Курс удалён",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Курс удалён" })
             })
             .catch(err => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось удалить курс",
-                    message: err.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось удалить курс:\n${getServerErrorResponse(err)}` })
             })
     }
 

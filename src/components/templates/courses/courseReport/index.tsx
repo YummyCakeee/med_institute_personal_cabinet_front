@@ -12,6 +12,7 @@ import axiosApi from "utils/axios"
 import { useRouter } from "next/router"
 import { ENDPOINT_COURSES } from "constants/endpoints"
 import addNotification from "utils/notifications"
+import { getServerErrorResponse } from "utils/serverData"
 
 type CourseReportTemplateProps = {
     course: CourseType,
@@ -38,7 +39,7 @@ const CourseReportTemplate = ({
             })
             .catch(err => {
                 setUserThemesStatus(LoadingStatusType.LOAD_ERROR)
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить темы студента:\n${err.code}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить темы студента:\n${getServerErrorResponse(err)}` })
             })
     }
 

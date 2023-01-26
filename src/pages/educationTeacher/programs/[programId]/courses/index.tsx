@@ -13,6 +13,7 @@ import axios from "axios"
 import { ROUTE_EDUCATION_TEACHER } from "constants/routes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
+import { getServerErrorResponse } from "utils/serverData"
 
 const Program = () => {
 
@@ -37,7 +38,7 @@ const Program = () => {
                 }))
                 .catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
 

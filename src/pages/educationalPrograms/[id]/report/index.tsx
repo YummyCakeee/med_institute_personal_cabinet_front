@@ -13,6 +13,7 @@ import { UserProfileType } from "components/templates/users/types"
 import { ROUTE_EDUCATIONAL_PROGRAMS } from "constants/routes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
+import { getServerErrorResponse } from "utils/serverData"
 
 const EducationalProgramReport = () => {
 
@@ -38,7 +39,7 @@ const EducationalProgramReport = () => {
                     setProgramUsers(programUsers)
                 })).catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
     }, [user, router])

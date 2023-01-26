@@ -16,6 +16,7 @@ import { convertSecondsToFullTime } from "utils/formatters"
 import addNotification from "utils/notifications"
 import styles from "./ThemeTemplate.module.scss"
 import cn from "classnames"
+import { getServerErrorResponse } from "utils/serverData"
 
 type ThemeTemplateProps = {
     userTheme: UserThemeType,
@@ -71,8 +72,8 @@ const ThemeTemplate = ({
             })
             .catch(err => {
                 addNotification({
-                    type: "danger", title: !testBlock!.isFileTestBlock ? "Ошибка" :
-                        "Не удалось начать тест", message: err.code
+                    type: "danger", title: "Ошибка",
+                    message: `Не удалось ${!testBlock!.isFileTestBlock ? "начать тест" : "приступить к упражнению"}:\n${getServerErrorResponse(err)}`
                 })
             })
     }

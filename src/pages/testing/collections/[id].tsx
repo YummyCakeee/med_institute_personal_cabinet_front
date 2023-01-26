@@ -11,6 +11,7 @@ import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
+import { getServerErrorResponse } from "utils/serverData"
 
 const Collection = () => {
 
@@ -42,7 +43,7 @@ const Collection = () => {
                 })
                 .catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
     }, [user.authorized, router.query])

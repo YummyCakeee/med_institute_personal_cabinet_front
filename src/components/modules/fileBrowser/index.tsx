@@ -8,6 +8,7 @@ import cn from "classnames"
 import ContextMenu, { ContextMenuProps } from "components/elements/contextMenu/ContextMenu"
 import addNotification from "utils/notifications"
 import { useModalWindowContext } from "context/modalWindowContext"
+import { getServerErrorResponse } from "utils/serverData"
 
 type BufferElementType = {
     name: string,
@@ -55,7 +56,7 @@ const FileBrowser = ({
                 onFileSelected && onFileSelected(undefined)
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Не удалось загрузить файлы", message: err.code })
+                addNotification({ type: "danger", title: "Не удалось загрузить файлы", message: getServerErrorResponse(err) })
             })
     }, [currentFolderPath, onFileSelected])
 
@@ -116,7 +117,7 @@ const FileBrowser = ({
                         setEditingItem(undefined)
                     })
                     .catch(err => {
-                        addNotification({ type: "danger", title: "Не удалось переименовать файл", message: err.code })
+                        addNotification({ type: "danger", title: "Ошибка", message: `Не удалось переименовать файл:\n${getServerErrorResponse(err)}` })
                     })
             }
         }
@@ -252,7 +253,7 @@ const FileBrowser = ({
             })
             .catch(err => {
                 const ending = filesCount > 1 ? "ы" : ""
-                addNotification({ type: "danger", title: `Не удалось загрузить файл${ending}`, message: err.code })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить файл${ending}:\n${getServerErrorResponse(err)}` })
             })
         e.target.value = ""
     }
@@ -281,7 +282,7 @@ const FileBrowser = ({
                 setConfirmActionModalWindowState(undefined)
             })
             .catch(err => {
-                addNotification({ type: "danger", title: `Не удалось удалить ${isFile ? "файл" : "папку"}`, message: err.code })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось удалить ${isFile ? "файл" : "папку"}:\n${getServerErrorResponse(err)}` })
             })
     }
 
@@ -300,7 +301,7 @@ const FileBrowser = ({
                     fetchFolderData()
                 })
                 .catch(err => {
-                    addNotification({ type: "danger", title: "Не удалось скопировать файл", message: err.code })
+                    addNotification({ type: "danger", title: "Ошибка", message: `Не удалось скопировать файл:\n${getServerErrorResponse(err)}` })
                 })
         }
         else {
@@ -315,7 +316,7 @@ const FileBrowser = ({
                     fetchFolderData()
                 })
                 .catch(err => {
-                    addNotification({ type: "danger", title: "Не удалось переместить файл", message: err.code })
+                    addNotification({ type: "danger", title: "Ошибка", message: `Не удалось переместить файл:\n${getServerErrorResponse(err)}` })
                 })
         }
     }
@@ -367,7 +368,7 @@ const FileBrowser = ({
                 })
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Не удалось создать папку", message: err.code })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось создать папку:\n${getServerErrorResponse(err)}` })
             })
     }
 

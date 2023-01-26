@@ -21,6 +21,7 @@ import ItemList from "components/modules/itemList"
 import { EduFileType } from "components/templates/education/types"
 import cn from "classnames"
 import { useModalWindowContext } from "context/modalWindowContext"
+import { getServerErrorResponse } from "utils/serverData"
 
 const Editor = dynamic(
     () => import('react-draft-wysiwyg').then(mod => mod.Editor),
@@ -150,7 +151,7 @@ const ThemeTemplate = ({
                 addNotification({ type: "success", title: "Успех", message: "Информационные разделы сохранены" })
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось сохранить информационные разделы сохранены:\n${err.code}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось сохранить информационные разделы сохранены:\n${getServerErrorResponse(err)}` })
             })
     }
 
@@ -169,7 +170,7 @@ const ThemeTemplate = ({
                 setInitialTestBlock(newTestBlock)
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Не удалось добавить блок тестирования", message: err.code })
+                addNotification({ type: "danger", title: "Не удалось добавить блок тестирования", message: getServerErrorResponse(err) })
                 return
             })
         if (!testBlock.testBlockCollections) {
@@ -192,7 +193,7 @@ const ThemeTemplate = ({
                 addNotification({ type: "success", title: "Блок тестирования добавлен" })
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Не удалось добавить блок тестирования", message: err.code })
+                addNotification({ type: "danger", title: "Не удалось добавить блок тестирования", message: getServerErrorResponse(err) })
             })
     }
 
@@ -252,7 +253,7 @@ const ThemeTemplate = ({
                 })
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Не удалось обновить коллекции блока тестирования", message: err.code })
+                addNotification({ type: "danger", title: "Не удалось обновить коллекции блока тестирования", message: getServerErrorResponse(err) })
             })
     }
 
@@ -263,7 +264,7 @@ const ThemeTemplate = ({
                 setInitialTestBlock(undefined)
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Не удалось удалить блок тестирования", message: err.code })
+                addNotification({ type: "danger", title: "Не удалось удалить блок тестирования", message: getServerErrorResponse(err) })
             })
     }
 

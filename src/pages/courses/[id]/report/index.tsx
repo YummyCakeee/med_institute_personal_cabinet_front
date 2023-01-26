@@ -13,6 +13,7 @@ import CourseReportTemplate from "components/templates/courses/courseReport"
 import { ROUTE_COURSES } from "constants/routes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
+import { getServerErrorResponse } from "utils/serverData"
 
 const CourseReport = () => {
 
@@ -35,7 +36,7 @@ const CourseReport = () => {
                     setCourseUsers(courseUsers)
                 })).catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
     }, [user, router])

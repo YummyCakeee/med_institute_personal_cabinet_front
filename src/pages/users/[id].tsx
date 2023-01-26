@@ -11,6 +11,7 @@ import UserTemplate from "components/templates/users/user/UserTemplate"
 import { ROUTE_USERS } from "constants/routes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
+import { getServerErrorResponse } from "utils/serverData"
 
 const User = () => {
 
@@ -30,7 +31,7 @@ const User = () => {
                 })
                 .catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
     }, [user.authorized, router.query])

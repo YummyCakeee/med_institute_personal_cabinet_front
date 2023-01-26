@@ -9,6 +9,7 @@ import { UserProgramType } from "components/templates/educationalPrograms/types"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { wrapper } from "store"
 import { clearBreadCrumbs } from "store/breadCrumbsSlice"
+import { getServerErrorResponse } from "utils/serverData"
 
 const Education = () => {
 
@@ -26,7 +27,7 @@ const Education = () => {
                 })
                 .catch(err => {
                     setSuccess(false)
-                    setError(err.code)
+                    setError(getServerErrorResponse(err))
                 })
         }
     }, [user.authorized])
