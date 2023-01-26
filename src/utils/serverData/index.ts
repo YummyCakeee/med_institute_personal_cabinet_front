@@ -13,10 +13,13 @@ export const convertServerTestToClient = (test: TestType) => {
 }
 
 export const getServerErrorResponse = (err: AxiosError) => {
+    if (!err.isAxiosError) return err
     if (err.response?.data) {
+        const data: any = err.response.data
         const errors: string[] = []
-        const errorsData = (err.response.data as any).errors
-
+        if (data.message) return data.message
+        const errorsData = data.errors
+        if (!errorsData) return ""
         Object.keys(errorsData).forEach(key => {
             errors.push(errorsData[key])
         })
