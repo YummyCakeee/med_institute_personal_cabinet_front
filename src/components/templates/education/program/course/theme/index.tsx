@@ -157,6 +157,7 @@ const ThemeTemplate = ({
                             <UserTestResultsInfo
                                 solvedTest={solvedTests[selectedSolvedTestIndex]}
                                 onClose={onCloseTestInfoClick}
+                                mode="student"
                             /> :
                             <UserExerciseResultsInfo
                                 solvedTest={solvedTests[selectedSolvedTestIndex]}
