@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo, useRef } from "react"
+import React, { memo, useMemo, useRef } from "react"
 import { EduFileType, SolvedTestType } from "components/templates/education/types"
 import styles from "./UserExerciseResultInfo.module.scss"
 import Button from "components/elements/button/Button"
