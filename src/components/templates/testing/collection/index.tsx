@@ -126,8 +126,6 @@ const CollectionTemplate = ({ collection }: CollectionTemplateProps) => {
         })
     }
 
-    console.log(tests)
-
     return (
         <Layout>
             <Head>

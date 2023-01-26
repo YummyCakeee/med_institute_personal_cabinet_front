@@ -12,7 +12,6 @@ import { userSelector } from "store/userSlice"
 import Datetime from "components/elements/datetime"
 import UserAvatarField from "components/elements/formikComponents/userAvatarField"
 import { toBase64, toISOStringWithTimeZone } from "utils/formatters"
-import moment from "moment"
 
 type ProfileInfoFormProps = {
     onSuccess?: (user: UserProfileType) => void,
@@ -38,7 +37,6 @@ const ProfileInfoForm = ({
             userName: user.login,
             profilePicture
         }
-        console.log(data)
 
         return axiosApi.post(`${ENDPOINT_ACCOUNT}/UpdatePersonalData`, data)
             .then(res => {

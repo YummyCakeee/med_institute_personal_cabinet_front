@@ -73,6 +73,12 @@ export type ApplicationRole = {
     concurrencyStamp?: string
 }
 
+export enum UserRoleType {
+    ADMINISTRATOR = "Administrator",
+    TEACHER = "Teacher",
+    STUDENT = "Student"
+}
+
 export type CertificateType = {
     name: string,
     date: string,

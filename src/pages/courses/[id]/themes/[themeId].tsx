@@ -10,10 +10,11 @@ import { useRouter } from "next/router"
 import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import UnauthorizedTemplate from "components/templates/unauthorized"
-import { ROUTE_COURSES } from "constants/routes"
+import { ROUTE_COURSES, ROUTE_PROFILE } from "constants/routes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { getServerErrorResponse } from "utils/serverData"
+import { UserRoleType } from "components/templates/users/types"
 
 const Theme = () => {
 
@@ -28,6 +29,10 @@ const Theme = () => {
         const fetchData = async () => {
             const { themeId } = router.query
             if (user.authorized && themeId) {
+                if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+                    router.replace(ROUTE_PROFILE)
+                    return
+                }
                 let theme: ThemeType | undefined
                 await axios.all([
                     axiosApi.get(`${ENDPOINT_THEMES}/${themeId}`),

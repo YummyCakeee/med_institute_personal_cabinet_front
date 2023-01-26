@@ -21,6 +21,9 @@ import { AppDispatch } from "store"
 import { userLoggedOut, userSelector } from "store/userSlice"
 import Image from "next/image"
 import UserAvatar from "components/elements/userAvatar"
+import { UserRoleType } from "components/templates/users/types"
+import addNotification from "utils/notifications"
+import { getServerErrorResponse } from "utils/serverData"
 
 type SectionType = {
     name: string,
@@ -29,12 +32,6 @@ type SectionType = {
 
 type SectionCollectionType = {
     [field: string]: SectionType
-}
-
-enum UserRoleType {
-    ADMINISTRATOR = "Administrator",
-    TEACHER = "Teacher",
-    STUDENT = "Student"
 }
 
 const Header = () => {
@@ -113,7 +110,7 @@ const Header = () => {
                 router.replace(ROUTE_REGISTRATION)
             })
             .catch(err => {
-                console.log(err)
+                addNotification({type: "danger", title: "Ошибка", message: `Не удалось выйти из аккаунта:\n${getServerErrorResponse(err)}`})
             })
     }
 

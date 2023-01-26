@@ -7,10 +7,10 @@ import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import { useRouter } from "next/router"
 import UnauthorizedTemplate from "components/templates/unauthorized"
-import { UserProfileType } from "components/templates/users/types"
+import { UserProfileType, UserRoleType } from "components/templates/users/types"
 import { CourseType } from "components/templates/courses/types"
 import CourseReportTemplate from "components/templates/courses/courseReport"
-import { ROUTE_COURSES } from "constants/routes"
+import { ROUTE_COURSES, ROUTE_PROFILE } from "constants/routes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { getServerErrorResponse } from "utils/serverData"
@@ -26,6 +26,10 @@ const CourseReport = () => {
 
     useEffect(() => {
         if (user.authorized && router.isReady) {
+            if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+                router.replace(ROUTE_PROFILE)
+                return
+            }
             axios.all([
                 axiosApi.get(`${ENDPOINT_COURSES}/${router.query.id}`),
                 axiosApi.get(`${ENDPOINT_COURSES}/${router.query.id}/Users`)

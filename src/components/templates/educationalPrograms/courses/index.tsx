@@ -41,15 +41,15 @@ const EducationalProgramCoursesTemplate = ({
 
     const percentageTypes = useMemo(() => new Map<PercentageType, string>([
         [
-            PercentageType.MIN,
+            "Min",
             "Минимальный"
         ],
         [
-            PercentageType.MAX,
+            "Max",
             "Максимальный"
         ],
         [
-            PercentageType.AVG,
+            "Avg",
             "Средний"
         ]
     ]), [])
@@ -71,15 +71,16 @@ const EducationalProgramCoursesTemplate = ({
                 programCourse.courseId === el.courseId)
 
             const dependencies = []
-            let percentageType = 0
+            let percentageType: PercentageType = "Min"
             let value = 0
             let sortOrder = 0
             if (programCourse) {
                 dependencies.push(...programCourse.dependencies?.courseIds || [])
-                percentageType = programCourse.courseCriteria?.percentageType || 0
+                percentageType = programCourse.courseCriteria?.percentageType || "Min"
                 value = programCourse.courseCriteria?.value || 0,
                     sortOrder = programCourse.sortOrder
             }
+
 
             return {
                 ...el,
@@ -100,7 +101,7 @@ const EducationalProgramCoursesTemplate = ({
                 {
                     ...el,
                     dependencies: [],
-                    percentageType: PercentageType.MIN,
+                    percentageType: "Min",
                     value: 0
                 }
             )))
@@ -180,8 +181,10 @@ const EducationalProgramCoursesTemplate = ({
                 addNotification({ type: "success", title: "Успех", message: "Курсы обновлены" })
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка",
-                    message: `Не удалось обновить курсы:\n${getServerErrorResponse(err)}` })
+                addNotification({
+                    type: "danger", title: "Ошибка",
+                    message: `Не удалось обновить курсы:\n${getServerErrorResponse(err)}`
+                })
             })
 
     }, [initialProgramCourses, programCourses, program])

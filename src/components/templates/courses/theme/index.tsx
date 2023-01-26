@@ -207,8 +207,11 @@ const ThemeTemplate = ({
             dateEnd: testBlock.dateEnd
         }
         await axiosApi.put(`${ENDPOINT_COURSES}/Themes/${theme.themeId}/TestBlock`, data)
+            .then(res => {
+                addNotification({type: "success", title: "Успех", message: "Основная информация блока тестирования обновлена"})
+            })
             .catch(err => {
-                console.log(err)
+                addNotification({type: "danger", title: "Ошибка", message: `Не удалось обновить основную информацию блока тестирования:\n${getServerErrorResponse(err)}`})
             })
 
         const testBlockCollections = testBlock.testBlockCollections || []
@@ -246,14 +249,14 @@ const ThemeTemplate = ({
             })
         ])
             .then(res => {
-                addNotification({ type: "success", title: "Коллекции блока тестирования обновлены" })
+                addNotification({ type: "success", title: "Успех", message: "Коллекции блока тестирования обновлены" })
                 setInitialTestBlock({
                     ...initialTestBlock,
                     testBlockCollections: [...testBlockCollections]
                 })
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Не удалось обновить коллекции блока тестирования", message: getServerErrorResponse(err) })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось обновить коллекции блока тестирования:\n${getServerErrorResponse(err)}` })
             })
     }
 
@@ -264,7 +267,7 @@ const ThemeTemplate = ({
                 setInitialTestBlock(undefined)
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Не удалось удалить блок тестирования", message: getServerErrorResponse(err) })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось удалить блок тестирования:\n${getServerErrorResponse(err)}` })
             })
     }
 

@@ -9,8 +9,8 @@ import { userSelector } from "store/userSlice"
 import { useRouter } from "next/router"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import EducationalProgramReportTemplate from "components/templates/educationalPrograms/report"
-import { UserProfileType } from "components/templates/users/types"
-import { ROUTE_EDUCATIONAL_PROGRAMS } from "constants/routes"
+import { UserProfileType, UserRoleType } from "components/templates/users/types"
+import { ROUTE_EDUCATIONAL_PROGRAMS, ROUTE_PROFILE } from "constants/routes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { getServerErrorResponse } from "utils/serverData"
@@ -27,6 +27,10 @@ const EducationalProgramReport = () => {
 
     useEffect(() => {
         if (user.authorized && router.isReady) {
+            if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+                router.replace(ROUTE_PROFILE)
+                return
+            }
             axios.all([
                 axiosApi.get(`${ENDPOINT_PROGRAMS}/${router.query.id}/Report`),
                 axiosApi.get(`${ENDPOINT_PROGRAMS}/${router.query.id}`),

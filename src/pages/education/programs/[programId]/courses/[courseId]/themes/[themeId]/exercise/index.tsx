@@ -25,7 +25,6 @@ const Exercise = () => {
             const requestUrl = `${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes/${themeId}/TestBlock/Active`
             axiosApi.get(requestUrl)
                 .then(res => {
-                    console.log(res)
                     setSuccess(true)
                     setTest(res.data)
                 })

@@ -10,8 +10,9 @@ import UnauthorizedTemplate from "components/templates/unauthorized"
 import CourseThemesTemplate from "components/templates/courses/courseThemes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
-import { ROUTE_COURSES } from "constants/routes"
+import { ROUTE_COURSES, ROUTE_PROFILE } from "constants/routes"
 import { getServerErrorResponse } from "utils/serverData"
+import { UserRoleType } from "components/templates/users/types"
 
 const CourseThemes = () => {
 
@@ -24,6 +25,10 @@ const CourseThemes = () => {
 
     useEffect(() => {
         if (user.authorized) {
+            if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+                router.replace(ROUTE_PROFILE)
+                return
+            }
             const { id } = router.query
             axiosApi.get(`${ENDPOINT_COURSES}/${id}`)
                 .then(res => {

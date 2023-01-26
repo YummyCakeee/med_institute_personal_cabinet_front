@@ -9,9 +9,9 @@ import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
-import { UserProfileType } from "components/templates/users/types"
+import { UserProfileType, UserRoleType } from "components/templates/users/types"
 import { ENDPOINT_EDUCATION, ENDPOINT_THEMES } from "constants/endpoints"
-import { ROUTE_EDUCATION_TEACHER } from "constants/routes"
+import { ROUTE_EDUCATION_TEACHER, ROUTE_PROFILE } from "constants/routes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { getServerErrorResponse } from "utils/serverData"
@@ -27,6 +27,10 @@ const Theme = () => {
 
     useEffect(() => {
         if (user.authorized && router.isReady) {
+            if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+                router.replace(ROUTE_PROFILE)
+                return
+            }
             const { themeId } = router.query
             axios.all([
                 axiosApi.get(`${ENDPOINT_THEMES}/${themeId}`),

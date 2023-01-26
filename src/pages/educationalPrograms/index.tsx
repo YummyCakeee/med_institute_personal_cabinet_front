@@ -2,7 +2,10 @@ import EducationalProgramsTemplate from 'components/templates/educationalProgram
 import { ProgramType } from 'components/templates/educationalPrograms/types'
 import LoadingErrorTemplate from 'components/templates/loadingError'
 import UnauthorizedTemplate from 'components/templates/unauthorized'
+import { UserRoleType } from 'components/templates/users/types'
 import { ENDPOINT_PROGRAMS } from 'constants/endpoints'
+import { ROUTE_PROFILE } from 'constants/routes'
+import router from 'next/router'
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { wrapper } from 'store'
@@ -20,6 +23,10 @@ const EducationalPrograms = () => {
 
   useEffect(() => {
     if (user.authorized) {
+      if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+        router.replace(ROUTE_PROFILE)
+        return
+    }
       axiosApi.get(ENDPOINT_PROGRAMS)
         .then(res => {
           setSuccess(true)

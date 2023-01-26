@@ -28,9 +28,7 @@ export type CourseDependencyType = {
     courseIds: string[]
 }
 
-export enum PercentageType {
-    MIN, MAX, AVG
-}
+export type PercentageType = "Min" | "Max" | "Avg"
 
 export type CriteriaType = {
     percentageType: PercentageType,

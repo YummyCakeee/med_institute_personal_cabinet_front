@@ -1,5 +1,5 @@
 import { AnyAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { UserProfileType, UserWithCertificatesType } from "components/templates/users/types"
+import { UserRoleType, UserWithCertificatesType } from "components/templates/users/types"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
 import { StateType } from "store"
 import axiosApi from "utils/axios"
@@ -14,7 +14,7 @@ export type StateUserType = {
     login: string,
     email?: string,
     profilePicture?: string,
-    roles?: string[],
+    roles?: UserRoleType[],
     authorized?: boolean,
     infoLoadStatus?: "pending" | "fulfilled" | "rejected"
 }
@@ -33,6 +33,7 @@ const initialState: StateUserType = {
     infoLoadStatus: "rejected"
 }
 
+
 export const getUserInfo = createAsyncThunk("user/getUserInfo", async () => {
     const response = await axiosApi.get(`${ENDPOINT_ACCOUNT}/CurrentUserInfo`)
 
@@ -46,7 +47,7 @@ export const getUserInfo = createAsyncThunk("user/getUserInfo", async () => {
         login: data.user?.userName || "",
         email: data.user?.email || "",
         profilePicture: data.profilePicture || "",
-        roles: data.user?.userRoles?.map(el => el.role.name!) || [],
+        roles: data.user?.userRoles?.map(el => el.role.name! as UserRoleType) || [],
         authorized: true,
         infoLoadStatus: "fulfilled"
     }

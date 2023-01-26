@@ -2,8 +2,9 @@ import LoadingErrorTemplate from "components/templates/loadingError"
 import CollectionTemplate from "components/templates/testing/collection/index"
 import { CollectionType } from "components/templates/testing/types"
 import UnauthorizedTemplate from "components/templates/unauthorized"
+import { UserRoleType } from "components/templates/users/types"
 import { ENDPOINT_COLLECTIONS } from "constants/endpoints"
-import { ROUTE_TESTING, ROUTE_USERS } from "constants/routes"
+import { ROUTE_PROFILE, ROUTE_TESTING } from "constants/routes"
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
@@ -24,6 +25,10 @@ const Collection = () => {
     useEffect(() => {
         const { id } = router.query
         if (user.authorized) {
+            if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+                router.replace(ROUTE_PROFILE)
+                return
+            }
             axiosApi.get(`${ENDPOINT_COLLECTIONS}/${id}`)
                 .then(res => {
                     const tests = res.data.tests.map((el: any) => {

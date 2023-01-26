@@ -27,27 +27,10 @@ const useEducationalPrograms = () => {
             onSuccess: (program) => {
                 setPrograms(prev => [...prev, program])
                 setEducationalProgramModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Программа добавлена",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Программа добавлена" })
             },
-            onError: (error) => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось добавить программу",
-                    message: error.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+            onError: (err) => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось добавить программу:\n${getServerErrorResponse(err)}` })
             }
         })
     }
@@ -65,26 +48,11 @@ const useEducationalPrograms = () => {
                     return el
                 }))
                 setEducationalProgramModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Программа изменена",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Программа изменена" })
             },
-            onError: (error) => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось изменить программу",
-                    message: error.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
+            onError: (err) => {
+                addNotification({
+                    type: "danger", title: "Ошибка", message: `Не удалось изменить программу:\n${getServerErrorResponse(err)}`,
                 })
             }
         })

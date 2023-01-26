@@ -11,6 +11,8 @@ import UnauthorizedTemplate from "components/templates/unauthorized"
 import { clearBreadCrumbs } from "store/breadCrumbsSlice"
 import { wrapper } from "store"
 import { getServerErrorResponse } from "utils/serverData"
+import { UserRoleType } from "components/templates/users/types"
+import { ROUTE_PROFILE } from "constants/routes"
 
 
 const Courses = () => {
@@ -23,6 +25,10 @@ const Courses = () => {
 
     useEffect(() => {
         if (user.authorized && router.isReady) {
+            if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+                router.replace(ROUTE_PROFILE)
+                return
+            }
             axiosApi.get(ENDPOINT_COURSES)
                 .then(res => {
                     setSuccess(true)

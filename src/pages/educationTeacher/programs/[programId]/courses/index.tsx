@@ -10,10 +10,11 @@ import axiosApi from "utils/axios"
 import { ENDPOINT_COURSES, ENDPOINT_PROGRAMS } from "constants/endpoints"
 import { CourseType } from "components/templates/courses/types"
 import axios from "axios"
-import { ROUTE_EDUCATION_TEACHER } from "constants/routes"
+import { ROUTE_EDUCATION_TEACHER, ROUTE_PROFILE } from "constants/routes"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { getServerErrorResponse } from "utils/serverData"
+import { UserRoleType } from "components/templates/users/types"
 
 const Program = () => {
 
@@ -26,6 +27,10 @@ const Program = () => {
 
     useEffect(() => {
         if (user.authorized) {
+            if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+                router.replace(ROUTE_PROFILE)
+                return
+            }
             const { programId } = router.query
             axios.all([
                 axiosApi.get(`${ENDPOINT_PROGRAMS}/${programId}`),

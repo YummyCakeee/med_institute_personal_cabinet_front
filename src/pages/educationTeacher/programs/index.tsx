@@ -10,6 +10,9 @@ import EducationTeacherTemplate from "components/templates/educationTeacher"
 import { wrapper } from "store"
 import { clearBreadCrumbs } from "store/breadCrumbsSlice"
 import { getServerErrorResponse } from "utils/serverData"
+import { UserRoleType } from "components/templates/users/types"
+import { ROUTE_PROFILE } from "constants/routes"
+import router from "next/router"
 
 const EducationTeacher = ({ }) => {
 
@@ -20,6 +23,10 @@ const EducationTeacher = ({ }) => {
 
     useEffect(() => {
         if (user.authorized) {
+            if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+                router.replace(ROUTE_PROFILE)
+                return
+            }
             axiosApi.get(`${ENDPOINT_PROGRAMS}`)
                 .then(res => {
                     setSuccess(true)

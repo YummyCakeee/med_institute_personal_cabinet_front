@@ -8,11 +8,11 @@ import { useSelector } from "react-redux"
 import { userSelector } from "store/userSlice"
 import { useRouter } from "next/router"
 import UnauthorizedTemplate from "components/templates/unauthorized"
-import { UserProfileType, UserWithCertificatesType } from "components/templates/users/types"
+import { UserProfileType, UserRoleType, UserWithCertificatesType } from "components/templates/users/types"
 import EducationalProgramUserReportTemplate from "components/templates/educationalPrograms/userReport"
 import { wrapper } from "store"
 import { setBreadCrumbs } from "store/breadCrumbsSlice"
-import { ROUTE_EDUCATIONAL_PROGRAMS } from "constants/routes"
+import { ROUTE_EDUCATIONAL_PROGRAMS, ROUTE_PROFILE } from "constants/routes"
 import { getServerErrorResponse } from "utils/serverData"
 
 const EducationalProgramUserReport = () => {
@@ -27,6 +27,10 @@ const EducationalProgramUserReport = () => {
 
     useEffect(() => {
         if (user.authorized && router.isReady) {
+            if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+                router.replace(ROUTE_PROFILE)
+                return
+            }
             const { id: programId, userId } = router.query
             axios.all([
                 axiosApi.get(`${ENDPOINT_PROGRAMS}/${programId}/Users/${userId}/Report`),

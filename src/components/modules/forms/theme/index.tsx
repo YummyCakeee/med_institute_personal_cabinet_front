@@ -39,7 +39,6 @@ const ThemeForm = ({
                 })
                 .catch(err => {
                     onError(err)
-                    console.log(err)
                 })
         }
         if (!theme) return
@@ -57,7 +56,6 @@ const ThemeForm = ({
             })
             .catch(err => {
                 onError(err)
-                console.log(err)
             })
     }
     return (

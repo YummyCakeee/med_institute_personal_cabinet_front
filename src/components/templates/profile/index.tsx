@@ -61,7 +61,6 @@ const ProfileTemplate = ({
         }
         axiosApi.get(`${ENDPOINT_USERS}/DownloadCertificate`, { params, responseType: "blob" })
             .then(res => {
-                console.log(res.data)
                 let url = window.URL.createObjectURL(res.data);
                 if (downloadFileRef.current) {
                     const extension = filename.match(/.*(\..*)$/)

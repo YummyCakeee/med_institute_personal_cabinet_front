@@ -3,8 +3,9 @@ import { CourseType, ThemeType } from "components/templates/courses/types"
 import CourseTemplate from "components/templates/educationTeacher/program/course"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import UnauthorizedTemplate from "components/templates/unauthorized"
+import { UserRoleType } from "components/templates/users/types"
 import { ENDPOINT_COURSES } from "constants/endpoints"
-import { ROUTE_EDUCATION_TEACHER } from "constants/routes"
+import { ROUTE_EDUCATION_TEACHER, ROUTE_PROFILE } from "constants/routes"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
@@ -25,6 +26,10 @@ const Course = () => {
 
     useEffect(() => {
         if (user.authorized && router.isReady) {
+            if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
+                router.replace(ROUTE_PROFILE)
+                return
+            }
             const { programId, courseId } = router.query
             axios.all([
                 axiosApi.get(`${ENDPOINT_COURSES}/${courseId}`),
