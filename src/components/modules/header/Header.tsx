@@ -79,16 +79,16 @@ const Header = () => {
 
         if (user.roles?.includes(UserRoleType.ADMINISTRATOR)) {
             updatedUserSections.users = sections.users
+            updatedUserSections.educationalPrograms = sections.educationalPrograms
             updatedUserSections.courses = sections.courses
             updatedUserSections.testing = sections.testing
-            updatedUserSections.educationalPrograms = sections.educationalPrograms
             updatedUserSections.educationTeacher = sections.educationTeacher
         }
 
         if (user.roles?.includes(UserRoleType.TEACHER)) {
+            updatedUserSections.educationalPrograms = sections.educationalPrograms
             updatedUserSections.courses = sections.courses
             updatedUserSections.testing = sections.testing
-            updatedUserSections.educationalPrograms = sections.educationalPrograms
             updatedUserSections.educationTeacher = sections.educationTeacher
         }
 
