@@ -18,7 +18,7 @@ const EducationalProgramStudents = () => {
 
     const router = useRouter()
     const user = useSelector(userSelector)
-    const [users, setUsers] = useState<UserProfileType[]>([])
+    const [programUsers, setProgramUsers] = useState<UserProfileType[]>()
     const [program, setProgram] = useState<ProgramType>()
     const [success, setSuccess] = useState<boolean>(true)
     const [error, setError] = useState<string>("")
@@ -31,12 +31,12 @@ const EducationalProgramStudents = () => {
                 return
             }
             axios.all([
-                axiosApi.get(ENDPOINT_USERS),
-                axiosApi.get(`${ENDPOINT_PROGRAMS}/${id}`)
-            ]).then(axios.spread(({ data: users }, { data: program },) => {
+                axiosApi.get(`${ENDPOINT_PROGRAMS}/${id}`),
+                axiosApi.get(`${ENDPOINT_PROGRAMS}/${id}/Users`),
+            ]).then(axios.spread(({ data: program }, { data: programUsers }) => {
                 setSuccess(true)
-                setUsers(users)
                 setProgram(program)
+                setProgramUsers(programUsers)
             })).catch(err => {
                 setSuccess(false)
                 setError(getServerErrorResponse(err))
@@ -46,13 +46,17 @@ const EducationalProgramStudents = () => {
 
     return (
         <>
-            {success && program ?
-                <EducationalProgramStudentsTemplate
-                    {...{
-                        program,
-                        users
-                    }}
-                /> :
+            {success ?
+                <>
+                    {program && programUsers &&
+                        <EducationalProgramStudentsTemplate
+                            {...{
+                                program,
+                                programUsers
+                            }}
+                        />
+                    }
+                </> :
                 <LoadingErrorTemplate
                     error={error}
                 />
