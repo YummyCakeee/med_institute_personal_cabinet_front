@@ -24,7 +24,7 @@ const useUsers = () => {
     const router = useRouter()
     const [sortingFieldName, setSortingFieldName] = useState<FilterSortField | undefined>(FilterSortField.LAST_NAME)
     const [sortOrder, setsortOrder] = useState<"Asc" | "Desc">("Asc")
-    const [filteringFieldName, setFilteringFieldName] = useState<FilterSortField | undefined>(undefined)
+    const [filteringFieldName, setFilteringFieldName] = useState<FilterSortField>(FilterSortField.LAST_NAME)
     const [filteringFieldValue, setFilteringFieldValue] = useState<string>("")
     const [totalUsersCount, setTotalUsersCount] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(1)
@@ -142,7 +142,8 @@ const useUsers = () => {
                 filterField = FilterSortField.ROLES
                 break
         }
-        setFilteringFieldName(filterField)
+        if (filterField)
+            setFilteringFieldName(filterField)
     }
 
     const onFieldFilterValueChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
