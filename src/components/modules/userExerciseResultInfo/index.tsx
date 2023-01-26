@@ -29,6 +29,7 @@ const UserExerciseResultsInfo = ({
     const downloadFileRef = useRef<HTMLAnchorElement>(null)
 
     const isFinished = useMemo(() => {
+        if (!solvedTest.finishedTestTime) return false
         const currentTime = new Date().getTime()
         const endTime = new Date(solvedTest.finishedTestTime).getTime()
         return currentTime >= endTime
