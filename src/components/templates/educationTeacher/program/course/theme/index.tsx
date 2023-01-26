@@ -145,7 +145,7 @@ const ThemeTemplate = ({
             teacherComments: [],
             userComments: [],
         }
-        return axiosApi.put(`${ENDPOINT_EDUCATION}/Themes/${themeId}/Attemp/${attempt.startTestTime}/User/${themeStudents[selectedStudentIndex].userId}/Finish/false`, data)
+        return axiosApi.put(`${ENDPOINT_EDUCATION}/Themes/${themeId}/Attemp/${attempt.startTestTime}/User/${themeStudents[selectedStudentIndex].userId}/Finish/true`, data)
             .then(res => {
                 setAttempt({
                     ...attempt,
