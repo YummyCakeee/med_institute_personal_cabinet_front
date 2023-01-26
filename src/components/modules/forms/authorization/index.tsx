@@ -27,14 +27,14 @@ const AuthorizationForm = ({
             userName: values.userName,
             password: values.password
         }
-        return axiosApi.post(`${ENDPOINT_ACCOUNT}/Login`, data)
+        await axiosApi.post(`${ENDPOINT_ACCOUNT}/Login`, data)
             .then(res => {
                 if (res.status === 200) {
                     onSuccess()
                 }
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось войти в аккаунт ${getServerErrorResponse(err)}` })
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось войти в аккаунт:\n${getServerErrorResponse(err)}` })
             })
     }
 
