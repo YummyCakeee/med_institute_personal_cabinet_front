@@ -1,7 +1,7 @@
 import Layout from "components/layouts/Layout"
 import ItemList from "components/modules/itemList"
 import Head from "next/head"
-import React, { useMemo } from "react"
+import React from "react"
 import useUsers, { UserField } from "./useUsers"
 import styles from "./UsersTemplate.module.scss"
 import ComboBox from "components/elements/comboBox/ComboBox"
