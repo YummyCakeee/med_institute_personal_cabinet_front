@@ -32,7 +32,7 @@ const EducationalProgramsTemplate = ({
     return (
         <Layout>
             <Head>
-                <title>ПРограммы обучения</title>
+                <title>Программы обучения</title>
             </Head>
             <div className={utilStyles.title}>Программы обучения</div>
             <div className={utilStyles.section}>
