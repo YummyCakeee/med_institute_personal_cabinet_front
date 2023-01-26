@@ -294,7 +294,7 @@ const ThemeTemplate = ({
                     editorState={editorState}
                     onEditorStateChange={onEditorStateChange}
                     toolbar={{
-                        options: ['inline', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'image', 'remove', 'history']
+                        options: ['inline', 'list', 'textAlign', 'history']
                     }}
                 />
             </div>
