@@ -15,9 +15,14 @@ export const maxLengthValueValidator = (value: string, length: number) => {
 }
 
 export const passwordValidator = (value: string) => {
-    if (!value.match(/^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!#$%&?{}^()"]).*$/g)) {
+    if (!value || !value.match(/^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!#$%&?{}^()"]).*$/g)) {
         return "Пароль должен быть длиной от 6 символов и содержать хотя бы одну заглавную, одну прописную буквы и один символ из набора (!#$%&?{}^()\")"
     }
+}
+
+export const emailValidator = (value: string) => {
+    if (!value || !value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/))
+        return "Укажите корректный адрес эл. почты"
 }
 
 export const composeValidators = (value: string, ...validators: ((value: string) => string | undefined)[]) => {

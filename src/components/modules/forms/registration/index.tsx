@@ -3,7 +3,7 @@ import { Formik, Form, FormikValues, Field } from "formik"
 import Button from "components/elements/button/Button"
 import InputField from "components/elements/formikComponents/inputField/InputField"
 import utilStyles from "styles/utils.module.scss"
-import { composeValidators, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator, passwordValidator } from "utils/validators"
+import { emailValidator, passwordValidator } from "utils/validators"
 import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
 import addNotification from "utils/notifications"
@@ -54,12 +54,7 @@ const RegistrationForm = ({
                         placeholder="Email"
                         disabled={isSubmitting}
                         size="large"
-                        validate={(value: string) =>
-                            composeValidators(value,
-                                notEmptyValidator,
-                                val => minLengthValueValidator(val, 3),
-                                val => maxLengthValueValidator(val, 20)
-                            )}
+                        validate={emailValidator}
                     />
                     <Field
                         name="password"

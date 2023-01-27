@@ -2,7 +2,7 @@ import Button from "components/elements/button/Button"
 import InputField from "components/elements/formikComponents/inputField/InputField"
 import { Formik, Form, Field, FormikValues } from "formik"
 import React from "react"
-import { composeValidators, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator, passwordValidator } from "utils/validators"
+import { composeValidators, emailValidator, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator, passwordValidator } from "utils/validators"
 import utilStyles from "styles/utils.module.scss"
 import { ApplicationUserRole, UserProfileType } from "components/templates/users/types"
 import CheckboxField from "components/elements/formikComponents/checkboxField/CheckboxField"
@@ -183,11 +183,7 @@ const UserForm = ({
                                 name="email"
                                 component={InputField}
                                 placeholder="Почта"
-                                validate={(value: string) =>
-                                    composeValidators(value,
-                                        notEmptyValidator,
-                                        val => minLengthValueValidator(val, 2)
-                                    )}
+                                validate={emailValidator}
                                 disabled={isSubmitting}
                             />
                             <Field
