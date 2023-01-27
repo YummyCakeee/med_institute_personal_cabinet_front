@@ -36,27 +36,10 @@ const useCourses = () => {
                     return el
                 }))
                 setCourseModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Курс обновлён",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Курс обновлён" })
             },
-            onError: (error) => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось обновить курс",
-                    message: error.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+            onError: (err) => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось обновить курс:\n${getServerErrorResponse(err)}` })
             }
         })
     }
@@ -92,27 +75,10 @@ const useCourses = () => {
             onSuccess: (course) => {
                 setCourses(prev => [...prev, course])
                 setCourseModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Курс добавлен",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Курс добавлен" })
             },
-            onError: (error) => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось добавить курс",
-                    message: error.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+            onError: (err) => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось добавить курс:\n${getServerErrorResponse(err)}` })
             }
         })
     }

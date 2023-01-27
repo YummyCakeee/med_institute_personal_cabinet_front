@@ -37,27 +37,10 @@ const useTesting = () => {
                     return el
                 }))
                 setCollectionModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Коллекция изменена",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Коллекция изменена" })
             },
-            onError: (error) => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось изменить коллекцию",
-                    message: error.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+            onError: (err) => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось изменить коллекцию:\n${getServerErrorResponse(err)}` })
             }
         })
     }
@@ -93,27 +76,10 @@ const useTesting = () => {
             onSuccess: (collection) => {
                 setCollections([...collections, collection])
                 setCollectionModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Новая коллекция добавлена",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Новая коллекция добавлена" })
             },
-            onError: (error) => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось добавить коллекцию",
-                    message: error.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+            onError: (err) => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось добавить коллекцию:\n${getServerErrorResponse(err)}` })
             }
         })
     }

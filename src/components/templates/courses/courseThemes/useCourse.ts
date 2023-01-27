@@ -66,15 +66,7 @@ const useCourse = (course: CourseType) => {
             axiosApi.delete(`${ENDPOINT_COURSES}/Themes/${id}`)
                 .then(res => {
                     if (res.status === 204) {
-                        Store.addNotification({
-                            container: "top-right",
-                            type: "success",
-                            title: "Тема удалена",
-                            dismiss: {
-                                onScreen: true,
-                                duration: 5000
-                            }
-                        })
+                        addNotification({ type: "success", title: "Успех", message: "Тема удалена" })
                         setThemes(prev => prev.filter(el => el.themeId !== id))
                         setConfirmActionModalWindowState(undefined)
                     }
@@ -98,15 +90,7 @@ const useCourse = (course: CourseType) => {
             course,
             onSuccess: (theme) => {
                 setThemes(prev => [...prev, theme].sort(sortThemes))
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Новая тема добавлена",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Новая тема добавлена" })
                 setThemeModalWindowState(undefined)
             },
             onError: (err) => {
@@ -127,26 +111,10 @@ const useCourse = (course: CourseType) => {
             onSuccess: (themes) => {
                 setThemes(themes)
                 setThemesOrderModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Порядок тем сохранён",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Порядок тем сохранён" })
             },
-            onError: () => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось изменить порядок тем",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+            onError: (err) => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось изменить порядок тем:\n${getServerErrorResponse(err)}` })
             },
             onDismiss: () => setThemesOrderModalWindowState(undefined)
         })

@@ -37,27 +37,10 @@ const CollectionTemplate = ({ collection }: CollectionTemplateProps) => {
             onSuccess: (test) => {
                 setTests(prev => [...prev, test])
                 setTestModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Тест добавлен",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Тест добавлен" })
             },
-            onError: (error) => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось добавить тест",
-                    message: error.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+            onError: (err) => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось добавить тест:\n${getServerErrorResponse(err)}` })
             }
         })
     }
@@ -76,27 +59,10 @@ const CollectionTemplate = ({ collection }: CollectionTemplateProps) => {
                     return el
                 }))
                 setTestModalWindowState(undefined)
-                Store.addNotification({
-                    container: "top-right",
-                    type: "success",
-                    title: "Тест изменён",
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+                addNotification({ type: "success", title: "Успех", message: "Тест изменён" })
             },
-            onError: (error) => {
-                Store.addNotification({
-                    container: "top-right",
-                    type: "danger",
-                    title: "Не удалось добавить тест",
-                    message: error.code,
-                    dismiss: {
-                        onScreen: true,
-                        duration: 5000
-                    }
-                })
+            onError: (err) => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось добавить тест:\n${getServerErrorResponse(err)}` })
             }
         })
     }

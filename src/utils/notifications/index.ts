@@ -22,7 +22,8 @@ const addNotification = ({
         dismiss: {
             duration: 5000,
             onScreen: true
-        }
+        },
+        ...props
     })
 }
 
