@@ -57,13 +57,17 @@ const ExerciseTemplate = ({
                 return
             })
         const { programId, courseId, themeId } = router.query
+        const exercise = initialTest.userExercises[currentExerciceIndex]
         const data: UserExerciseType = {
-            ...initialTest.userExercises[currentExerciceIndex],
+            exerciseText: exercise.exerciseText,
             file: {
                 fileName: values.fileName,
                 fileDescription: values.fileDescription,
                 fileLink: serverFileName
-            }
+            },
+            rating: exercise.rating,
+            teacherComments: [],
+            userComments: []
         }
         await axiosApi.put(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes/${themeId}/TestBlock/Exercise`, data)
             .then(res => {
