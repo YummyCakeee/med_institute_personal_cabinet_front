@@ -3,9 +3,12 @@ import { SolvedTestType } from "components/templates/education/types"
 import LoadingErrorTemplate from "components/templates/loadingError"
 import UnauthorizedTemplate from "components/templates/unauthorized"
 import { ENDPOINT_EDUCATION } from "constants/endpoints"
+import { ROUTE_EDUCATION } from "constants/routes"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import { wrapper } from "store"
+import { setBreadCrumbs } from "store/breadCrumbsSlice"
 import { userSelector } from "store/userSlice"
 import axiosApi from "utils/axios"
 import { getServerErrorResponse } from "utils/serverData"
@@ -54,5 +57,28 @@ const Test = () => {
         </>
     )
 }
+
+
+Test.getInitialProps = wrapper.getInitialPageProps(store => ({ query }) => {
+    const { programId, courseId, themeId } = query
+    store.dispatch(setBreadCrumbs([
+        {
+            title: "Программы обучения",
+            route: ROUTE_EDUCATION
+        },
+        {
+            title: "Курсы программы",
+            route: `${ROUTE_EDUCATION}/${programId}/courses`
+        },
+        {
+            title: "Темы курса",
+            route: `${ROUTE_EDUCATION}/${programId}/courses/${courseId}/themes`
+        },
+        {
+            title: "Тема курса",
+            route: `${ROUTE_EDUCATION}/${programId}/courses/${courseId}/themes/${themeId}`
+        }
+    ]))
+})
 
 export default Test
