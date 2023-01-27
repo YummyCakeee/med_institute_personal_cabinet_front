@@ -43,8 +43,8 @@ const ProgramTemplate = ({
             }
         }).sort((a, b) => {
             if (a.dependencies.map(el => el.course.courseId).includes(b.course.courseId))
-                return -1
-            return 1
+                return 1
+            return -1
         }) || []
     }, [coursesInfo, programReport])
 
