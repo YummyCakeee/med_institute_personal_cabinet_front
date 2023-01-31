@@ -230,7 +230,7 @@ const EducationalProgramStudentsTemplate = ({
                                 <p className={utilStyles.text_small}>Поле:</p>
                                 <ComboBox
                                     options={
-                                        headers.slice(0, headers.length - 1).map(el => (
+                                        headers.map(el => (
                                             el.title
                                         ))
                                     }
