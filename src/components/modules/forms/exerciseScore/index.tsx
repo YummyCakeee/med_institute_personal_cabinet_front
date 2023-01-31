@@ -8,7 +8,6 @@ import { notEmptyValidator } from "utils/validators"
 import utilStyles from "styles/utils.module.scss"
 import { UserExerciseType } from "components/templates/education/types"
 import styles from "./ExerciseScoreForm.module.scss"
-import { numberFormatter } from "utils/formatters"
 
 interface ExerciseScoreFormProps {
     exercise: UserExerciseType,
@@ -59,7 +58,6 @@ const ExerciseScoreForm = ({
                         placeholder="0"
                         validate={notEmptyValidator}
                         disabled={isSubmitting}
-                        formatter={numberFormatter}
                         inputClassName={styles.score_input}
                     />
                     <div className={utilStyles.form_button_container}>
