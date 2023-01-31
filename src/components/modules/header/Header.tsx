@@ -40,38 +40,37 @@ const Header = () => {
     const user = useSelector(userSelector)
     const dispatch = useDispatch<AppDispatch>()
 
-    const sections = {
-        educationalPrograms: {
-            name: "Программы обучения",
-            path: ROUTE_EDUCATIONAL_PROGRAMS
-        },
-        users: {
-            name: "Пользователи",
-            path: ROUTE_USERS
-        },
-        courses: {
-            name: "Курсы",
-            path: ROUTE_COURSES
-        },
-        testing: {
-            name: "Тестирование",
-            path: ROUTE_TESTING
-        },
-        education: {
-            name: "Обучение",
-            path: ROUTE_EDUCATION
-        },
-        educationTeacher: {
-            name: "Обучение студентов",
-            path: ROUTE_EDUCATION_TEACHER
-        },
-        profile: {
-            name: "Мой профиль",
-            path: ROUTE_PROFILE
-        }
-    }
-
     const userSections = useMemo(() => {
+        const sections = {
+            educationalPrograms: {
+                name: "Программы обучения",
+                path: ROUTE_EDUCATIONAL_PROGRAMS
+            },
+            users: {
+                name: "Пользователи",
+                path: ROUTE_USERS
+            },
+            courses: {
+                name: "Курсы",
+                path: ROUTE_COURSES
+            },
+            testing: {
+                name: "Тестирование",
+                path: ROUTE_TESTING
+            },
+            education: {
+                name: "Обучение",
+                path: ROUTE_EDUCATION
+            },
+            educationTeacher: {
+                name: "Обучение студентов",
+                path: ROUTE_EDUCATION_TEACHER
+            },
+            profile: {
+                name: "Мой профиль",
+                path: ROUTE_PROFILE
+            }
+        }
         const updatedUserSections: SectionCollectionType = {}
 
         if (user.roles?.includes(UserRoleType.ADMINISTRATOR)) {
@@ -101,7 +100,7 @@ const Header = () => {
         })
 
         return sectionsArray
-    }, [user.roles, sections])
+    }, [user.roles])
 
     const onLogoutClick = () => {
         axiosApi.post(`${ENDPOINT_ACCOUNT}/Logout`)
@@ -110,7 +109,7 @@ const Header = () => {
                 router.replace(ROUTE_REGISTRATION)
             })
             .catch(err => {
-                addNotification({type: "danger", title: "Ошибка", message: `Не удалось выйти из аккаунта:\n${getServerErrorResponse(err)}`})
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось выйти из аккаунта:\n${getServerErrorResponse(err)}` })
             })
     }
 

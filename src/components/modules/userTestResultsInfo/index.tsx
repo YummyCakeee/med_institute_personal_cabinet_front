@@ -42,7 +42,7 @@ const UserTestResultsInfo = ({
 
     const reactToPrintContent = useCallback(() => {
         return resultComponentRef.current;
-    }, [resultComponentRef.current]);
+    }, []);
 
     return (
         <div className={styles.container} ref={resultComponentRef}>

@@ -1,5 +1,4 @@
 import { CrossIcon, FileIcon } from "components/elements/icons"
-import { useModalWindowContext } from "context/modalWindowContext"
 import React, { useEffect, useRef, useState } from "react"
 import styles from "./FileUploaderField.module.scss"
 import cn from "classnames"
@@ -21,7 +20,6 @@ const FileUploaderField = ({
     ...props
 }: FileUploaderFieldProps) => {
 
-    const { setConfirmActionModalWindowState } = useModalWindowContext()
     const [files, setFiles] = useState<string[]>([])
     const ref = useRef<HTMLInputElement>(null)
 
@@ -36,7 +34,7 @@ const FileUploaderField = ({
         else {
             setFiles([(value as File).name])
         }
-    }, [value])
+    }, [value, multiple])
 
     const onFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.currentTarget.files?.length) return

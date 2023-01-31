@@ -92,7 +92,7 @@ const ItemList = ({
         setSetectedItemIndex(null)
         if (scrollToBottomOnItemsUpdate && itemListEndRef.current)
             itemListEndRef.current.scrollIntoView({ behavior: "smooth" })
-    }, [items])
+    }, [items, scrollToBottomOnItemsUpdate])
 
     const onItemClick = (index: number) => {
         if (selectedItemIndex !== index && itemControlButtons) setSetectedItemIndex(index)

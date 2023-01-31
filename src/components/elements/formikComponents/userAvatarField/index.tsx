@@ -29,7 +29,7 @@ const UserAvatarField = ({
     useEffect(() => {
         if (!initialPhoto)
             setInitialPhoto(value)
-    }, [value])
+    }, [value, initialPhoto])
 
     const onAvatarClick = () => {
         if (ref.current)
