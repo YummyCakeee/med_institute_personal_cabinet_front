@@ -1,16 +1,14 @@
 import Input from "components/elements/input/Input"
-import { CollectionType, TestBlockCollectionsType, TestBlockType } from "components/templates/testing/types"
-import React from "react"
+import { CollectionType, TestBlockCollectionType, TestBlockType } from "components/templates/testing/types"
+import React, { useMemo } from "react"
 import styles from "./Theme.module.scss"
 import 'moment/locale/ru';
 import ItemList from "components/modules/itemList"
 import utilStyles from "styles/utils.module.scss"
 import Checkbox from "components/elements/checkbox/Checkbox"
 import { maxMinConstraint } from "utils/computations"
-import { Store } from "react-notifications-component"
 import { useModalWindowContext } from "context/modalWindowContext"
 import Datetime from "components/elements/datetime"
-import { Moment } from "moment"
 import cn from "classnames"
 import addNotification from "utils/notifications";
 
@@ -35,7 +33,7 @@ const TestBlockEdit = ({
         }
 
         const onAddCollectionConfirm = (questionsAmount: number) => {
-            const newTestBlockCollection: TestBlockCollectionsType = {
+            const newTestBlockCollection: TestBlockCollectionType = {
                 collectionId: collections[index].collectionId!,
                 testBlockId: "",
                 questionsAmount: questionsAmount,
@@ -160,7 +158,7 @@ const TestBlockEdit = ({
                                 onClick: onRemoveCollectionClick
                             }
                         ]}
-                        items={testBlock.testBlockCollections!}
+                        items={testBlock.testBlockCollections || []}
                         className={styles.collection}
                     />
                 </div>
