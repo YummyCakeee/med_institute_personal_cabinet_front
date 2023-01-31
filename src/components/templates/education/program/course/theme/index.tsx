@@ -36,6 +36,8 @@ const ThemeTemplate = ({
     const timeoutRef = useRef<NodeJS.Timeout>()
     const [activeAttemptLeftTime, setActiveAttemptLeftTime] = useState<number>(0)
     const [selectedSolvedTestIndex, setSelectedSolvedTestIndex] = useState<number>()
+    const [isThemePassed, setIsThemePassed] = useState<boolean>(userTheme.themePassed)
+
     const hostName = (!process.env.NODE_ENV || process.env.NODE_ENV === "development") ?
         "http://localhost:5000" :
         "http://1085037-cq23779.tmweb.ru"
@@ -92,6 +94,18 @@ const ThemeTemplate = ({
         setSelectedSolvedTestIndex(undefined)
     }
 
+    const onFinishThemeClick = () => {
+        const { programId, courseId, themeId } = router.query
+        axiosApi.put(`${ENDPOINT_EDUCATION}/Programs/${programId}/Courses/${courseId}/Themes/${themeId}/Finish`)
+            .then(res => {
+                setIsThemePassed(true)
+                addNotification({ type: "success", title: "Успех", message: "Тема завершена" })
+            })
+            .catch(err => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось завершить тему:\n${getServerErrorResponse(err)}` })
+            })
+    }
+
     return (
         <Layout>
             <Head>
@@ -123,7 +137,7 @@ const ThemeTemplate = ({
                             </div>
                         </div>
                     }
-                    {testBlock &&
+                    {testBlock ?
                         <div className={utilStyles.section}>
                             <div className={utilStyles.section_title}>Тестирование</div>
                             <div className={styles.test_time}>
@@ -149,7 +163,19 @@ const ThemeTemplate = ({
                                     testBlock
                                 }}
                             />
-                        </div>
+                        </div> :
+                        <>
+                            {!isThemePassed &&
+                                <div className={utilStyles.section}>
+                                    <div className={utilStyles.text_medium}>Для завершения темы нажмите на кнопку ниже:</div>
+                                    <Button
+                                        title="Завершить"
+                                        size="small"
+                                        onClick={onFinishThemeClick}
+                                    />
+                                </div>
+                            }
+                        </>
                     }
                 </div>
                 {solvedTests && selectedSolvedTestIndex !== undefined &&
