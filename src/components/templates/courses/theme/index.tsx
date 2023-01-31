@@ -167,7 +167,14 @@ const ThemeTemplate = ({
         await axiosApi.post(`${ENDPOINT_COURSES}/Themes/${theme.themeId}/TestBlock`, data)
             .then(res => {
                 newTestBlock = res.data
-                setInitialTestBlock(newTestBlock)
+                setInitialTestBlock({
+                    ...testBlock,
+                    testBlockId: newTestBlock!.testBlockId
+                })
+                setTestBlock({
+                    ...testBlock,
+                    testBlockId: newTestBlock!.testBlockId
+                })
             })
             .catch(err => {
                 addNotification({ type: "danger", title: "Не удалось добавить блок тестирования", message: getServerErrorResponse(err) })
@@ -188,7 +195,12 @@ const ThemeTemplate = ({
             .then(res => {
                 setInitialTestBlock({
                     ...initialTestBlock!,
-                    testBlockCollections: [...testBlock.testBlockCollections || []]
+                    testBlockCollections: testBlock.testBlockCollections!.map((el, index) => {
+                        return {
+                            ...el,
+                            testBlockCollectionId: res[index].data
+                        }
+                    })
                 })
                 addNotification({ type: "success", title: "Блок тестирования добавлен" })
             })
@@ -208,10 +220,10 @@ const ThemeTemplate = ({
         }
         await axiosApi.put(`${ENDPOINT_COURSES}/Themes/${theme.themeId}/TestBlock`, data)
             .then(res => {
-                addNotification({type: "success", title: "Успех", message: "Основная информация блока тестирования обновлена"})
+                addNotification({ type: "success", title: "Успех", message: "Основная информация блока тестирования обновлена" })
             })
             .catch(err => {
-                addNotification({type: "danger", title: "Ошибка", message: `Не удалось обновить основную информацию блока тестирования:\n${getServerErrorResponse(err)}`})
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось обновить основную информацию блока тестирования:\n${getServerErrorResponse(err)}` })
             })
 
         const testBlockCollections = testBlock.testBlockCollections || []
@@ -252,7 +264,12 @@ const ThemeTemplate = ({
                 addNotification({ type: "success", title: "Успех", message: "Коллекции блока тестирования обновлены" })
                 setInitialTestBlock({
                     ...initialTestBlock,
-                    testBlockCollections: [...testBlockCollections]
+                    testBlockCollections: testBlockCollections.map((el, index) => {
+                        return {
+                            ...el,
+                            testBlockCollectionId: res[index].data
+                        }
+                    })
                 })
             })
             .catch(err => {
