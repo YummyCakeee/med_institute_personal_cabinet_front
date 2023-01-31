@@ -26,7 +26,6 @@ export type ThemeType = {
     testBlockId?: string,
     sortOrder: number,
     createDate?: string,
-    themePassed?: boolean
     userThemes?: null
     course?: CourseType,
     testBlock?: TestBlockType
