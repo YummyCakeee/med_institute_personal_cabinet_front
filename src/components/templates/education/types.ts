@@ -9,7 +9,8 @@ export type UserThemeType = {
     userTestDate?: string,
     timeSpent?: number,
     createDate: string,
-    theme: ThemeType
+    theme: ThemeType,
+    themePassed: boolean
 }
 
 export type SolvedTestType = {
