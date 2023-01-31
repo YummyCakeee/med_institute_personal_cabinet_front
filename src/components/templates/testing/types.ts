@@ -36,10 +36,10 @@ export type TestBlockType = {
     creatorId?: string,
     createDate?: string,
     isFileTestBlock: boolean,
-    testBlockCollections?: TestBlockCollectionsType[]
+    testBlockCollections?: TestBlockCollectionType[]
 }
 
-export type TestBlockCollectionsType = {
+export type TestBlockCollectionType = {
     testBlockCollectionId?: string,
     testBlockId: string,
     collectionId: string,
