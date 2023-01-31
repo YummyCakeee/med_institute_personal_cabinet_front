@@ -4,7 +4,7 @@ import LoadingErrorTemplate from "components/templates/loadingError"
 import axiosApi from "utils/axios"
 import { ENDPOINT_COLLECTIONS, ENDPOINT_TEST_BLOCK_COLLECTIONS, ENDPOINT_THEMES } from "constants/endpoints"
 import ThemeTemplate from "components/templates/courses/theme"
-import { CollectionType, TestBlockCollectionsType } from "components/templates/testing/types"
+import { CollectionType, TestBlockCollectionType } from "components/templates/testing/types"
 import axios from "axios"
 import { useRouter } from "next/router"
 import { useSelector } from "react-redux"
@@ -22,7 +22,7 @@ const Theme = () => {
     const user = useSelector(userSelector)
     const [success, setSuccess] = useState<boolean>(true)
     const [error, setError] = useState<string>("")
-    const [theme, setThemes] = useState<ThemeType>()
+    const [theme, setTheme] = useState<ThemeType>()
     const [collections, setCollections] = useState<CollectionType[]>()
 
     useEffect(() => {
@@ -40,7 +40,6 @@ const Theme = () => {
                 ])
                     .then(axios.spread(({ data: themeData }, { data: collectionsData }) => {
                         theme = themeData
-                        setThemes(theme)
                         setCollections(collectionsData)
                     }))
                     .catch(err => {
@@ -50,16 +49,17 @@ const Theme = () => {
                 if (theme?.testBlockId) {
                     await axiosApi.get(`${ENDPOINT_TEST_BLOCK_COLLECTIONS}`)
                         .then(res => {
-                            (res.data as TestBlockCollectionsType[]).forEach(el => {
+                            (res.data as TestBlockCollectionType[]).forEach(el => {
                                 if (el.testBlockId === theme!.testBlockId)
-                                    theme?.testBlock?.testBlockCollections?.push(el)
+                                    theme!.testBlock!.testBlockCollections?.push(el)
                             })
+                            setTheme(theme)
                         })
                         .catch(err => {
                             setSuccess(false)
                             setError(getServerErrorResponse(err))
                         })
-                }
+                } else setTheme(theme)
             }
         }
 
