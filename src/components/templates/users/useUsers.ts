@@ -1,3 +1,4 @@
+import axios from "axios"
 import { LoadingStatusType } from "components/modules/LoadingStatusWrapper/LoadingStatusWrapper"
 import { ENDPOINT_USERS } from "constants/endpoints"
 import { ROUTE_USERS } from "constants/routes"
@@ -30,6 +31,7 @@ const useUsers = () => {
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [usersLoadingStatus, setUsersLoadingStatus] = useState<LoadingStatusType>(LoadingStatusType.LOADING)
     const usersPerPage = 10
+    const controller = new AbortController()
 
     const [users, setUsers] = useState<UserProfileType[]>([])
     const [headers] = useState([
@@ -81,16 +83,18 @@ const useUsers = () => {
             filterField: filteringFieldName,
             filterString: filteringFieldValue
         }
-        axiosApi.get(`${ENDPOINT_USERS}/Count`, { params })
+        axiosApi.get(`${ENDPOINT_USERS}/Count`, { params, signal: controller.signal })
             .then(res => {
                 setTotalUsersCount(res.data)
                 setUsersLoadingStatus(LoadingStatusType.LOADED)
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось получить число всех пользователей:\n${getServerErrorResponse(err)}` })
-                setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
+                if (!axios.isCancel(err)) {
+                    addNotification({ type: "danger", title: "Ошибка", message: `Не удалось получить число всех пользователей:\n${getServerErrorResponse(err)}` })
+                    setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
+                }
             })
-
+        return () => controller.abort()
     }, [filteringFieldName, filteringFieldValue])
 
     useEffect(() => {
@@ -99,8 +103,8 @@ const useUsers = () => {
             const params = {
                 limit: usersPerPage,
                 offset: (currentPage - 1) * usersPerPage,
-                ...(filteringFieldName && { filterField: filteringFieldName }),
-                ...(filteringFieldName && { filterString: filteringFieldValue }),
+                filterField: filteringFieldName,
+                filterString: filteringFieldValue,
                 ...(sortingFieldName && {
                     sortFieldEnum: sortingFieldName,
                     sortOrder
