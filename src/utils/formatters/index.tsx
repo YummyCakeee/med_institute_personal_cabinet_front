@@ -16,4 +16,10 @@ export const toBase64 = (file: File) => new Promise<string>((resolve, reject) =>
 export const toISOStringWithTimeZone = (date: string) => {
     var tzoffset = (new Date(date)).getTimezoneOffset() * 60000
     return (new Date(new Date(date).getTime() - tzoffset)).toISOString().slice(0, -1)
-} 
+}
+
+export const numberFormatter = (value: string) => {
+    console.log(value)
+    const clearedValue = value.replace(/[^\d]/g, '')
+    return clearedValue.length ? clearedValue : "0"
+}
