@@ -9,7 +9,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, ContentState, convertToRaw } from "draft-js"
 import Button from "components/elements/button/Button"
 import TestBlockEdit from "./TestBlockEdit"
-import { CollectionType, TestBlockType } from "components/templates/testing/types"
+import { CollectionType, TestBlockCollectionType, TestBlockType } from "components/templates/testing/types"
 import htmlToDraft from 'html-to-draftjs'
 import draftToHtml from 'draftjs-to-html';
 import axiosApi from "utils/axios"
@@ -77,11 +77,11 @@ const ThemeTemplate = ({
         if (theme.testBlock) {
             setInitialTestBlock({
                 ...theme.testBlock,
-                testBlockCollections: theme.testBlock.testBlockCollections || []
+                testBlockCollections: [...theme.testBlock.testBlockCollections || []]
             })
             setTestBlock({
                 ...theme.testBlock,
-                testBlockCollections: theme.testBlock.testBlockCollections || []
+                testBlockCollections: [...theme.testBlock.testBlockCollections || []]
             })
         }
         setThemeFiles(theme.themeFiles || [])
@@ -157,33 +157,38 @@ const ThemeTemplate = ({
 
     const addNewTestBlock = async () => {
         if (!testBlock) return
+
         const data = {
             timeLimit: testBlock.timeLimit,
             isFileTestBlock: testBlock.isFileTestBlock,
             percentSuccess: testBlock.percentSuccess,
             dateEnd: testBlock.dateEnd
         }
+
         let newTestBlock: TestBlockType | undefined
+
         await axiosApi.post(`${ENDPOINT_COURSES}/Themes/${theme.themeId}/TestBlock`, data)
             .then(res => {
                 newTestBlock = res.data
-                setInitialTestBlock({
-                    ...testBlock,
-                    testBlockId: newTestBlock!.testBlockId
-                })
-                setTestBlock({
-                    ...testBlock,
-                    testBlockId: newTestBlock!.testBlockId
-                })
             })
             .catch(err => {
                 addNotification({ type: "danger", title: "Не удалось добавить блок тестирования", message: getServerErrorResponse(err) })
                 return
             })
+            
         if (!testBlock.testBlockCollections) {
             addNotification({ type: "success", title: "Блок тестирования добавлен" })
+            setInitialTestBlock({
+                ...testBlock,
+                testBlockId: newTestBlock!.testBlockId
+            })
+            setTestBlock({
+                ...testBlock,
+                testBlockId: newTestBlock!.testBlockId
+            })
             return
         }
+
         await axios.all(testBlock.testBlockCollections.map(el => {
             const data = {
                 testBlockId: newTestBlock!.testBlockId,
@@ -193,14 +198,22 @@ const ThemeTemplate = ({
             return axiosApi.post(ENDPOINT_TEST_BLOCK_COLLECTIONS, data)
         }))
             .then(res => {
-                setInitialTestBlock({
-                    ...initialTestBlock!,
-                    testBlockCollections: testBlock.testBlockCollections!.map((el, index) => {
+                const updatedTestBlockCollections: TestBlockCollectionType[] =
+                    testBlock.testBlockCollections!.map((el, index) => {
                         return {
                             ...el,
                             testBlockCollectionId: res[index].data
                         }
                     })
+                setInitialTestBlock({
+                    ...testBlock,
+                    testBlockCollections: [...updatedTestBlockCollections],
+                    testBlockId: newTestBlock!.testBlockId
+                })
+                setTestBlock({
+                    ...testBlock,
+                    testBlockCollections: [...updatedTestBlockCollections],
+                    testBlockId: newTestBlock!.testBlockId
                 })
                 addNotification({ type: "success", title: "Блок тестирования добавлен" })
             })
@@ -262,14 +275,26 @@ const ThemeTemplate = ({
         ])
             .then(res => {
                 addNotification({ type: "success", title: "Успех", message: "Коллекции блока тестирования обновлены" })
-                setInitialTestBlock({
-                    ...initialTestBlock,
-                    testBlockCollections: testBlockCollections.map((el, index) => {
-                        return {
-                            ...el,
-                            testBlockCollectionId: res[index].data
+
+                let newCollectionIdIndex = 0
+                const updatedTestBlockCollections: TestBlockCollectionType[] =
+                    testBlockCollections.map(testBlockCollection => {
+                        if (newTestBlockCollections.find(newTestBlockCollection =>
+                            newTestBlockCollection.collectionId === testBlockCollection.collectionId)) {
+                            return {
+                                ...testBlockCollection,
+                                testBlockCollectionId: res[newCollectionIdIndex++].data
+                            }
                         }
+                        return testBlockCollection
                     })
+                setInitialTestBlock({
+                    ...testBlock,
+                    testBlockCollections: [...updatedTestBlockCollections]
+                })
+                setTestBlock({
+                    ...testBlock,
+                    testBlockCollections: [...updatedTestBlockCollections]
                 })
             })
             .catch(err => {
