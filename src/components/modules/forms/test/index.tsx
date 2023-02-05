@@ -150,7 +150,7 @@ const TestForm = ({
                                                         component={InputField}
                                                         size="medium"
                                                         validate={notEmptyValidator}
-                                                        placeholder="Тест ответа"
+                                                        placeholder="Ответ"
                                                     />
                                                     <div className={styles.answer_checkbox_correct}>
                                                         <Field
