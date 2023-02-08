@@ -30,8 +30,10 @@ const useUsers = () => {
     const [totalUsersCount, setTotalUsersCount] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [usersLoadingStatus, setUsersLoadingStatus] = useState<LoadingStatusType>(LoadingStatusType.LOADING)
+    const [isInitialLoaded, setIsInitialLoaded] = useState(false)
     const usersPerPage = 10
-    const controller = new AbortController()
+    const userCountController = new AbortController()
+    const userController = new AbortController()
 
     const [users, setUsers] = useState<UserProfileType[]>([])
     const [headers] = useState([
@@ -78,50 +80,68 @@ const useUsers = () => {
     } = useModalWindowContext()
 
     useEffect(() => {
+        getUserCount()
+        return () => {
+            if (isInitialLoaded)
+                userCountController.abort()
+        }
+    }, [filteringFieldName, filteringFieldValue])
+
+    useEffect(() => {
+        getUsers()
+        return () => {
+            if (isInitialLoaded)
+                userController.abort()
+        }
+    }, [sortingFieldName, sortOrder, filteringFieldName, filteringFieldValue, currentPage, usersPerPage])
+
+    const getUsers = () => {
+        setUsersLoadingStatus(LoadingStatusType.LOADING)
+        const params = {
+            limit: usersPerPage,
+            offset: (currentPage - 1) * usersPerPage,
+            filterField: filteringFieldName,
+            filterString: filteringFieldValue,
+            ...(sortingFieldName && {
+                sortFieldEnum: sortingFieldName,
+                sortOrder
+            }),
+        }
+        axiosApi.get(ENDPOINT_USERS, { params, signal: userController.signal })
+            .then(res => {
+                setUsers(res.data)
+                setUsersLoadingStatus(LoadingStatusType.LOADED)
+                setIsInitialLoaded(true)
+            })
+            .catch(err => {
+                if (!axios.isCancel(err)) {
+                    addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить список пользователей:\n${getServerErrorResponse(err)}` })
+                    setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
+                    setIsInitialLoaded(true)
+                }
+            })
+    }
+
+    const getUserCount = () => {
         setUsersLoadingStatus(LoadingStatusType.LOADING)
         const params = {
             filterField: filteringFieldName,
             filterString: filteringFieldValue
         }
-        axiosApi.get(`${ENDPOINT_USERS}/Count`, { params, signal: controller.signal })
+        axiosApi.get(`${ENDPOINT_USERS}/Count`, { params, signal: userCountController.signal })
             .then(res => {
                 setTotalUsersCount(res.data)
                 setUsersLoadingStatus(LoadingStatusType.LOADED)
+                setIsInitialLoaded(true)
             })
             .catch(err => {
                 if (!axios.isCancel(err)) {
                     addNotification({ type: "danger", title: "Ошибка", message: `Не удалось получить число всех пользователей:\n${getServerErrorResponse(err)}` })
                     setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
+                    setIsInitialLoaded(true)
                 }
             })
-        return () => controller.abort()
-    }, [filteringFieldName, filteringFieldValue])
-
-    useEffect(() => {
-        const getUsers = () => {
-            setUsersLoadingStatus(LoadingStatusType.LOADING)
-            const params = {
-                limit: usersPerPage,
-                offset: (currentPage - 1) * usersPerPage,
-                filterField: filteringFieldName,
-                filterString: filteringFieldValue,
-                ...(sortingFieldName && {
-                    sortFieldEnum: sortingFieldName,
-                    sortOrder
-                }),
-            }
-            axiosApi.get(ENDPOINT_USERS, { params })
-                .then(res => {
-                    setUsers(res.data)
-                    setUsersLoadingStatus(LoadingStatusType.LOADED)
-                })
-                .catch(err => {
-                    addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить список пользователей:\n${getServerErrorResponse(err)}` })
-                    setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
-                })
-        }
-        getUsers()
-    }, [sortingFieldName, sortOrder, filteringFieldName, filteringFieldValue, currentPage, usersPerPage])
+    }
 
     const onFieldFilterSelect = (option: string) => {
         const field = headers.find(el => el.title === option)?.field
