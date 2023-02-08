@@ -21,13 +21,6 @@ const ForgotPasswordForm = () => {
         await axiosApi.get(`${ENDPOINT_ACCOUNT}/ForgotPassword`, { params })
             .then(res => {
                 addNotification({ type: "info", title: "Информация", message: "На Вашу почту, привязанную к логину, было отправлено письмо, вы можете закрыть эту страницу" })
-                addNotification({ type: "warning", title: "Внимание", message: "На момент тестирования вы перенарпаляетесь на страницу восстановления автоматически" })
-                router.push({
-                    pathname: ROUTE_RECOVERY,
-                    query: {
-                        token: res.data
-                    }
-                })
             })
             .catch(err => {
                 addNotification({ type: "danger", title: "Ошибка", message: `Не удалось отправить письмо:\n${getServerErrorResponse(err)}` })
