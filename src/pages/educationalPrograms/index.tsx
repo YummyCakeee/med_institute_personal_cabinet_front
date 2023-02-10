@@ -5,7 +5,7 @@ import UnauthorizedTemplate from 'components/templates/unauthorized'
 import { UserRoleType } from 'components/templates/users/types'
 import { ENDPOINT_PROGRAMS } from 'constants/endpoints'
 import { ROUTE_PROFILE } from 'constants/routes'
-import router from 'next/router'
+import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { wrapper } from 'store'
@@ -17,6 +17,7 @@ import { getServerErrorResponse } from 'utils/serverData'
 const EducationalPrograms = () => {
 
   const user = useSelector(userSelector)
+  const router = useRouter()
   const [educationalPrograms, setEducationalPrograms] = useState<ProgramType[]>([])
   const [success, setSuccess] = useState<boolean>(true)
   const [error, setError] = useState<string>("")
@@ -26,7 +27,7 @@ const EducationalPrograms = () => {
       if (!user.roles?.includes(UserRoleType.ADMINISTRATOR) && !user.roles?.includes(UserRoleType.TEACHER)) {
         router.replace(ROUTE_PROFILE)
         return
-    }
+      }
       axiosApi.get(ENDPOINT_PROGRAMS)
         .then(res => {
           setSuccess(true)
@@ -37,7 +38,7 @@ const EducationalPrograms = () => {
           setError(getServerErrorResponse(err))
         })
     }
-  }, [user.authorized])
+  }, [user, router])
 
 
   return (

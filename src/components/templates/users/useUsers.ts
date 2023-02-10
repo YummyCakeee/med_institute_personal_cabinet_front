@@ -32,8 +32,6 @@ const useUsers = () => {
     const [usersLoadingStatus, setUsersLoadingStatus] = useState<LoadingStatusType>(LoadingStatusType.LOADING)
     const [isInitialLoaded, setIsInitialLoaded] = useState(false)
     const usersPerPage = 10
-    const userCountController = new AbortController()
-    const userController = new AbortController()
 
     const [users, setUsers] = useState<UserProfileType[]>([])
     const [headers] = useState([
@@ -84,68 +82,72 @@ const useUsers = () => {
     } = useModalWindowContext()
 
     useEffect(() => {
+        const userCountController = new AbortController()
+
+        const getUserCount = () => {
+            setUsersLoadingStatus(LoadingStatusType.LOADING)
+            const params = {
+                filterField: filteringFieldName,
+                filterString: filteringFieldValue
+            }
+            axiosApi.get(`${ENDPOINT_USERS}/Count`, { params, signal: userCountController.signal })
+                .then(res => {
+                    setTotalUsersCount(res.data)
+                    setUsersLoadingStatus(LoadingStatusType.LOADED)
+                    setIsInitialLoaded(true)
+                })
+                .catch(err => {
+                    if (!axios.isCancel(err)) {
+                        addNotification({ type: "danger", title: "Ошибка", message: `Не удалось получить число всех пользователей:\n${getServerErrorResponse(err)}` })
+                        setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
+                        setIsInitialLoaded(true)
+                    }
+                })
+        }
         getUserCount()
         return () => {
             if (isInitialLoaded)
                 userCountController.abort()
         }
-    }, [filteringFieldName, filteringFieldValue])
+    }, [filteringFieldName, filteringFieldValue, isInitialLoaded])
 
     useEffect(() => {
+        const userController = new AbortController()
+        const getUsers = () => {
+            setUsersLoadingStatus(LoadingStatusType.LOADING)
+            const params = {
+                limit: usersPerPage,
+                offset: (currentPage - 1) * usersPerPage,
+                filterField: filteringFieldName,
+                filterString: filteringFieldValue,
+                ...(sortingFieldName && {
+                    sortFieldEnum: sortingFieldName,
+                    sortOrder
+                }),
+            }
+            axiosApi.get(ENDPOINT_USERS, { params, signal: userController.signal })
+                .then(res => {
+                    setUsers(res.data)
+                    setUsersLoadingStatus(LoadingStatusType.LOADED)
+                    setIsInitialLoaded(true)
+                })
+                .catch(err => {
+                    if (!axios.isCancel(err)) {
+                        addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить список пользователей:\n${getServerErrorResponse(err)}` })
+                        setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
+                        setIsInitialLoaded(true)
+                    }
+                    else {
+                        console.log("aaa")
+                    }
+                })
+        }
         getUsers()
         return () => {
             if (isInitialLoaded)
                 userController.abort()
         }
-    }, [sortingFieldName, sortOrder, filteringFieldName, filteringFieldValue, currentPage, usersPerPage])
-
-    const getUsers = () => {
-        setUsersLoadingStatus(LoadingStatusType.LOADING)
-        const params = {
-            limit: usersPerPage,
-            offset: (currentPage - 1) * usersPerPage,
-            filterField: filteringFieldName,
-            filterString: filteringFieldValue,
-            ...(sortingFieldName && {
-                sortFieldEnum: sortingFieldName,
-                sortOrder
-            }),
-        }
-        axiosApi.get(ENDPOINT_USERS, { params, signal: userController.signal })
-            .then(res => {
-                setUsers(res.data)
-                setUsersLoadingStatus(LoadingStatusType.LOADED)
-                setIsInitialLoaded(true)
-            })
-            .catch(err => {
-                if (!axios.isCancel(err)) {
-                    addNotification({ type: "danger", title: "Ошибка", message: `Не удалось загрузить список пользователей:\n${getServerErrorResponse(err)}` })
-                    setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
-                    setIsInitialLoaded(true)
-                }
-            })
-    }
-
-    const getUserCount = () => {
-        setUsersLoadingStatus(LoadingStatusType.LOADING)
-        const params = {
-            filterField: filteringFieldName,
-            filterString: filteringFieldValue
-        }
-        axiosApi.get(`${ENDPOINT_USERS}/Count`, { params, signal: userCountController.signal })
-            .then(res => {
-                setTotalUsersCount(res.data)
-                setUsersLoadingStatus(LoadingStatusType.LOADED)
-                setIsInitialLoaded(true)
-            })
-            .catch(err => {
-                if (!axios.isCancel(err)) {
-                    addNotification({ type: "danger", title: "Ошибка", message: `Не удалось получить число всех пользователей:\n${getServerErrorResponse(err)}` })
-                    setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
-                    setIsInitialLoaded(true)
-                }
-            })
-    }
+    }, [sortingFieldName, sortOrder, filteringFieldName, filteringFieldValue, currentPage, usersPerPage, isInitialLoaded])
 
     const onFieldFilterSelect = (option: string) => {
         const field = headers.find(el => el.title === option)?.field

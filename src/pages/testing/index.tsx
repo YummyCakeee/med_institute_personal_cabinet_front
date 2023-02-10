@@ -37,7 +37,7 @@ const Testing = () => {
                     setError(getServerErrorResponse(err))
                 })
         }
-    }, [user.authorized])
+    }, [user])
 
     return (
         <>

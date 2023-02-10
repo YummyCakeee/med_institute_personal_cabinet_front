@@ -42,7 +42,7 @@ const EducationalProgramStudents = () => {
                 setError(getServerErrorResponse(err))
             })
         }
-    }, [user.authorized, router.query])
+    }, [user, router])
 
     return (
         <>

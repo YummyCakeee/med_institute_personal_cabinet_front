@@ -65,7 +65,7 @@ const Theme = () => {
 
         fetchData()
 
-    }, [user, router.query])
+    }, [user, router])
 
     return (
         <>

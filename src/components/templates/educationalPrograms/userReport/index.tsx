@@ -34,7 +34,7 @@ const EducationalProgramUserReportTemplate = ({
 
     useEffect(() => {
         setCertificate(programUser.certificates.find(el => el.programName === program.title))
-    }, [programUser.certificates])
+    }, [programUser.certificates, program.title])
 
     const onCertificateUploadSuccess = (certificate: CertificateType) => {
         setCertificate(certificate)

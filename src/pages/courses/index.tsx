@@ -40,7 +40,7 @@ const Courses = () => {
                 })
         }
 
-    }, [router, user.authorized])
+    }, [router, user])
 
     return (
         <>

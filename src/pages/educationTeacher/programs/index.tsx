@@ -12,11 +12,12 @@ import { clearBreadCrumbs } from "store/breadCrumbsSlice"
 import { getServerErrorResponse } from "utils/serverData"
 import { UserRoleType } from "components/templates/users/types"
 import { ROUTE_PROFILE } from "constants/routes"
-import router from "next/router"
+import { useRouter } from "next/router"
 
 const EducationTeacher = ({ }) => {
 
     const user = useSelector(userSelector)
+    const router = useRouter()
     const [programs, setPrograms] = useState<ProgramType[]>([])
     const [success, setSuccess] = useState<boolean>(true)
     const [error, setError] = useState<string>("")
@@ -37,7 +38,7 @@ const EducationTeacher = ({ }) => {
                     setError(getServerErrorResponse(err))
                 })
         }
-    }, [user.authorized])
+    }, [user, router])
 
     return (
         <>

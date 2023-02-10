@@ -51,7 +51,7 @@ const Collection = () => {
                     setError(getServerErrorResponse(err))
                 })
         }
-    }, [user.authorized, router.query])
+    }, [user, router])
 
     return (
         <>

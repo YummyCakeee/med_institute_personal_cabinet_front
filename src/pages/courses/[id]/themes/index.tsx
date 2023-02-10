@@ -41,7 +41,7 @@ const CourseThemes = () => {
                 })
         }
 
-    }, [user.authorized, router.query])
+    }, [user, router])
 
     return (
         <>
