@@ -137,9 +137,6 @@ const useUsers = () => {
                         setUsersLoadingStatus(LoadingStatusType.LOAD_ERROR)
                         setIsInitialLoaded(true)
                     }
-                    else {
-                        console.log("aaa")
-                    }
                 })
         }
         getUsers()

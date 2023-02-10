@@ -19,7 +19,6 @@ export const toISOStringWithTimeZone = (date: string) => {
 }
 
 export const numberFormatter = (value: string) => {
-    console.log(value)
     const clearedValue = value.replace(/[^\d]/g, '')
     return clearedValue.length ? clearedValue : "0"
 }
