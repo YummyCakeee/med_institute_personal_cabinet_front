@@ -3,30 +3,29 @@ import { Formik, Form, FormikValues, Field } from "formik"
 import Button from "components/elements/button/Button"
 import InputField from "components/elements/formikComponents/inputField/InputField"
 import utilStyles from "styles/utils.module.scss"
-import { emailValidator, passwordValidator } from "utils/validators"
+import { composeValidators, emailValidator, maxLengthValueValidator, minLengthValueValidator, notEmptyValidator, passwordValidator } from "utils/validators"
 import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
-import addNotification from "utils/notifications"
-import { getServerErrorResponse } from "utils/serverData"
 
 type RegistrationFormProps = {
-    onSuccess: () => void
+    onSuccess: () => void,
+    onError: (error: any) => void
 }
 
 type UserRegisterType = {
     email: string,
-    password: string
+    lastName: string,
+    firstName: string,
+    secondName: string
 }
 
 const RegistrationForm = ({
-    onSuccess
+    onSuccess,
+    onError
 }: RegistrationFormProps) => {
 
     const onSubmit = async (values: FormikValues) => {
-        const data: UserRegisterType = {
-            email: values.email,
-            password: values.password
-        }
+        const data: UserRegisterType = values as UserRegisterType
         return axiosApi.post(`${ENDPOINT_ACCOUNT}/Register`, data)
             .then(res => {
                 if (res.status === 200) {
@@ -34,7 +33,7 @@ const RegistrationForm = ({
                 }
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось зарегистрироваться:\n${getServerErrorResponse(err)}` })
+                onError(err)
             })
     }
 
@@ -42,12 +41,56 @@ const RegistrationForm = ({
         <Formik
             initialValues={{
                 email: "",
-                password: ""
+                lastName: "",
+                firstName: "",
+                secondName: ""
             }}
             onSubmit={onSubmit}
         >
             {({ isSubmitting, isValid }) => (
                 <Form>
+                    <Field
+                        name="lastName"
+                        component={InputField}
+                        placeholder="Фамилия"
+                        disabled={isSubmitting}
+                        size="large"
+                        validate={(value: string) =>
+                            composeValidators(
+                                value,
+                                notEmptyValidator,
+                                val => minLengthValueValidator(val, 2),
+                                val => maxLengthValueValidator(val, 20)
+                            )}
+                    />
+                    <Field
+                        name="firstName"
+                        component={InputField}
+                        placeholder="Имя"
+                        disabled={isSubmitting}
+                        size="large"
+                        validate={(value: string) =>
+                            composeValidators(
+                                value,
+                                notEmptyValidator,
+                                val => minLengthValueValidator(val, 2),
+                                val => maxLengthValueValidator(val, 20)
+                            )}
+                    />
+                    <Field
+                        name="secondName"
+                        component={InputField}
+                        placeholder="Отчество"
+                        disabled={isSubmitting}
+                        size="large"
+                        validate={(value: string) =>
+                            composeValidators(
+                                value,
+                                notEmptyValidator,
+                                val => minLengthValueValidator(val, 2),
+                                val => maxLengthValueValidator(val, 20)
+                            )}
+                    />
                     <Field
                         name="email"
                         component={InputField}
@@ -55,15 +98,6 @@ const RegistrationForm = ({
                         disabled={isSubmitting}
                         size="large"
                         validate={emailValidator}
-                    />
-                    <Field
-                        name="password"
-                        component={InputField}
-                        placeholder="Пароль"
-                        type="password"
-                        size="large"
-                        disabled={isSubmitting}
-                        validate={passwordValidator}
                     />
                     <div className={utilStyles.form_button_container}>
                         <Button
