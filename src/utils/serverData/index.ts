@@ -18,6 +18,7 @@ export const getServerErrorResponse = (err: AxiosError) => {
         const data: any = err.response.data
         const errors: string[] = []
         if (data.message) return data.message
+        if (data.title) return data.title
         const errorsData = data.errors
         if (!errorsData) return ""
         Object.keys(errorsData).forEach(key => {
