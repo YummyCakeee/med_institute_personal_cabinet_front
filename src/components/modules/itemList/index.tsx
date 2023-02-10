@@ -16,7 +16,7 @@ type Item = {
     [field: string]: any,
 }
 
-interface ItemControlButton extends Omit<ButtonProps, 'onClick'> {
+export interface ItemControlButton extends Omit<ButtonProps, 'onClick'> {
     onClick?: (itemIndex: number) => void
 }
 
