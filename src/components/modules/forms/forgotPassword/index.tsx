@@ -9,21 +9,27 @@ import axiosApi from "utils/axios"
 import { ENDPOINT_ACCOUNT } from "constants/endpoints"
 import { getServerErrorResponse } from "utils/serverData"
 import { useRouter } from "next/router"
-import { ROUTE_RECOVERY } from "constants/routes"
 
-const ForgotPasswordForm = () => {
+type ForgotPasswordFormProps = {
+    onSuccess: () => void,
+    onError: (arror: any) => void
+}
 
-    const router = useRouter()
+const ForgotPasswordForm = ({
+    onSuccess,
+    onError
+}: ForgotPasswordFormProps) => {
+
     const onSubmit = async (values: FormikValues) => {
         const params = {
             email: values.email
         }
         await axiosApi.get(`${ENDPOINT_ACCOUNT}/ForgotPassword`, { params })
             .then(res => {
-                addNotification({ type: "info", title: "Информация", message: "На Вашу почту, привязанную к логину, было отправлено письмо, вы можете закрыть эту страницу" })
+                onSuccess()
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось отправить письмо:\n${getServerErrorResponse(err)}` })
+                onError(err)
             })
     }
 

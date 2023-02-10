@@ -10,7 +10,8 @@ import addNotification from "utils/notifications"
 import { getServerErrorResponse } from "utils/serverData"
 
 type AutorizationFormProps = {
-    onSuccess: () => void
+    onSuccess: () => void,
+    onError: (error: any) => void
 }
 
 type UserLoginType = {
@@ -19,7 +20,8 @@ type UserLoginType = {
 }
 
 const AuthorizationForm = ({
-    onSuccess
+    onSuccess,
+    onError
 }: AutorizationFormProps) => {
 
     const onSubmit = async (values: FormikValues) => {
@@ -34,7 +36,7 @@ const AuthorizationForm = ({
                 }
             })
             .catch(err => {
-                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось войти в аккаунт:\n${getServerErrorResponse(err)}` })
+                onError(err)
             })
     }
 

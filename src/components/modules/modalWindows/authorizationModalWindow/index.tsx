@@ -8,11 +8,21 @@ import styles from "./AuthorizationModalWindow.module.scss"
 import ForgotPasswordForm from "components/modules/forms/forgotPassword"
 
 export interface AuthorizationModalWindowProps extends ModalWindowProps {
-    onSuccess: () => void,
+    onRegistrationSuccess: () => void,
+    onAuthorizationSuccess: () => void,
+    onForgotPasswordSuccess: () => void,
+    onRegistrationError: (error: any) => void,
+    onAuthorizationError: (error: any) => void,
+    onForgotPasswordError: (error: any) => void
 }
 
 const AuthorizationModalWindow = ({
-    onSuccess,
+    onRegistrationSuccess,
+    onAuthorizationSuccess,
+    onRegistrationError,
+    onAuthorizationError,
+    onForgotPasswordSuccess,
+    onForgotPasswordError
 }: AuthorizationModalWindowProps) => {
 
     const [mode, setMode] = useState<"auth" | "reg" | "recovery">("auth")
@@ -31,19 +41,24 @@ const AuthorizationModalWindow = ({
         >
             {mode === "auth" ?
                 <AuthorizationForm
-                    onSuccess={onSuccess}
+                    onSuccess={onAuthorizationSuccess}
+                    onError={onAuthorizationError}
                 />
                 :
                 mode === "reg" ?
                     <RegistrationForm
-                        onSuccess={onSuccess}
+                        onSuccess={onRegistrationSuccess}
+                        onError={onRegistrationError}
                     /> :
                     <>
                         <p className={cn(
                             utilStyles.modal_window_text,
                             utilStyles.modal_window_text_medium,
                         )}>Укажите Вашу почту от аккаунта:</p>
-                        <ForgotPasswordForm />
+                        <ForgotPasswordForm 
+                            onSuccess={onForgotPasswordSuccess}
+                            onError={onForgotPasswordError}
+                        />
                         <p className={cn(
                             utilStyles.modal_window_text,
                             utilStyles.modal_window_text_medium,
