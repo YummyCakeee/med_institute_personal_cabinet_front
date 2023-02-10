@@ -3,13 +3,13 @@ export const notEmptyValidator = (value: string) => {
 }
 
 export const minLengthValueValidator = (value: string, length: number) => {
-    if (value && value.length < length) {
+    if (!value || value.length < length) {
         return `Длина должна быть больше ${length - 1}`
     }
 }
 
 export const maxLengthValueValidator = (value: string, length: number) => {
-    if (value && value.length > length) {
+    if (!value || value.length > length) {
         return `Длина должна быть меньше ${length + 1}`
     }
 }
