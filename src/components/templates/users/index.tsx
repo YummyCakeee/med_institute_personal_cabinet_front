@@ -1,5 +1,5 @@
 import Layout from "components/layouts/Layout"
-import ItemList from "components/modules/itemList"
+import ItemList, { ItemControlButton } from "components/modules/itemList"
 import Head from "next/head"
 import React from "react"
 import useUsers, { UserField } from "./useUsers"
@@ -7,7 +7,7 @@ import styles from "./UsersTemplate.module.scss"
 import ComboBox from "components/elements/comboBox/ComboBox"
 import InputField from "components/elements/input/Input"
 import utilStyles from "styles/utils.module.scss"
-import { ApplicationUserRole } from "./types"
+import { ApplicationUserRole, UserProfileType } from "./types"
 import cn from "classnames"
 import LoadingStatusWrapper from "components/modules/LoadingStatusWrapper/LoadingStatusWrapper"
 
@@ -27,6 +27,7 @@ const UsersTemplate = () => {
         onHeaderClick,
         onFieldFilterSelect,
         onFieldFilterValueChanged,
+        onEmailConfirmClick,
         setCurrentPage
     } = useUsers()
 
@@ -91,6 +92,12 @@ const UsersTemplate = () => {
                                         value.map(el => el.role.name).join(', ')
                                     ,
                                     fieldName: UserField.ROLES
+                                },
+                                {
+                                    render: (value: boolean) =>
+                                        value ? "Подтверждена" : "Не подтверждена"
+                                    ,
+                                    fieldName: UserField.EMAIL_CONFIRMED
                                 }
                             ]}
                             itemControlButtons={({ selectedItem }) => [
@@ -108,14 +115,21 @@ const UsersTemplate = () => {
                                 },
                                 {
                                     title: (() => {
-                                        const lockoutEnd = new Date(selectedItem.user.lockoutEnd)
+                                        const lockoutEnd = new Date((selectedItem as UserProfileType).user!.lockoutEnd!)
                                         return lockoutEnd > new Date() ?
                                             "Разблокировать" : "Заблокировать"
                                     })(),
                                     onClick: onUserBlockClick,
                                     size: "small",
-                                    stretchable: true,
-                                }
+                                    stretchable: true
+                                },
+                                ...(!(selectedItem as UserProfileType).user?.emailConfirmed ?
+                                    [{
+                                        title: "Подтвердить почту",
+                                        onClick: onEmailConfirmClick,
+                                        size: "small",
+                                        stretchable: true
+                                    } as ItemControlButton] : [])
                             ]}
                             controlButtonsBottom={[
                                 {

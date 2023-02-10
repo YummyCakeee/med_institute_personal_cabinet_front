@@ -12,7 +12,7 @@ import { UserProfileType } from "./types"
 
 export enum UserField {
     SECOND_NAME = "secondName", FIRST_NAME = "firstName", LAST_NAME = "lastName",
-    LOGIN = "userName", EMAIL = "user.email", ROLES = "user.userRoles"
+    LOGIN = "userName", EMAIL = "user.email", ROLES = "user.userRoles", EMAIL_CONFIRMED = "user.emailConfirmed"
 }
 
 export enum FilterSortField {
@@ -71,6 +71,10 @@ const useUsers = () => {
             title: "Роли",
             field: UserField.ROLES,
             filterSortFieldName: FilterSortField.ROLES
+        },
+        {
+            title: "Статус почты",
+            field: UserField.EMAIL_CONFIRMED
         }
     ])
 
@@ -267,6 +271,27 @@ const useUsers = () => {
         })
     }
 
+    const onEmailConfirmClick = (index: number) => {
+        const userId = users[index].userId
+        axiosApi.post(`${ENDPOINT_USERS}/${userId}/ConfirmEmail`)
+            .then(res => {
+                addNotification({ type: "success", title: "Успех", message: "Почта пользователя подтверждена" })
+                setUsers(users.map((el, key) => {
+                    if (index !== key) return el
+                    return {
+                        ...el,
+                        user: {
+                            ...el.user,
+                            emailConfirmed: true
+                        }
+                    }
+                }))
+            })
+            .catch(err => {
+                addNotification({ type: "danger", title: "Ошибка", message: `Не удалось подтвердить почту пользователя:\n${getServerErrorResponse(err)}` })
+            })
+    }
+
     const sortingFieldHeaderTitle = useMemo(() => {
         return headers.find(el => el.filterSortFieldName === sortingFieldName)?.title
     }, [headers, sortingFieldName])
@@ -286,6 +311,7 @@ const useUsers = () => {
         onHeaderClick,
         onFieldFilterSelect,
         onFieldFilterValueChanged,
+        onEmailConfirmClick,
         setCurrentPage
     }
 }
