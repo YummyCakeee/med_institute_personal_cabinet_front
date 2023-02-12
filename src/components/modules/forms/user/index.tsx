@@ -30,35 +30,29 @@ const UserForm = ({
 
     const onSubmit = async (values: FormikValues) => {
         if (mode === "add") {
-            const userSecurityData = {
+            const userData = {
+                firstName: values.firstName,
+                lastName: values.lastName,
+                secondName: values.secondName,
                 email: values.email,
-                password: values.password
+                userName: values.email
             }
             let userId: string | null = null
-            await axiosApi.post(ENDPOINT_USERS, userSecurityData)
+            await axiosApi.post(ENDPOINT_USERS, userData)
                 .then(res => {
                     userId = res.data.userId
                 })
                 .catch(err => {
                     return addNotification({ type: "danger", title: "Ошибка", message: `Не удалось добавить нового пользователя:\n${getServerErrorResponse(err)}` })
                 })
-            const userData: UserProfileType = {
-                userId: userId!,
-                userName: userSecurityData.email,
-                firstName: values.firstName,
-                lastName: values.lastName,
-                secondName: values.secondName,
-            }
             const rolesData: string[] = values.roles
-            return axios.all([
-                axiosApi.post(`${ENDPOINT_USERS}/UpdatePersonalDataofUser`, userData),
-                axiosApi.post(`${ENDPOINT_USERS}/${userId}/ChangeRoles`, rolesData)
-            ])
+            return axiosApi.post(`${ENDPOINT_USERS}/${userId}/ChangeRoles`, rolesData)
                 .then(res => {
                     const updatedUser: UserProfileType = {
                         ...userData,
+                        userId: userId!,
                         user: {
-                            email: userSecurityData.email,
+                            email: userData.email,
                             userRoles: rolesData.map(el => {
                                 const role: ApplicationUserRole = {
                                     role: {
@@ -85,7 +79,7 @@ const UserForm = ({
             }
             const rolesData: string[] = values.roles
             return axios.all([
-                axiosApi.post(`${ENDPOINT_USERS}/UpdatePersonalDataofUser`, userData),
+                axiosApi.post(`${ENDPOINT_USERS}/UpdatePersonalDataOfUser`, userData),
                 axiosApi.post(`${ENDPOINT_USERS}/${user.userId}/ChangeRoles`, rolesData)
             ])
                 .then(res => {
@@ -126,7 +120,6 @@ const UserForm = ({
                     firstName: "",
                     secondName: "",
                     email: "",
-                    password: "",
                     roles: []
                 } :
                 {
@@ -178,23 +171,13 @@ const UserForm = ({
                         disabled={isSubmitting}
                     />
                     {mode === "add" &&
-                        <>
-                            <Field
-                                name="email"
-                                component={InputField}
-                                placeholder="Почта"
-                                validate={emailValidator}
-                                disabled={isSubmitting}
-                            />
-                            <Field
-                                name="password"
-                                component={InputField}
-                                placeholder="Пароль"
-                                type="password"
-                                validate={passwordValidator}
-                                disabled={isSubmitting}
-                            />
-                        </>
+                        <Field
+                            name="email"
+                            component={InputField}
+                            placeholder="Почта"
+                            validate={emailValidator}
+                            disabled={isSubmitting}
+                        />
                     }
                     <div className={utilStyles.form_text}>Роли:</div>
                     {userRoles.map((el, key) => (
