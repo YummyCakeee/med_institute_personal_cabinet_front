@@ -6,7 +6,7 @@ import React from "react"
 export interface UserModalWindowProps extends ModalWindowProps {
     mode?: "add" | "edit",
     user?: UserProfileType,
-    onSuccess?: (user: UserProfileType) => void,
+    onSuccess?: (user: UserProfileType, emailSuccess: boolean) => void,
     onError?: (error: any) => void
 }
 

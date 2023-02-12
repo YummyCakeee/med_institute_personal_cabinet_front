@@ -11,12 +11,11 @@ import { ENDPOINT_USERS } from "constants/endpoints"
 import axios from "axios"
 import addNotification from "utils/notifications"
 import { getServerErrorResponse } from "utils/serverData"
-import { Exception } from "sass"
 
 interface UserFormProps {
     mode?: "add" | "edit",
     user?: UserProfileType,
-    onSuccess?: (user: UserProfileType) => void,
+    onSuccess?: (user: UserProfileType, emailSuccess: boolean) => void,
     onError?: (error: any) => void
 }
 
@@ -38,13 +37,18 @@ const UserForm = ({
                 userName: values.email
             }
             let userId: string | null = null
+            let emailSuccess = false
             await axiosApi.post(ENDPOINT_USERS, userData)
                 .then(res => {
                     userId = res.data.userId
+                    if (!(res.data.message as string).includes("Email failed")) {
+                        emailSuccess = true
+                    }
                 })
                 .catch(err => {
                     return addNotification({ type: "danger", title: "Ошибка", message: `Не удалось добавить нового пользователя:\n${getServerErrorResponse(err)}` })
                 })
+            if (userId === null) return
             const rolesData: string[] = values.roles
             return axiosApi.post(`${ENDPOINT_USERS}/${userId}/ChangeRoles`, rolesData)
                 .then(res => {
@@ -63,7 +67,7 @@ const UserForm = ({
                             })
                         }
                     }
-                    onSuccess(updatedUser)
+                    onSuccess(updatedUser, emailSuccess)
                 })
                 .catch(err => {
                     onError(err)
@@ -98,7 +102,7 @@ const UserForm = ({
                             })
                         }
                     }
-                    onSuccess(updatedUser)
+                    onSuccess(updatedUser, true)
                 })
                 .catch(err => {
                     onError(err)

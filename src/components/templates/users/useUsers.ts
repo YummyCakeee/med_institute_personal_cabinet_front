@@ -197,10 +197,13 @@ const useUsers = () => {
             mode: "add",
             closable: true,
             backgroundOverlap: true,
-            onSuccess: (user) => {
+            onSuccess: (user, emailSuccess) => {
                 setUsers([...users, user])
                 addNotification({ type: "success", title: "Успех", message: "Пользователь добавлен" })
                 setUserModalWindowState(undefined)
+                if (!emailSuccess) {
+                    addNotification({ type: "warning", title: "Внимание", message: "Не удалось отправить письмо на указанную почту" })
+                }
             },
             onError: (err) => {
                 addNotification({ type: "danger", title: "Ошибка", message: `Не удалось добавить пользователя:\n${getServerErrorResponse(err)}` })
