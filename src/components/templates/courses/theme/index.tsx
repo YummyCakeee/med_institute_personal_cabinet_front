@@ -175,7 +175,7 @@ const ThemeTemplate = ({
                 addNotification({ type: "danger", title: "Не удалось добавить блок тестирования", message: getServerErrorResponse(err) })
                 return
             })
-            
+
         if (!testBlock.testBlockCollections) {
             addNotification({ type: "success", title: "Блок тестирования добавлен" })
             setInitialTestBlock({
@@ -328,8 +328,9 @@ const ThemeTemplate = ({
     return (
         <Layout>
             <Head>
-                <title>Настройка темы</title>
+                <title>{`Настройка темы "${theme.title}"`}</title>
             </Head>
+            <div className={utilStyles.title}>{`Настройка темы "${theme.title}"`}</div>
             <div className={utilStyles.section}>
                 <div className={utilStyles.section_title}>{`Информационные материалы (обязательно)`}</div>
                 <Editor
