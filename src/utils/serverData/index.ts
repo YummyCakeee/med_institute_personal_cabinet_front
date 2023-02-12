@@ -18,13 +18,14 @@ export const getServerErrorResponse = (err: AxiosError) => {
         const data: any = err.response.data
         const errors: string[] = []
         if (data.message) return data.message
-        if (data.title) return data.title
         const errorsData = data.errors
-        if (!errorsData) return ""
-        Object.keys(errorsData).forEach(key => {
-            errors.push(errorsData[key])
-        })
-        return errors.join('\n')
+        if (errorsData) {
+            Object.keys(errorsData).forEach(key => {
+                errors.push(errorsData[key])
+            })
+            return errors.join('\n')
+        }
+        if (data.title) return data.title
     }
     return err.message || err.code || ""
 }
