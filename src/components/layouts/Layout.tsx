@@ -5,7 +5,6 @@ import styles from "./Layout.module.scss"
 import BreadCrumbs from "components/modules/breadCrumbs"
 import Script from "next/script"
 import Head from "next/head"
-import Document from "next/document"
 
 type LayoutProps = {
     children: React.ReactNode,
@@ -18,13 +17,17 @@ const Layout = ({
 }: LayoutProps) => {
     return (
         <div className={styles.container}>
-            <Head>
-                <Script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/8.2.0/adapter.min.js" />
-                <Script
-                    type="text/javascript"
-                    dangerouslySetInnerHTML={{
-                        __html:
-                            `window.qumicon_config = {
+            <Script
+                type="text/javascript"
+                src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/8.2.0/adapter.min.js"
+            />
+            <Script
+                id="q_script"
+                strategy="afterInteractive"
+                type="text/javascript"
+                dangerouslySetInnerHTML={{
+                    __html:
+                        `window.qumicon_config = {
                             janus: "ws://46.19.65.37:8188",
                             hub: "http://46.19.65.37:5264/qumicon-hub",
                             hasAuth: false,
@@ -41,10 +44,13 @@ const Layout = ({
                                 url: 'path/to/userInfo/route'
                             },
                         }`
-                    }}
-                />
-                <Script type="module" src="/qumicon-main/build/assets/qumicon.js" />
-
+                }}
+            />
+            <Script
+                type="module"
+                src="/qumicon-main/build/assets/qumicon.js"
+            />
+            <Head>
                 <link rel="stylesheet" href="/qumicon-main/build/assets/qumicon.css" />
             </Head>
             {showHeader &&
