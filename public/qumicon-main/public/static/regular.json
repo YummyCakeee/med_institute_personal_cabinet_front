@@ -1,0 +1,49 @@
+{
+  "user": {
+    "userId": "c39b5654-b991-4e01-b5c9-71a042a409a5",
+    "userName": "mtrunnikov@gmail.com",
+    "dateOfBirth": null,
+    "profilePicture": null,
+    "createDate": "2023-03-15T19:27:08.366666",
+    "firstName": "Максим",
+    "secondName": "Владиславович",
+    "lastName": "Трунников",
+    "user": {
+      "claims": null,
+      "logins": null,
+      "tokens": null,
+      "userRoles": [
+        {
+          "user": null,
+          "role": {
+            "userRoles": [
+              null
+            ],
+            "id": "232bd5cc-0e80-4230-9bf7-ccc1d64dd964",
+            "name": "Student",
+            "normalizedName": "STUDENT",
+            "concurrencyStamp": "4123b560-7a63-4b1a-96a4-a267aed90d12"
+          },
+          "userId": "c39b5654-b991-4e01-b5c9-71a042a409a5",
+          "roleId": "232bd5cc-0e80-4230-9bf7-ccc1d64dd964"
+        }
+      ],
+      "id": "c39b5654-b991-4e01-b5c9-71a042a409a5",
+      "userName": "mtrunnikov@gmail.com",
+      "normalizedUserName": "MTRUNNIKOV@GMAIL.COM",
+      "email": "mtrunnikov@gmail.com",
+      "normalizedEmail": "MTRUNNIKOV@GMAIL.COM",
+      "emailConfirmed": true,
+      "passwordHash": "AQAAAAEAACcQAAAAEC8fpS8JlEK1mahTmlV3N9teJwXUJ4HmjxSJr/usLPIX/LxBRSR5rp9BPGi3aMC0OQ==",
+      "securityStamp": "ZBN2ZAMYKO4OHGITKEZQS7Z3YIAPQQYT",
+      "concurrencyStamp": "42f2c640-0818-4576-a601-8c744429c449",
+      "phoneNumber": null,
+      "phoneNumberConfirmed": false,
+      "twoFactorEnabled": false,
+      "lockoutEnd": null,
+      "lockoutEnabled": true,
+      "accessFailedCount": 0
+    }
+  },
+  "certificates": []
+}

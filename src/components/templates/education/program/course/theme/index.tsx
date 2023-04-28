@@ -40,7 +40,7 @@ const ThemeTemplate = ({
 
     const hostName = (!process.env.NODE_ENV || process.env.NODE_ENV === "development") ?
         "http://localhost:5000" :
-        "http://1085037-cq23779.tmweb.ru"
+        "https://edu.instdpo.online"
 
     useEffect(() => {
         if (activeTest) {

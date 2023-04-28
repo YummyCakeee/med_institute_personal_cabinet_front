@@ -1,0 +1,49 @@
+{
+  "user": {
+    "userId": "1ecf7b3b-4584-4be8-a98f-0bbd2a3871a8",
+    "userName": "m.trunnikov@mail.ru",
+    "dateOfBirth": null,
+    "profilePicture": null,
+    "createDate": "2023-03-15T19:25:35.274686",
+    "firstName": "Максим",
+    "secondName": "Владиславович",
+    "lastName": "Трунников",
+    "user": {
+      "claims": null,
+      "logins": null,
+      "tokens": null,
+      "userRoles": [
+        {
+          "user": null,
+          "role": {
+            "userRoles": [
+              null
+            ],
+            "id": "90e6a6fd-d51a-430a-97bb-55094f73833f",
+            "name": "Administrator",
+            "normalizedName": "ADMINISTRATOR",
+            "concurrencyStamp": "d635fd87-87b2-4f55-9792-b592fc4f1778"
+          },
+          "userId": "1ecf7b3b-4584-4be8-a98f-0bbd2a3871a8",
+          "roleId": "90e6a6fd-d51a-430a-97bb-55094f73833f"
+        }
+      ],
+      "id": "1ecf7b3b-4584-4be8-a98f-0bbd2a3871a8",
+      "userName": "m.trunnikov@mail.ru",
+      "normalizedUserName": "M.TRUNNIKOV@MAIL.RU",
+      "email": "m.trunnikov@mail.ru",
+      "normalizedEmail": "M.TRUNNIKOV@MAIL.RU",
+      "emailConfirmed": true,
+      "passwordHash": "AQAAAAEAACcQAAAAED0Dimh3XIo878sM4UWR6Ti6PhxiQIa8PIiYzWwtePUWZvV+3LnXGzmdQkypfTc1UA==",
+      "securityStamp": "3QCI343HEZ2BCV7TJXQ6FVRHJRS355PB",
+      "concurrencyStamp": "0fd15aee-c679-46fc-9991-6d8ec2ebf8cf",
+      "phoneNumber": null,
+      "phoneNumberConfirmed": false,
+      "twoFactorEnabled": false,
+      "lockoutEnd": null,
+      "lockoutEnabled": true,
+      "accessFailedCount": 0
+    }
+  },
+  "certificates": []
+}

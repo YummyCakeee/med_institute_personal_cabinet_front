@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link type="text/css" hidden>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/8.2.0/adapter.min.js" ></script>
+    <script type="text/javascript">
+      window.qumicon_config = {
+        janus: "ws://localhost:8188",
+        hub: "http://localhost:5264/qumicon-hub",
+        hasAuth: true,
+        login: {
+          method: 'POST',
+          url: '/static/login.json'
+        },
+        userInfo: {
+          method: 'GET',
+          url: '/static/admin.json'
+        }
+      }
+    </script>
+    
+    <script type="module" crossorigin src="/assets/qumicon.js"></script>
+    <link rel="stylesheet" href="/assets/qumicon.css">
+  </head>
+  <body>
+  </body>
+</html>

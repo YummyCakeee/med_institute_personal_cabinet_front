@@ -1,0 +1,142 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*LAYOUTS*/
+.main-layout {
+  /*min-height: 100vh;*/
+}
+
+.main-layout .outer-content-layout {
+  /*margin-top: 64px;*/
+}
+
+/*.main-layout .outer-content-layout .inner-content-layout {*/
+/*  margin: 16px 16px 0;*/
+/*  display: flex;*/
+/*  flex: auto;*/
+/*  flex-direction: column;*/
+/*}*/
+
+/*.site-layout-sub-header-background {*/
+/*  background: #fff;*/
+/*}*/
+
+/*.site-layout-background {*/
+/*  background: #fff;*/
+/*}*/
+
+.ant-tabs,.h-full,.tabs-full-height .ant-tabs-content-holder .ant-tabs-content {
+  height: 100%;
+}
+
+.ant-tabs,.h-full,.tabs-full-height .ant-tabs-content-holder .ant-tabs-content .tab-pane-full-height {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.slideshow {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  /*background: rebeccapurple;*/
+}
+
+.navigation {
+  position: absolute;
+  width: 100%;
+
+  text-align: center; /* buttons align like text */
+}
+
+.arrow {
+  border-bottom-color: rgba(125, 125, 125, 0.5) !important;
+  transition-duration: 500ms;
+}
+
+.arrow:hover[aria-disabled="true"] {
+  border-bottom-color: rgba(125, 125, 125, 0.5) !important;
+}
+
+.arrow:hover[aria-disabled="false"] {
+  border-bottom-color: rgba(125, 125, 125, 1) !important;
+}
+
+.control {
+  background: rgba(125, 125, 125, 0.5) !important;
+}
+
+.pip {
+  display: inline-block;
+  padding: 0;
+
+  border: 0;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.pip--active {
+  background: rgba(125, 125, 125, 1) !important;
+}
+
+.anticon {
+  vertical-align: 0.125em !important;
+}
+
+.ant-btn-primary:not(.ant-btn-dangerous) {
+  background-color: #1677ff !important;
+}
+
+.rCS1s34yp2 .moveable-line {
+  background: transparent !important;
+}
+
+.rCS1s34yp2 .moveable-control {
+  background: transparent !important;
+  border: 0 solid transparent !important;
+}
+
+.ant-drawer .ant-drawer-body {
+  padding: 0 !important;
+}
+
+.ant-space,.w-full .ant-space-item {
+  width: 100%;
+}
